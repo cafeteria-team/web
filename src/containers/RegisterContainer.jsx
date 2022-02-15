@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from "react";
-import styles from "../styles/register.module.css";
 import axios from "../utils/axios";
 import Post from "../utils/Post";
 import ImageUploader from "../utils/imageuploader";
@@ -48,25 +47,6 @@ const Register = (props) => {
       return !prev;
     });
   };
-
-  // 하이픈제거
-  // useEffect(() => {
-  //   // 모바일 하이픈넣기
-  //   if (state.phone?.length === 10) {
-  //     setState((prev) => ({
-  //       ...prev,
-  //       phone: state.phone.replace(/(\d{3})(\d{3})(\d{4})/, "$1-$2-$3"),
-  //     }));
-  //   }
-  //   if (state.phone?.length === 13) {
-  //     setState((prev) => ({
-  //       ...prev,
-  //       phone: state.phone
-  //         .replace(/-/g, "")
-  //         .replace(/(\d{3})(\d{4})(\d{4})/, "$1-$2-$3"),
-  //     }));
-  //   }
-  // }, [state.phone]);
 
   const handleChange = (e) => {
     const { id, value } = e.target;
@@ -242,7 +222,6 @@ const Register = (props) => {
                 placeholder="사업자번호"
                 value={state.busi_num}
                 id="busi_num"
-                className={styles.input}
                 onChange={handleChange}
               />
               <ImageInput
@@ -311,7 +290,6 @@ const Register = (props) => {
               type="button"
               title="회원가입"
               width="300px"
-              className={styles.btn}
               onClick={handleSubmitClick}
             />
 

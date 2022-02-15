@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import axios from "axios";
+import axios from "../utils/axios";
 import { Button, Input } from "../components";
 import {
   StyledTitle,
@@ -9,21 +9,26 @@ import {
   FlexBox,
   StyledLink,
 } from "../components/StyledElements";
+import { useNavigate } from "react-router-dom";
 
 const Login = ({ props }) => {
+  const navigate = useNavigate();
+
   // Login
-  const get = (e) => {
-    axios({
-      method: "get",
-      url: "/api/user/login",
-    })
-      .then((Response) => {
-        console.log(Response.data, "성공!!");
-      })
-      .catch((Error) => {
-        console.log(Error, "실패!!");
+  const _login = async (e) => {
+    const { username, password } = state;
+    try {
+      const response = await axios.post("/api/user/login", {
+        username,
+        password,
       });
-    e.preventDefault();
+      console.log(response);
+      navigate("/untitled");
+      return response;
+    } catch (error) {
+      console.log(error.response.data.detail, state);
+      return false;
+    }
   };
 
   // state
@@ -31,6 +36,14 @@ const Login = ({ props }) => {
     username: "",
     password: "",
   });
+
+  const handleChange = (e) => {
+    const { id, value } = e.target;
+    setState((prevState) => ({
+      ...prevState,
+      [id]: value,
+    }));
+  };
 
   return (
     <MainContainer>
@@ -48,11 +61,23 @@ const Login = ({ props }) => {
           Login
         </StyledTitle>
         <Form method="POST" direction="column">
-          <Input type="email" id="email" placeholder="이메일" />
+          <Input
+            type="email"
+            id="username"
+            placeholder="이메일"
+            value={state.username}
+            onChange={handleChange}
+          />
 
-          <Input type="password" id="password" placeholder="비밀번호" />
+          <Input
+            type="password"
+            id="password"
+            value={state.password}
+            onChange={handleChange}
+            placeholder="비밀번호"
+          />
 
-          <Button type="button" onClick={get} title="로그인" width="300px" />
+          <Button type="button" onClick={_login} title="로그인" width="300px" />
         </Form>
         <FlexBox direction="column" align="center">
           <FlexBox margin="0 0 20px 0">
