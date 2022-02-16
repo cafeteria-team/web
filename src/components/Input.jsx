@@ -18,16 +18,19 @@ const StyledInput = styled.input`
   }
 `;
 
-const Input = memo(({ placeholder, type, onChange, value, width, id }) => {
-  return (
-    <StyledInput
-      placeholder={placeholder}
-      type={type}
-      onChange={onChange}
-      value={value || ""}
-      id={id || ""}
-    ></StyledInput>
-  );
-});
+const Input = memo(
+  ({ placeholder, type, onChange, value, width, id, disabled }) => {
+    return (
+      <StyledInput
+        placeholder={placeholder}
+        type={type}
+        onChange={onChange}
+        value={value || ""}
+        id={id || ""}
+        disabled={disabled}
+      ></StyledInput>
+    );
+  }
+);
 
 export default Input;

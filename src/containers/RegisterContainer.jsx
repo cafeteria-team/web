@@ -152,7 +152,7 @@ const Register = (props) => {
             <Input
               type="text"
               id="username"
-              placeholder="이름"
+              placeholder="아이디"
               value={state.username}
               onChange={handleChange}
             />
@@ -243,6 +243,7 @@ const Register = (props) => {
                 placeholder="우편번호"
                 value={state.zip_code}
                 onChange={handleChange}
+                disabled="disabled"
               />
               <Button
                 color="#3b86ff"
@@ -264,6 +265,7 @@ const Register = (props) => {
               placeholder="업체주소"
               value={state.addr}
               onChange={handleChange}
+              disabled="disabled"
             />
 
             <Input

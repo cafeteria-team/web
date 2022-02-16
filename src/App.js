@@ -2,6 +2,7 @@ import {
   RegisterContainer,
   LoginContainer,
   CompleteContainer,
+  Untitled,
 } from "./containers";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import { ThemeProvider } from "styled-components";
@@ -15,6 +16,7 @@ function App() {
           <Route path="/" element={<LoginContainer />}></Route>
           <Route path="/register" element={<RegisterContainer />}></Route>
           <Route path="/complete" element={<CompleteContainer />}></Route>
+          <Route path="/untitled" element={<Untitled />}></Route>
         </Routes>
       </BrowserRouter>
     </ThemeProvider>
