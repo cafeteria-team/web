@@ -15,7 +15,7 @@ function Complete(props) {
   };
 
   return (
-    <MainContainer>
+    <MainContainer bgImage="url('/img/mainbg.jpg')">
       <FlexBox
         width="600px"
         height="600px"

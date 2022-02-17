@@ -23,7 +23,7 @@ const Login = ({ props }) => {
         password,
       });
       console.log(response);
-      navigate("/untitled");
+      navigate("/main");
       return response;
     } catch (error) {
       console.log(error.response.data.detail, state);
@@ -46,15 +46,20 @@ const Login = ({ props }) => {
   };
 
   return (
-    <MainContainer>
+    <MainContainer background="unset">
+      <FlexBox
+        bgImage="url('/img/mainbg.jpg')"
+        width="100%"
+        height="100%"
+        flex="1 1 50%"
+      />
       <FlexBox
         width="600px"
         height="600px"
         background="#fff"
-        rad="8px"
-        shadow="2px 4px 12px rgb(0 0 0 / 8%)"
         align="center"
         just="center"
+        flex="1 1 50%"
         direction="column"
       >
         <StyledTitle align="center" margin="0 0 40px 0">

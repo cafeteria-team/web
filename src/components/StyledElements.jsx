@@ -6,10 +6,18 @@ export const StyledTitle = styled.h1`
   font-weight: ${({ theme }) => theme.fontWeights[8]};
   text-align: ${(props) => (props.align === "center" ? "center" : "left")};
   margin: ${(props) => props.margin};
+  color: ${(props) => props.color || ""};
+  padding: ${(props) => props.pad || ""};
+  display: ${(props) => props.display || ""};
+  flex-shrink: 0;
 `;
 export const StyledBody = styled.p`
   font-size: ${({ theme }) => theme.fontSizes[2]};
   margin: ${(props) => props.margin || ""};
+  color: ${(props) => props.color || ""};
+  font-weight: ${(props) => props.weight || ""};
+  display: ${(props) => props.display || ""};
+  flex-shrink: 0;
 `;
 export const StyledSpan = styled.span`
   align-self: ${(props) => props.align || ""};
@@ -17,7 +25,11 @@ export const StyledSpan = styled.span`
   color: ${(props) => props.color || ""};
 `;
 export const MainContainer = styled.div`
-  background-color: ${({ theme }) => theme.colors.orange};
+  background-color: ${(props) =>
+    props.background ? props.background : props.theme.colors.orange};
+  background-image: ${(props) => props.bgImage || ""};
+  background-repeat: no-repeat;
+  background-size: cover;
   height: 100%;
   display: flex;
   justify-content: center;
@@ -39,11 +51,39 @@ export const FlexBox = styled.div`
   width: ${(props) => props.width || ""};
   height: ${(props) => props.height || ""};
   background-color: ${(props) => props.background || ""};
+  background-image: ${(props) => props.bgImage || ""};
+  background-repeat: no-repeat;
+  background-size: cover;
   border-radius: ${(props) => props.rad || ""};
   box-shadow: ${(props) => props.shadow || ""};
   position: ${(props) => props.position || ""};
+  max-width: ${(props) => props.maxW || ""};
+  flex: ${(props) => props.flex || ""};
+  transition: all 0.6s ease;
 `;
 
 export const StyledLink = styled(Link)`
   color: ${(props) => props.color || props.theme.colors.blue};
+`;
+
+export const SideUl = styled.ul`
+  display: flex;
+  flex-direction: column;
+`;
+
+export const SideLi = styled.li`
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  // justify-content: space-between;
+  // align-items: center;
+  height: 54px;
+  width: 100%;
+  padding: 0 20px;
+  background: ${(props) => props.background || ""};
+  cursor: pointer;
+  transition: background-color 0.6s ease;
+  &:hover {
+    background: #f97316;
+  }
 `;

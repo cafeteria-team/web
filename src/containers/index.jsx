@@ -1,6 +1,6 @@
 import RegisterContainer from "./RegisterContainer";
 import LoginContainer from "./LoginContainer";
 import CompleteContainer from "./CompleteContainer";
-import Untitled from "./Untitled";
+import Main from "./Main";
 
-export { RegisterContainer, LoginContainer, CompleteContainer, Untitled };
+export { RegisterContainer, LoginContainer, CompleteContainer, Main };

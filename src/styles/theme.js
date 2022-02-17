@@ -27,11 +27,13 @@ const theme = {
     black: "#000",
     white: "#fff",
     transparent: "transparent",
-    blue: "#3b86ff",
+    blue: "#06c",
     gray: "#aaa",
     red: "#eb5757",
-    orange: "#f97316",
+    orange: "#FF8400",
   },
+
+  shadow: "2px 4px 12px rgb(0 0 0 / 8%)",
 
   radii,
 };

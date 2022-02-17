@@ -128,7 +128,7 @@ const Register = (props) => {
   };
 
   return (
-    <MainContainer>
+    <MainContainer bgImage="url('/img/mainbg.jpg')">
       {isPopup && (
         <div className="postContainer">
           <Post setAddress={setState}></Post>
