@@ -18,6 +18,7 @@ export const StyledBody = styled.p`
   font-weight: ${(props) => props.weight || ""};
   display: ${(props) => props.display || ""};
   flex-shrink: 0;
+  white-space: nowrap;
 `;
 export const StyledSpan = styled.span`
   align-self: ${(props) => props.align || ""};
@@ -42,7 +43,7 @@ export const Form = styled.form`
   margin: ${(props) => props.margin || ""};
 `;
 export const FlexBox = styled.div`
-  display: flex;
+  display: ${(props) => props.display || "flex"};
   flex-direction: ${(props) => props.direction || ""};
   justify-content: ${(props) => props.just || ""};
   align-items: ${(props) => props.align};
@@ -75,9 +76,10 @@ export const SideLi = styled.li`
   box-sizing: border-box;
   display: flex;
   flex-direction: column;
-  // justify-content: space-between;
+  justify-content: center;
   // align-items: center;
-  height: 54px;
+  height: auto;
+  min-height: 54px;
   width: 100%;
   padding: 0 20px;
   background: ${(props) => props.background || ""};
