@@ -1,14 +1,23 @@
 import React from "react";
-import { SideMenu } from "../components";
+import { SideMenu, Header } from "../components";
 import { FlexBox } from "../components/StyledElements";
+import { inject, observer } from "mobx-react";
+import { Outlet } from "react-router-dom";
 
-const Main = (props) => {
-  return (
-    <FlexBox width="100%" height="100%">
-      <SideMenu></SideMenu>
-      <FlexBox>12312</FlexBox>
-    </FlexBox>
-  );
-};
+const Main = inject("authStore")(
+  observer(({ authStore }) => {
+    return (
+      <FlexBox width="100%" height="100%" background="#ededed">
+        <SideMenu></SideMenu>
+        <FlexBox direction="column" width="100%">
+          <Header name={authStore._username} />
+          <FlexBox>
+            <Outlet />
+          </FlexBox>
+        </FlexBox>
+      </FlexBox>
+    );
+  })
+);
 
 export default Main;

@@ -1,3 +1,4 @@
-import RegisterView from "./RegisterView";
+import Overview from "./Overview";
+import NotFound from "./NotFound";
 
-export { RegisterView };
+export { Overview, NotFound };

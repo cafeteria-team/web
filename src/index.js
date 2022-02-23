@@ -4,10 +4,13 @@ import "./index.css";
 import App from "./App";
 import reportWebVitals from "./reportWebVitals";
 
+import { Provider } from "mobx-react";
+import authStore from "./stores/authStore";
+
 ReactDOM.render(
-  <React.StrictMode>
+  <Provider authStore={authStore}>
     <App />
-  </React.StrictMode>,
+  </Provider>,
   document.getElementById("root")
 );
 

@@ -14,11 +14,15 @@ export const StyledTitle = styled.h1`
 export const StyledBody = styled.p`
   font-size: ${({ theme }) => theme.fontSizes[2]};
   margin: ${(props) => props.margin || ""};
+  padding: ${(props) => props.padding || ""};
   color: ${(props) => props.color || ""};
   font-weight: ${(props) => props.weight || ""};
   display: ${(props) => props.display || ""};
   flex-shrink: 0;
   white-space: nowrap;
+  line-height: ${(props) => props.lineH || ""};
+  box-sizing: ${(props) => props.boxSizing || ""};
+  height: ${(props) => props.height || ""};
 `;
 export const StyledSpan = styled.span`
   align-self: ${(props) => props.align || ""};
@@ -61,6 +65,16 @@ export const FlexBox = styled.div`
   max-width: ${(props) => props.maxW || ""};
   flex: ${(props) => props.flex || ""};
   transition: all 0.6s ease;
+  max-height: ${(props) => props.mHeight || ""};
+  min-height: ${(props) => props.minHeight || ""};
+  overflow: ${(props) => props.overflow || ""};
+  top: ${(props) => props.top || ""};
+  cursor: ${(props) => props.cursor || ""};
+  box-sizing: ${(props) => props.boxSizing || ""};
+  &:hover {
+    background: ${(props) => props.hoverBg || ""};
+    color: ${(props) => props.hoverColor || ""};
+  }
 `;
 
 export const StyledLink = styled(Link)`
@@ -81,7 +95,7 @@ export const SideLi = styled.li`
   height: auto;
   min-height: 54px;
   width: 100%;
-  padding: 0 20px;
+  // padding: 0 20px;
   background: ${(props) => props.background || ""};
   cursor: pointer;
   transition: background-color 0.6s ease;
