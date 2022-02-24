@@ -103,3 +103,66 @@ export const SideLi = styled.li`
     background: #f97316;
   }
 `;
+
+export const Ul = styled.ul`
+  display: ${(props) => props.display || "flex"};
+  flex-direction: ${(props) => props.direction || ""};
+  justify-content: ${(props) => props.just || ""};
+  align-items: ${(props) => props.align};
+  margin: ${(props) => props.margin || ""};
+  padding: ${(props) => props.padding || ""};
+  width: ${(props) => props.width || ""};
+  height: ${(props) => props.height || ""};
+  background-color: ${(props) => props.background || ""};
+  background-image: ${(props) => props.bgImage || ""};
+  background-repeat: no-repeat;
+  background-size: cover;
+  border-radius: ${(props) => props.rad || ""};
+  box-shadow: ${(props) => props.shadow || ""};
+  position: ${(props) => props.position || ""};
+  max-width: ${(props) => props.maxW || ""};
+  flex: ${(props) => props.flex || ""};
+  transition: all 0.6s ease;
+  max-height: ${(props) => props.mHeight || ""};
+  min-height: ${(props) => props.minHeight || ""};
+  overflow: ${(props) => props.overflow || ""};
+  top: ${(props) => props.top || ""};
+  cursor: ${(props) => props.cursor || ""};
+  box-sizing: ${(props) => props.boxSizing || ""};
+  color: ${(props) => props.color || ""};
+  &:hover {
+    background: ${(props) => props.hoverBg || ""};
+    color: ${(props) => props.hoverColor || ""};
+  }
+`;
+
+export const Li = styled.li`
+  display: ${(props) => props.display || "flex"};
+  flex-direction: ${(props) => props.direction || ""};
+  justify-content: ${(props) => props.just || ""};
+  align-items: ${(props) => props.align};
+  margin: ${(props) => props.margin || ""};
+  padding: ${(props) => props.padding || ""};
+  width: ${(props) => props.width || ""};
+  height: ${(props) => props.height || ""};
+  background-color: ${(props) => props.background || ""};
+  background-image: ${(props) => props.bgImage || ""};
+  background-repeat: no-repeat;
+  background-size: cover;
+  border-radius: ${(props) => props.rad || ""};
+  box-shadow: ${(props) => props.shadow || ""};
+  position: ${(props) => props.position || ""};
+  max-width: ${(props) => props.maxW || ""};
+  flex: ${(props) => props.flex || ""};
+  transition: all 0.6s ease;
+  max-height: ${(props) => props.mHeight || ""};
+  min-height: ${(props) => props.minHeight || ""};
+  overflow: ${(props) => props.overflow || ""};
+  top: ${(props) => props.top || ""};
+  cursor: ${(props) => props.cursor || ""};
+  box-sizing: ${(props) => props.boxSizing || ""};
+  &:hover {
+    background: ${(props) => props.hoverBg || ""};
+    color: ${(props) => props.hoverColor || ""};
+  }
+`;

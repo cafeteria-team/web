@@ -10,7 +10,7 @@ const Main = inject("authStore")(
       <FlexBox width="100%" height="100%" background="#ededed">
         <SideMenu></SideMenu>
         <FlexBox direction="column" width="100%">
-          <Header name={authStore._username} />
+          <Header name={authStore._username} logout={authStore.logout} />
           <FlexBox>
             <Outlet />
           </FlexBox>

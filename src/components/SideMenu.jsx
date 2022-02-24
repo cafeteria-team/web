@@ -52,7 +52,7 @@ const menuData = [
   {
     header: (menuState, index) => (
       <NavLink
-        to="/main/overview"
+        to="/main/member"
         style={({ isActive }) =>
           isActive
             ? { borderLeft: "4px solid #fff", padding: "0 20px" }
@@ -88,35 +88,53 @@ const menuData = [
         just="space-between"
         overflow="hidden"
       >
-        <StyledBody
-          color="#fff"
-          display="block"
-          height="34px"
-          padding="0 0 0 34px"
-          lineH="34px"
-          boxSizing="border-box"
-          onClick={_onClick}
+        <NavLink
+          to="/main/member"
+          style={({ isActive }) =>
+            isActive
+              ? { background: "#f97316", padding: "0 26px" }
+              : { padding: "0 26px" }
+          }
         >
-          일반회원
-        </StyledBody>
-        <StyledBody
-          color="#fff"
-          display="block"
-          height="34px"
-          padding="0 0 0 34px"
-          lineH="34px"
-          boxSizing="border-box"
-          onClick={_onClick}
+          <StyledBody
+            color="#fff"
+            display="block"
+            height="34px"
+            padding="0 0 0 34px"
+            lineH="34px"
+            boxSizing="border-box"
+            onClick={_onClick}
+          >
+            일반회원
+          </StyledBody>
+        </NavLink>
+        <NavLink
+          to="/main/request"
+          style={({ isActive }) =>
+            isActive
+              ? { background: "#f97316", padding: "0 26px" }
+              : { padding: "0 26px" }
+          }
         >
-          가입요청
-        </StyledBody>
+          <StyledBody
+            color="#fff"
+            display="block"
+            height="34px"
+            padding="0 0 0 34px"
+            lineH="34px"
+            boxSizing="border-box"
+            onClick={_onClick}
+          >
+            가입요청
+          </StyledBody>
+        </NavLink>
       </FlexBox>
     ),
   },
   {
     header: (menuState, index) => (
       <NavLink
-        to="/main/overview"
+        to="/main/manage"
         style={({ isActive }) =>
           isActive
             ? { borderLeft: "4px solid #fff", padding: "0 20px" }
@@ -142,7 +160,7 @@ const menuData = [
   {
     header: (menuState, index) => (
       <NavLink
-        to="/main/overview"
+        to="/main/website"
         style={({ isActive }) =>
           isActive
             ? { borderLeft: "4px solid #fff", padding: "0 20px" }
@@ -168,7 +186,7 @@ const menuData = [
   {
     header: (menuState) => (
       <NavLink
-        to="/main/overview"
+        to="/main/notice"
         style={({ isActive }) =>
           isActive
             ? { borderLeft: "4px solid #fff", padding: "0 20px" }
@@ -232,14 +250,14 @@ const menuData = [
   {
     header: (menuState, index) => (
       <NavLink
-        to="/main/overview"
+        to="/main/setting"
         style={({ isActive }) =>
           isActive
             ? { borderLeft: "4px solid #fff", padding: "0 20px" }
             : { padding: "0 20px" }
         }
       >
-        <FlexBox just="space-between" align="center" minHeight="34px">
+        <FlexBox just="space-between" align="center" minHeight="54px">
           <FlexBox align="center">
             <SettingsIcon sx={{ color: grey[50] }} />
             <StyledBody
@@ -271,7 +289,9 @@ const SideMenu = (props) => {
   };
 
   const hello = (e) => {
-    e.stopPropagation();
+    // setMenuState((prev) => prev);
+    // e.preventDefault();
+    // e.stopPropagation();
   };
 
   return (
@@ -305,147 +325,6 @@ const SideMenu = (props) => {
             </SideLi>
           );
         })}
-        {/* <SideLi>
-          <FlexBox just="space-between" align="center">
-            <FlexBox align="center">
-              <HomeIcon sx={{ color: grey[50] }} />
-              <StyledBody
-                margin="0 0 0 10px"
-                color="#fff"
-                weight="bold"
-                display={menuState ? "none" : ""}
-              >
-                관리자홈
-              </StyledBody>
-            </FlexBox>
-          </FlexBox>
-        </SideLi>
-        <SideLi>
-          <FlexBox just="space-between" align="center">
-            <FlexBox align="center">
-              <PersonIcon sx={{ color: grey[50] }} />
-              <StyledBody
-                margin="0 0 0 10px"
-                color="#fff"
-                weight="bold"
-                display={menuState ? "none" : ""}
-              >
-                회원정보관리
-              </StyledBody>
-            </FlexBox>
-            <FlexBox>
-              <ExpandMoreIcon
-                sx={{ color: grey[50] }}
-                style={{ display: menuState ? "none" : "" }}
-              />
-            </FlexBox>
-          </FlexBox>
-
-          <FlexBox
-            direction="column"
-            margin="20px 0 20px 24px"
-            display={menuState ? "none" : ""}
-          >
-            <StyledBody margin="0 0 20px 10px" color="#fff">
-              일반회원
-            </StyledBody>
-            <StyledBody margin="0 0 0 10px" color="#fff">
-              가입요청
-            </StyledBody>
-          </FlexBox>
-        </SideLi>
-        <SideLi>
-          <FlexBox just="space-between" align="center">
-            <FlexBox align="center">
-              <StoreIcon sx={{ color: grey[50] }} />
-              <StyledBody
-                margin="0 0 0 10px"
-                color="#fff"
-                weight="bold"
-                display={menuState ? "none" : ""}
-              >
-                업체관리
-              </StyledBody>
-            </FlexBox>
-          </FlexBox>
-        </SideLi>
-        <SideLi>
-          <FlexBox just="space-between" align="center">
-            <FlexBox align="center">
-              <WebIcon sx={{ color: grey[50] }} />
-              <StyledBody
-                margin="0 0 0 10px"
-                color="#fff"
-                weight="bold"
-                display={menuState ? "none" : ""}
-              >
-                사이트관리
-              </StyledBody>
-            </FlexBox>
-          </FlexBox>
-        </SideLi>
-        <SideLi>
-          <FlexBox just="space-between" align="center">
-            <FlexBox align="center">
-              <NotificationsIcon sx={{ color: grey[50] }} />
-              <StyledBody
-                margin="0 0 0 10px"
-                color="#fff"
-                weight="bold"
-                display={menuState ? "none" : ""}
-              >
-                공지사항관리
-              </StyledBody>
-            </FlexBox>
-            <FlexBox>
-              <ExpandMoreIcon
-                sx={{ color: grey[50] }}
-                style={{ display: menuState ? "none" : "" }}
-              />
-            </FlexBox>
-          </FlexBox>
-
-          <FlexBox
-            direction="column"
-            margin="20px 0 20px 24px"
-            display={menuState ? "none" : ""}
-          >
-            <StyledBody margin="0 0 20px 10px" color="#fff">
-              공지사항
-            </StyledBody>
-            <StyledBody margin="0 0 0 10px" color="#fff">
-              이벤트
-            </StyledBody>
-          </FlexBox>
-        </SideLi>
-        <SideLi>
-          <FlexBox align="center">
-            <BarChartIcon sx={{ color: grey[50] }} />
-            <StyledBody
-              margin="0 0 0 10px"
-              color="#fff"
-              weight="bold"
-              display={menuState ? "none" : ""}
-            >
-              설문조사관리
-            </StyledBody>
-          </FlexBox>
-        </SideLi>
-        <SideLi>
-          <FlexBox just="space-between" align="center">
-            <FlexBox align="center">
-              <SettingsIcon sx={{ color: grey[50] }} />
-              <StyledBody
-                margin="0 0 0 10px"
-                color="#fff"
-                weight="bold"
-                display={menuState ? "none" : ""}
-              >
-                설정
-              </StyledBody>
-            </FlexBox>
-          </FlexBox>
-        </SideLi> */}
       </SideUl>
     </FlexBox>
   );

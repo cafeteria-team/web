@@ -3,7 +3,7 @@ import { FlexBox, StyledBody, StyledTitle } from "./StyledElements";
 import LogoutIcon from "@mui/icons-material/Logout";
 import ArrowDropDownIcon from "@mui/icons-material/ArrowDropDown";
 
-function Header({ name }) {
+function Header({ name, logout }) {
   console.log(name);
   const [box, setBox] = useState(false);
   const _onClick = () => {
@@ -43,7 +43,7 @@ function Header({ name }) {
         mHeight={box ? "48px" : "0"}
       >
         <LogoutIcon />
-        <StyledBody>로그아웃</StyledBody>
+        <StyledBody onClick={logout}>로그아웃</StyledBody>
       </FlexBox>
     </FlexBox>
   );
