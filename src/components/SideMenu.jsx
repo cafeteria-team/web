@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useRef } from "react";
 import {
   FlexBox,
   StyledTitle,
@@ -51,34 +51,30 @@ const menuData = [
   },
   {
     header: (menuState, index) => (
-      <NavLink
-        to="/main/member"
-        style={({ isActive }) =>
-          isActive
-            ? { borderLeft: "4px solid #fff", padding: "0 20px" }
-            : { padding: "0 20px" }
-        }
+      <FlexBox
+        just="space-between"
+        align="center"
+        minHeight="54px"
+        padding="0 20px"
       >
-        <FlexBox just="space-between" align="center" minHeight="54px">
-          <FlexBox align="center">
-            <PersonIcon sx={{ color: grey[50] }} />
-            <StyledBody
-              margin="0 0 0 10px"
-              color="#fff"
-              weight="bold"
-              display={menuState ? "none" : ""}
-            >
-              회원정보관리
-            </StyledBody>
-          </FlexBox>
-          <FlexBox>
-            <ExpandMoreIcon
-              sx={{ color: grey[50] }}
-              style={{ display: menuState ? "none" : "" }}
-            />
-          </FlexBox>
+        <FlexBox align="center">
+          <PersonIcon sx={{ color: grey[50] }} />
+          <StyledBody
+            margin="0 0 0 10px"
+            color="#fff"
+            weight="bold"
+            display={menuState ? "none" : ""}
+          >
+            회원정보관리
+          </StyledBody>
         </FlexBox>
-      </NavLink>
+        <FlexBox>
+          <ExpandMoreIcon
+            sx={{ color: grey[50] }}
+            style={{ display: menuState ? "none" : "" }}
+          />
+        </FlexBox>
+      </FlexBox>
     ),
     panel: (menuState, index, menuActive, _onClick) => (
       <FlexBox
@@ -95,6 +91,7 @@ const menuData = [
               ? { background: "#f97316", padding: "0 26px" }
               : { padding: "0 26px" }
           }
+          onClick={_onClick}
         >
           <StyledBody
             color="#fff"
@@ -103,7 +100,6 @@ const menuData = [
             padding="0 0 0 34px"
             lineH="34px"
             boxSizing="border-box"
-            onClick={_onClick}
           >
             일반회원
           </StyledBody>
@@ -115,6 +111,7 @@ const menuData = [
               ? { background: "#f97316", padding: "0 26px" }
               : { padding: "0 26px" }
           }
+          onClick={_onClick}
         >
           <StyledBody
             color="#fff"
@@ -123,7 +120,6 @@ const menuData = [
             padding="0 0 0 34px"
             lineH="34px"
             boxSizing="border-box"
-            onClick={_onClick}
           >
             가입요청
           </StyledBody>
@@ -185,34 +181,30 @@ const menuData = [
   },
   {
     header: (menuState) => (
-      <NavLink
-        to="/main/notice"
-        style={({ isActive }) =>
-          isActive
-            ? { borderLeft: "4px solid #fff", padding: "0 20px" }
-            : { padding: "0 20px" }
-        }
+      <FlexBox
+        just="space-between"
+        align="center"
+        minHeight="54px"
+        padding="0 20px"
       >
-        <FlexBox just="space-between" align="center" minHeight="54px">
-          <FlexBox align="center">
-            <NotificationsIcon sx={{ color: grey[50] }} />
-            <StyledBody
-              margin="0 0 0 10px"
-              color="#fff"
-              weight="bold"
-              display={menuState ? "none" : ""}
-            >
-              공지사항관리
-            </StyledBody>
-          </FlexBox>
-          <FlexBox>
-            <ExpandMoreIcon
-              sx={{ color: grey[50] }}
-              style={{ display: menuState ? "none" : "" }}
-            />
-          </FlexBox>
+        <FlexBox align="center">
+          <NotificationsIcon sx={{ color: grey[50] }} />
+          <StyledBody
+            margin="0 0 0 10px"
+            color="#fff"
+            weight="bold"
+            display={menuState ? "none" : ""}
+          >
+            공지사항관리
+          </StyledBody>
         </FlexBox>
-      </NavLink>
+        <FlexBox>
+          <ExpandMoreIcon
+            sx={{ color: grey[50] }}
+            style={{ display: menuState ? "none" : "" }}
+          />
+        </FlexBox>
+      </FlexBox>
     ),
     panel: (menuState, index, menuActive, _onClick) => (
       <FlexBox
@@ -222,28 +214,46 @@ const menuData = [
         just="space-between"
         overflow="hidden"
       >
-        <StyledBody
-          color="#fff"
-          display="block"
-          height="34px"
-          padding="0 0 0 34px"
-          lineH="34px"
-          boxSizing="border-box"
+        <NavLink
+          to="/main/notice"
+          style={({ isActive }) =>
+            isActive
+              ? { background: "#f97316", padding: "0 26px" }
+              : { padding: "0 26px" }
+          }
           onClick={_onClick}
         >
-          공지사항
-        </StyledBody>
-        <StyledBody
-          color="#fff"
-          display="block"
-          height="34px"
-          padding="0 0 0 34px"
-          lineH="34px"
-          boxSizing="border-box"
+          <StyledBody
+            color="#fff"
+            display="block"
+            height="34px"
+            padding="0 0 0 34px"
+            lineH="34px"
+            boxSizing="border-box"
+          >
+            공지사항
+          </StyledBody>
+        </NavLink>
+        <NavLink
+          to="/main/event"
+          style={({ isActive }) =>
+            isActive
+              ? { background: "#f97316", padding: "0 26px" }
+              : { padding: "0 26px" }
+          }
           onClick={_onClick}
         >
-          이벤트
-        </StyledBody>
+          <StyledBody
+            color="#fff"
+            display="block"
+            height="34px"
+            padding="0 0 0 34px"
+            lineH="34px"
+            boxSizing="border-box"
+          >
+            이벤트
+          </StyledBody>
+        </NavLink>
       </FlexBox>
     ),
   },
@@ -279,9 +289,11 @@ const SideMenu = (props) => {
   const [menuList] = useState(menuData);
   const [menuState, setMenuState] = useState(false);
   const [menuActive, setMenuActive] = useState(undefined);
+  const menuRef = useRef();
 
   const menuHide = () => {
     setMenuState((prev) => !prev);
+    setMenuActive(0);
   };
 
   const _onClick = (e, index) => {
@@ -289,9 +301,7 @@ const SideMenu = (props) => {
   };
 
   const hello = (e) => {
-    // setMenuState((prev) => prev);
-    // e.preventDefault();
-    // e.stopPropagation();
+    e.stopPropagation();
   };
 
   return (
@@ -320,7 +330,7 @@ const SideMenu = (props) => {
             <SideLi onClick={(e) => _onClick(e, index)} key={index}>
               {item.header(menuState)}
               {item.panel
-                ? item.panel(menuState, index, menuActive, hello)
+                ? item.panel(menuState, index, menuActive, hello, menuRef)
                 : ""}
             </SideLi>
           );
