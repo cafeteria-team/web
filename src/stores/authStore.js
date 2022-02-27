@@ -23,16 +23,22 @@ class AuthStore {
   }
 
   @action
-  async login(body) {
-    const { username, password } = body;
+  async login(profile) {
+    const { username, password } = profile;
     try {
-      const response = await axios.post("/api/user/login", {
-        username,
-        password,
-      });
+      const response = await axios.post(
+        "/api/user/login",
+        {
+          username,
+          password,
+        },
+        { withCredentials: true }
+      );
       this.setUsername(username);
+      console.log(response);
       return response;
     } catch (error) {
+      console.log(error.response);
       // console.log(error.response.data.detail, body);
       return false;
     }

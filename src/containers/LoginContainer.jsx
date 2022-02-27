@@ -22,7 +22,7 @@ const Login = inject("authStore")(
 
     const isSucceeded = () => {
       authStore.isAuthenticated(true);
-      return navigate("/main");
+      // return navigate("/main");
     };
 
     // state

@@ -9,6 +9,7 @@ import { NotFound } from "./views";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import { ThemeProvider } from "styled-components";
 import theme from "./styles/theme";
+import ProtectedRoutes from "./containers/ProtectedRoutes";
 
 function App() {
   return (
@@ -18,8 +19,10 @@ function App() {
           <Route path="/" element={<LoginContainer />}></Route>
           <Route path="/register" element={<RegisterContainer />}></Route>
           <Route path="/complete" element={<CompleteContainer />}></Route>
-          <Route path="/main" element={<Main />}>
-            <Route path=":name" element={<MainViewContainer />} />
+          <Route element={<ProtectedRoutes />}>
+            <Route path="/main" element={<Main />}>
+              <Route path=":name" element={<MainViewContainer />} />
+            </Route>
           </Route>
           <Route path="*" element={<NotFound />} />
         </Routes>
