@@ -63,7 +63,7 @@ const Login = inject("authStore")(
             <Input
               type="email"
               id="username"
-              placeholder="이메일"
+              placeholder="아이디"
               value={state.username}
               onChange={handleChange}
             />
