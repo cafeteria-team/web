@@ -1,7 +1,7 @@
 import axios from "axios";
 
 const instance = axios.create({
-  baseURL: "",
+  baseURL: "https://www.good-cafeteria.cf",
   //proxy 설정후 빈칸
   timeout: 1000,
 });

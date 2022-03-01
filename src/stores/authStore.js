@@ -31,8 +31,8 @@ class AuthStore {
         {
           username,
           password,
-        },
-        { withCredentials: true }
+        }
+        // { withCredentials: true }
       );
       this.setUsername(username);
       console.log(response);
