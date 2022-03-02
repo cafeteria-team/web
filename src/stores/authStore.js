@@ -10,10 +10,12 @@ class AuthStore {
 
   async onSilentRefresh() {
     const data = getCookie("refresh");
-    console.log(typeof data);
+
     if (data) {
       try {
-        const response = await axios.post("/api/user/token/refresh/", data);
+        const response = await axios.post("/api/user/token/refresh/", data, {
+          withCredentials: true,
+        });
         setCookie("refresh", response.data.refresh, {
           path: "/",
           secure: true,
