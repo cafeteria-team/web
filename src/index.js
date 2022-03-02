@@ -3,14 +3,16 @@ import ReactDOM from "react-dom";
 import "./index.css";
 import App from "./App";
 import reportWebVitals from "./reportWebVitals";
-
 import { Provider } from "mobx-react";
 import authStore from "./stores/authStore";
+import { CookiesProvider } from "react-cookie";
 
 ReactDOM.render(
-  <Provider authStore={authStore}>
-    <App />
-  </Provider>,
+  <CookiesProvider>
+    <Provider authStore={authStore}>
+      <App />
+    </Provider>
+  </CookiesProvider>,
   document.getElementById("root")
 );
 

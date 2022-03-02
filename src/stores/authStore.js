@@ -1,10 +1,40 @@
 import { observable, action, makeObservable, toJS, computed } from "mobx";
 import axios from "../utils/axios";
+import { setCookie, getCookie } from "../utils/cookie";
 
 class AuthStore {
   constructor() {
     makeObservable(this);
+    this.JWT_EXPIRY_TIME = 3600 * 1000;
   }
+
+  async onSilentRefresh() {
+    const data = getCookie("refresh");
+    console.log(typeof data);
+    if (data) {
+      try {
+        const response = await axios.post("/api/user/token/refresh/", data);
+        setCookie("refresh", response.data.refresh, {
+          path: "/",
+          secure: true,
+          samSite: "none",
+        });
+        this.onLoginSucess(response.data.access);
+      } catch (error) {
+        console.log(error);
+      }
+    }
+  }
+
+  onLoginSucess = (data) => {
+    this.isAuthenticated(true);
+
+    // accessToken 설정
+    axios.defaults.headers.common["Authorization"] = `Bearer ${data}`;
+
+    // accessToken 만료하기 1분전에 로그인 연장
+    setTimeout(this.onSilentRefresh, this.JWT_EXPIRY_TIME - 60000);
+  };
 
   // 유저
   @observable
@@ -31,11 +61,16 @@ class AuthStore {
         {
           username,
           password,
-        }
-        // { withCredentials: true }
+        },
+        { withCredentials: true }
       );
       this.setUsername(username);
-      console.log(response);
+      this.onLoginSucess(response.data.refresh);
+      setCookie("refresh", response.data.refresh, {
+        path: "/",
+        secure: true,
+        samSite: "none",
+      });
       return response;
     } catch (error) {
       console.log(error.response);
