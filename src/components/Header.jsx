@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { FlexBox, StyledBody, StyledTitle } from "./StyledElements";
+import { FlexBox, StyledBody } from "./StyledElements";
 import LogoutIcon from "@mui/icons-material/Logout";
 import ArrowDropDownIcon from "@mui/icons-material/ArrowDropDown";
 

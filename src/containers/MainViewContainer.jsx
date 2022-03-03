@@ -9,6 +9,7 @@ import {
   Website,
   Request,
   Event,
+  NotFound,
 } from "../views";
 
 const MainViewContainer = (props) => {
@@ -35,6 +36,8 @@ const MainViewContainer = (props) => {
             return <Setting />;
           case "website":
             return <Website />;
+          default:
+            return <NotFound />;
         }
       })()}
     </>

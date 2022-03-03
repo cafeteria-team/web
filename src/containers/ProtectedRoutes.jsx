@@ -5,7 +5,7 @@ import { inject, observer } from "mobx-react";
 const ProtectedRoutes = inject("authStore")(
   observer(({ authStore }) => {
     const auth = authStore.authenticated;
-    console.log(auth);
+    console.log("값ㅇ벗다", auth);
     return auth ? <Outlet /> : <Navigate to="/" />;
   })
 );

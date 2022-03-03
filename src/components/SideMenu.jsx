@@ -7,7 +7,6 @@ import {
   StyledBody,
 } from "./StyledElements";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
-import ArrowLeftIcon from "@mui/icons-material/ArrowLeft";
 import { grey } from "@mui/material/colors";
 import MenuOpenIcon from "@mui/icons-material/MenuOpen";
 import HomeIcon from "@mui/icons-material/Home";
@@ -15,7 +14,6 @@ import PersonIcon from "@mui/icons-material/Person";
 import StoreIcon from "@mui/icons-material/Store";
 import WebIcon from "@mui/icons-material/Web";
 import NotificationsIcon from "@mui/icons-material/Notifications";
-import BarChartIcon from "@mui/icons-material/BarChart";
 import SettingsIcon from "@mui/icons-material/Settings";
 import { IconButton } from "@mui/material";
 import { NavLink } from "react-router-dom";

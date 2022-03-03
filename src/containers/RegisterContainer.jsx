@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import axios from "../utils/axios";
 import Post from "../utils/Post";
 import ImageUploader from "../utils/imageuploader";

@@ -13,9 +13,13 @@ class AuthStore {
 
     if (data) {
       try {
-        const response = await axios.post("/api/user/token/refresh/", data, {
-          withCredentials: true,
-        });
+        const response = await axios.post(
+          "/api/user/token/refresh/",
+          { refresh: data },
+          {
+            withCredentials: true,
+          }
+        );
         setCookie("refresh", response.data.refresh, {
           path: "/",
           secure: true,
