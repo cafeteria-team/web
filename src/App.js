@@ -18,14 +18,12 @@ const App = inject("authStore")(
   observer(({ authStore }) => {
     const initializeUserInfo = async () => {
       await authStore.onSilentRefresh();
-      console.log("App 1번");
     };
 
     useEffect(() => {
       initializeUserInfo();
-      console.log("App 2번");
     }, []);
-    console.log("App 3번");
+
     return (
       <ThemeProvider theme={theme}>
         <BrowserRouter className="App">
@@ -34,8 +32,7 @@ const App = inject("authStore")(
             <Route path="/register" element={<RegisterContainer />}></Route>
             <Route path="/complete" element={<CompleteContainer />}></Route>
             <Route
-              authenticated={getCookie("refresh")}
-              render={() => <ProtectedRoutes />}
+              element={<ProtectedRoutes authenticated={getCookie("refresh")} />}
             >
               <Route path="/main" element={<Main />}>
                 <Route path=":name" element={<MainViewContainer />} />

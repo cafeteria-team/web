@@ -25,7 +25,7 @@ class AuthStore {
   }
 
   onSilentRefresh = async () => {
-    console.log("onSilentRefresh 호출");
+    // console.log("onSilentRefresh 호출");
     const data = getCookie("refresh");
 
     if (data) {
@@ -74,8 +74,8 @@ class AuthStore {
   };
 
   onLoginSucess = (data) => {
-    console.log("onLoginSuccess 호출");
-    console.log("onLoginSuccess data값은", data);
+    // console.log("onLoginSuccess 호출");
+    // console.log("onLoginSuccess data값은", data);
 
     // authenticated = true로 변경
     this.isAuthenticated(true);
@@ -131,9 +131,10 @@ class AuthStore {
   }
 
   @action
-  logout() {
-    this._auth.clearAll();
-  }
+  logout = () => {
+    this.isAuthenticated(false);
+    removeCookie("refresh");
+  };
 }
 
 export default new AuthStore();

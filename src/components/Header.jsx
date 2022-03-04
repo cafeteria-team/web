@@ -2,12 +2,19 @@ import React, { useState } from "react";
 import { FlexBox, StyledBody } from "./StyledElements";
 import LogoutIcon from "@mui/icons-material/Logout";
 import ArrowDropDownIcon from "@mui/icons-material/ArrowDropDown";
+import { useNavigate } from "react-router-dom";
 
 function Header({ name, logout }) {
+  const navigate = useNavigate();
   console.log(name);
   const [box, setBox] = useState(false);
   const _onClick = () => {
     setBox((prev) => !prev);
+  };
+
+  const _logout = () => {
+    logout();
+    return navigate("/");
   };
 
   return (
@@ -43,7 +50,7 @@ function Header({ name, logout }) {
         mHeight={box ? "48px" : "0"}
       >
         <LogoutIcon />
-        <StyledBody onClick={logout}>로그아웃</StyledBody>
+        <StyledBody onClick={_logout}>로그아웃</StyledBody>
       </FlexBox>
     </FlexBox>
   );

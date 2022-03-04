@@ -21,7 +21,6 @@ const Login = inject("authStore")(
     };
 
     const isSucceeded = () => {
-      // authStore.isAuthenticated(true);
       return navigate("/main");
     };
 
@@ -38,8 +37,6 @@ const Login = inject("authStore")(
         [id]: value,
       }));
     };
-
-    const pass = "123";
 
     return (
       <MainContainer background="unset">
