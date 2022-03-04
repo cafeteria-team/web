@@ -27,9 +27,10 @@ class AuthStore {
   onSilentRefresh = async () => {
     // console.log("onSilentRefresh 호출");
     const data = getCookie("refresh");
+    const username = getCookie("username");
 
     if (data) {
-      console.log("onSilentRefresh 데이터 값", data);
+      // console.log("onSilentRefresh 데이터 값", data);
       try {
         const response = await axios.post(
           "/api/user/token/refresh/",
@@ -43,7 +44,8 @@ class AuthStore {
           secure: true,
           samSite: "none",
         });
-        this.onLoginSucess(response.data.refresh);
+
+        this.onLoginSucess(response.data.refresh, username);
         return response;
       } catch (error) {
         console.log(error);
@@ -73,7 +75,7 @@ class AuthStore {
     }
   };
 
-  onLoginSucess = (data) => {
+  onLoginSucess = (data, username) => {
     // console.log("onLoginSuccess 호출");
     // console.log("onLoginSuccess data값은", data);
 
@@ -86,6 +88,14 @@ class AuthStore {
       secure: true,
       samSite: "none",
     });
+
+    // username 저장
+    setCookie("username", username, {
+      path: "/",
+      secure: true,
+      samSite: "none",
+    });
+    this.setUsername(username);
 
     // accessToken 설정
     // axios.defaults.headers.common["Authorization"] = `Bearer ${data}`;
@@ -107,7 +117,7 @@ class AuthStore {
         { withCredentials: true }
       );
       this.setUsername(username);
-      this.onLoginSucess(response.data.refresh);
+      this.onLoginSucess(response.data.refresh, username);
       // setCookie("refresh", response.data.refresh, {
       //   path: "/",
       //   secure: true,
@@ -134,6 +144,7 @@ class AuthStore {
   logout = () => {
     this.isAuthenticated(false);
     removeCookie("refresh");
+    removeCookie("username");
   };
 }
 

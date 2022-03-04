@@ -12,7 +12,7 @@ import theme from "./styles/theme";
 import ProtectedRoutes from "./containers/ProtectedRoutes";
 import React, { useEffect } from "react";
 import { inject, observer } from "mobx-react";
-import { setCookie, getCookie, removeCookie } from "./utils/cookie";
+import { getCookie } from "./utils/cookie";
 
 const App = inject("authStore")(
   observer(({ authStore }) => {

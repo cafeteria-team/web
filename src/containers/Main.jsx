@@ -6,7 +6,6 @@ import { Outlet } from "react-router-dom";
 
 const Main = inject("authStore")(
   observer(({ authStore }) => {
-    console.log("ss");
     return (
       <FlexBox width="100%" height="100%" background="#ededed">
         <SideMenu></SideMenu>
