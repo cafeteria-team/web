@@ -17,12 +17,6 @@ const App = inject("authStore")(
   observer(({ authStore }) => {
     const initializeUserInfo = async () => {
       await authStore.onSilentRefresh();
-      if (authStore.authenticated) {
-        console.log(authStore.authenticated);
-        // window.location.href = "/main/overview";
-      } else {
-        return;
-      }
     };
 
     useEffect(() => {

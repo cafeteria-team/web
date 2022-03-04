@@ -39,6 +39,8 @@ const Login = inject("authStore")(
       }));
     };
 
+    const pass = "123";
+
     return (
       <MainContainer background="unset">
         <FlexBox
