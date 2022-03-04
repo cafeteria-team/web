@@ -15,7 +15,6 @@ import {
 const MainViewContainer = (props) => {
   const params = useParams();
   const menuLists = params.name;
-  console.log(menuLists);
   return (
     <>
       {(() => {
