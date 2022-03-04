@@ -4,7 +4,8 @@ import { inject, observer } from "mobx-react";
 import { getCookie } from "../utils/cookie";
 
 const ProtectedRoutes = inject("authStore")(
-  observer(({ authStore }) => {
+  observer(({ authStore, authenticated }) => {
+    console.log("protected 1번", authenticated);
     // console.log("sajad 1");
     // const [state, setState] = useState("");
     const auth = authStore.authenticated;
@@ -33,7 +34,7 @@ const ProtectedRoutes = inject("authStore")(
     //     })()}
     //   </>
     // );
-    return auth ? <Outlet /> : <Navigate to="/" />;
+    return authenticated ? <Outlet /> : <Navigate to="/" />;
   })
 );
 
