@@ -18,6 +18,7 @@ const App = inject("authStore")(
   observer(({ authStore }) => {
     const initializeUserInfo = async () => {
       await authStore.onSilentRefresh();
+      console.log(authStore.accessToken);
     };
 
     useEffect(() => {

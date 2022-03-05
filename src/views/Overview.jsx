@@ -12,18 +12,18 @@ import {
 import axios from "../utils/axios";
 
 const UserList = () => {
-  const loadMemberList = async () => {
-    try {
-      const response = await axios.get("/api/user");
-      console.log(response);
-      return response;
-    } catch (error) {
-      return false;
-    }
-  };
-  useEffect(() => {
-    loadMemberList();
-  }, []);
+  // const loadMemberList = async () => {
+  //   try {
+  //     const response = await axios.get("/api/user");
+  //     console.log(response);
+  //     return response;
+  //   } catch (error) {
+  //     return false;
+  //   }
+  // };
+  // useEffect(() => {
+  //   loadMemberList();
+  // }, []);
 
   return (
     <FlexBox
