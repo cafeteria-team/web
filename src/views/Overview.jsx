@@ -10,8 +10,35 @@ import {
   Li,
 } from "../components/StyledElements";
 import axios from "../utils/axios";
+import { Pagination } from "./index";
 
 const UserList = () => {
+  const [posts, setPosts] = useState([]);
+  const [limit, setLimit] = useState(10);
+  const [page, setPage] = useState(1);
+  const offset = (page - 1) * limit;
+
+  // const getData = async () => {
+  //   try {
+  //     const response = await axios.post(
+  //       "https://jsonplaceholder.typicode.com/posts"
+  //     );
+  //     console.log(response);
+  //     return setPosts(response.data);
+  //   } catch (error) {
+  //     console.log(error);
+  //   }
+  // };
+
+  // console.log(posts);
+
+  useEffect(() => {
+    // getData();
+    fetch("https://jsonplaceholder.typicode.com/posts")
+      .then((res) => res.json())
+      .then((data) => setPosts(data));
+  }, []);
+
   // const loadMemberList = async () => {
   //   try {
   //     const response = await axios.get("/api/user");
@@ -34,7 +61,43 @@ const UserList = () => {
       direction="column"
     >
       <StyledBody margin="0 0 20px 0">회원관리</StyledBody>
-      <Ul
+      <div>
+        <label>
+          페이지 당 표시할 게시물 수:&nbsp;
+          <select
+            type="number"
+            value={limit}
+            onChange={({ target: { value } }) => setLimit(Number(value))}
+          >
+            <option value="10">10</option>
+            <option value="12">12</option>
+            <option value="20">20</option>
+            <option value="50">50</option>
+            <option value="100">100</option>
+          </select>
+        </label>
+      </div>
+
+      <div>
+        {posts.slice(offset, offset + limit).map(({ id, title, body }) => (
+          <div key={id}>
+            <h3>
+              {id}.{title}
+            </h3>
+            <p>{body}</p>
+          </div>
+        ))}
+      </div>
+      <footer>
+        <Pagination
+          total={posts.length}
+          limit={limit}
+          page={page}
+          setPage={setPage}
+        />
+      </footer>
+
+      {/* <Ul
         width="100%"
         background="#FF8400"
         padding="14px"
@@ -76,7 +139,7 @@ const UserList = () => {
             <Li></Li>
           </Ul>
         </Li>
-      </Ul>
+      </Ul> */}
     </FlexBox>
   );
 };

@@ -7,6 +7,7 @@ import Setting from "./Setting";
 import Website from "./Website";
 import Event from "./Event";
 import Request from "./Request";
+import Pagination from "./Pagination";
 
 export {
   Overview,
@@ -18,4 +19,5 @@ export {
   Website,
   Request,
   Event,
+  Pagination,
 };

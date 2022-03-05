@@ -21,7 +21,7 @@ const Login = inject("authStore")(
     };
 
     const isSucceeded = () => {
-      return navigate("/main");
+      return navigate("/main/overview");
     };
 
     // state
