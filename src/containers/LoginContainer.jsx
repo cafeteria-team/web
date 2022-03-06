@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Button, Input } from "../components";
 import {
   StyledTitle,
@@ -14,6 +14,12 @@ import { inject, observer } from "mobx-react";
 const Login = inject("authStore")(
   observer(({ authStore }) => {
     const navigate = useNavigate();
+
+    useEffect(() => {
+      if (localStorage.getItem("refresh")) {
+        navigate("/main/overview");
+      }
+    });
 
     const _login = async () => {
       const response = await authStore.login(state);

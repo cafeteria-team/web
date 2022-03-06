@@ -5,8 +5,7 @@ import { setCookie, getCookie, removeCookie } from "../utils/cookie";
 class AuthStore {
   constructor() {
     makeObservable(this);
-    // this.JWT_EXPIRY_TIME = 3600 * 1000;
-    this.JWT_EXPIRY_TIME = 60000;
+    this.JWT_EXPIRY_TIME = 3600 * 1000;
   }
 
   // 유저
@@ -35,12 +34,12 @@ class AuthStore {
   }
 
   onSilentRefresh = async () => {
-    // console.log("onSilentRefresh 호출");
-    const data = getCookie("refresh");
+    console.log("onSilentRefresh 호출");
+    const data = localStorage.getItem("refresh");
     const username = getCookie("username");
 
     if (data) {
-      // console.log("onSilentRefresh 데이터 값", data);
+      console.log("onSilentRefresh / refresh token 데이터 값은 :", data);
       try {
         const res = await axios.post(
           "/api/user/token/refresh/",
@@ -50,16 +49,14 @@ class AuthStore {
           }
         );
 
-        setCookie("refresh", res.data.refresh, {
-          path: "/",
-          secure: true,
-          samSite: "none",
-        });
+        // refresh토큰저장
+        localStorage.setItem("refresh", res.data.refresh);
 
         this.onLoginSucess(res.data.refresh, res.data.access, username);
+        console.log(res);
         return res;
       } catch (error) {
-        console.log(error);
+        console.log(error.response);
       }
     } else {
       this.isAuthenticated(false);
@@ -67,18 +64,14 @@ class AuthStore {
   };
 
   onLoginSucess = (refresh, access, username) => {
-    // console.log("onLoginSuccess 호출");
+    console.log("onLoginSuccess 호출");
     // console.log("onLoginSuccess data값은", data);
 
     // authenticated = true로 변경
     this.isAuthenticated(true);
 
     // refresh 값 쿠키로 저장
-    setCookie("refresh", refresh, {
-      path: "/",
-      secure: true,
-      samSite: "none",
-    });
+    localStorage.setItem("refresh", refresh);
 
     // username 저장
     setCookie("username", username, {
@@ -97,7 +90,7 @@ class AuthStore {
     // axios.defaults.headers.common["Authorization"] = `Bearer ${data}`;
 
     // accessToken 만료하기 1분전에 로그인 연장
-    setTimeout(this.onSilentRefresh, this.JWT_EXPIRY_TIME - 1000);
+    setTimeout(this.onSilentRefresh, this.JWT_EXPIRY_TIME - 60000);
   };
 
   @action
@@ -114,11 +107,7 @@ class AuthStore {
       );
       this.setUsername(username);
       this.onLoginSucess(response.data.refresh, response.data.access, username);
-      // setCookie("refresh", response.data.refresh, {
-      //   path: "/",
-      //   secure: true,
-      //   samSite: "none",
-      // });
+
       return response;
     } catch (error) {
       console.log(error.response);
@@ -145,7 +134,7 @@ class AuthStore {
   @action
   logout = () => {
     this.isAuthenticated(false);
-    removeCookie("refresh");
+    localStorage.removeItem("refresh");
     removeCookie("username");
   };
 }

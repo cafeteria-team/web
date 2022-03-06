@@ -1,5 +1,5 @@
 import axios from "axios";
-import { removeCookie } from "../utils/cookie";
+import { getCookie, removeCookie } from "../utils/cookie";
 
 const instance = axios.create({
   // baseURL: "https://www.good-cafeteria.cf",
@@ -19,18 +19,27 @@ const instance = axios.create({
 //   return config;
 // });
 
+// let isTokenRefreshing = false;
+
 instance.interceptors.response.use(
   (res) => {
+    console.log(res);
     return res;
   },
   async (error) => {
-    const {
-      config,
-      response: { status },
-    } = error;
-    if (status === 401) {
-      removeCookie("refresh");
-      alert("세션이 만료되었습니다. 다시 로그인해주세요.");
+    // const {
+    //   config,
+    //   response: { status },
+    // } = error;
+    const originalRequest = error.config;
+    if (error.response?.status === 401) {
+      if (error.response?.data.detail === "Token is invalid or expired") {
+        localStorage.removeItem("refresh");
+        removeCookie("username");
+        alert("세션이 만료되었습니다. 다시 로그인해주세요.");
+        window.location.replace("/");
+      }
+      return Promise.reject(error);
     }
     return Promise.reject(error);
   }

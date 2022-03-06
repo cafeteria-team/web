@@ -12,13 +12,12 @@ import theme from "./styles/theme";
 import ProtectedRoutes from "./containers/ProtectedRoutes";
 import React, { useEffect } from "react";
 import { inject, observer } from "mobx-react";
-import { getCookie } from "./utils/cookie";
 
 const App = inject("authStore")(
   observer(({ authStore }) => {
     const initializeUserInfo = async () => {
       await authStore.onSilentRefresh();
-      console.log(authStore.accessToken);
+      console.log("app / access Token 값은 :", authStore.accessToken);
     };
 
     useEffect(() => {
@@ -33,7 +32,11 @@ const App = inject("authStore")(
             <Route path="/register" element={<RegisterContainer />}></Route>
             <Route path="/complete" element={<CompleteContainer />}></Route>
             <Route
-              element={<ProtectedRoutes authenticated={getCookie("refresh")} />}
+              element={
+                <ProtectedRoutes
+                  authenticated={localStorage.getItem("refresh")}
+                />
+              }
             >
               <Route path="/main" element={<Main />}>
                 <Route path=":name" element={<MainViewContainer />} />
