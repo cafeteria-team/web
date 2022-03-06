@@ -11,11 +11,15 @@ import {
   Event,
   NotFound,
 } from "../views";
+import { useOutletContext } from "react-router-dom";
 
-const MainViewContainer = (props) => {
+const MainViewContainer = () => {
   const params = useParams();
   const menuLists = params.name;
 
+  const sss = useOutletContext();
+
+  console.log(sss);
   return (
     <>
       {(() => {

@@ -6,13 +6,15 @@ import { Outlet } from "react-router-dom";
 
 const Main = inject("authStore")(
   observer(({ authStore }) => {
+    const sss = "hh";
+
     return (
       <FlexBox width="100%" height="100%" background="#ededed">
         <SideMenu></SideMenu>
         <FlexBox direction="column" width="100%">
           <Header name={authStore._username} logout={authStore.logout} />
           <FlexBox>
-            <Outlet />
+            <Outlet context={sss} />
           </FlexBox>
         </FlexBox>
       </FlexBox>
