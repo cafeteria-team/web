@@ -5,28 +5,31 @@ import { inject, observer } from "mobx-react";
 import { Outlet } from "react-router-dom";
 import axios from "../utils/axios";
 
-const Main = inject("authStore")(
-  observer(({ authStore }) => {
-    console.log(authStore.accessToken);
-    //?page=1&page_size=10
-    const getUserList = async () => {
-      if (authStore.accessToken) {
-        try {
-          const response = await axios.get("/api/user?page=1&page_size=10", {
-            headers: {
-              Authorization: `Bearer ${authStore.accessToken}`,
-            },
-          });
-          console.log(response);
-          return response;
-        } catch (error) {
-          console.log(error.response);
-        }
-      }
-    };
+const Main = inject(
+  "authStore",
+  "listStore"
+)(
+  observer(({ authStore, listStore }) => {
+    // console.log(authStore.accessToken);
+
+    // const getUserList = async () => {
+    //   if (authStore.accessToken) {
+    //     try {
+    //       const response = await axios.get("/api/user?page=1&page_size=10", {
+    //         headers: {
+    //           Authorization: `Bearer ${authStore.accessToken}`,
+    //         },
+    //       });
+    //       console.log(response);
+    //       return response;
+    //     } catch (error) {
+    //       console.log(error.response);
+    //     }
+    //   }
+    // };
 
     useEffect(() => {
-      getUserList();
+      listStore.callUserList(authStore.accessToken, 1);
     }, []);
 
     const sss = "gg";
@@ -37,7 +40,7 @@ const Main = inject("authStore")(
         <FlexBox direction="column" width="100%">
           <Header name={authStore._username} logout={authStore.logout} />
           <FlexBox>
-            <Outlet context={sss} />
+            <Outlet context={listStore.getUserList} />
           </FlexBox>
         </FlexBox>
       </FlexBox>

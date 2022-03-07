@@ -5,11 +5,12 @@ import App from "./App";
 import reportWebVitals from "./reportWebVitals";
 import { Provider } from "mobx-react";
 import authStore from "./stores/authStore";
+import listStore from "./stores/listStore";
 import { CookiesProvider } from "react-cookie";
 
 ReactDOM.render(
   <CookiesProvider>
-    <Provider authStore={authStore}>
+    <Provider authStore={authStore} listStore={listStore}>
       <App />
     </Provider>
   </CookiesProvider>,
