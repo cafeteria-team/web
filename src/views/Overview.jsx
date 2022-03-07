@@ -9,7 +9,6 @@ import {
   Ul,
   Li,
 } from "../components/StyledElements";
-import axios from "../utils/axios";
 import { Pagination } from "./index";
 
 const UserList = ({ userList }) => {
@@ -17,8 +16,7 @@ const UserList = ({ userList }) => {
   const [limit, setLimit] = useState(10);
   const [page, setPage] = useState(1);
   const offset = (page - 1) * limit;
-
-  console.log(userList);
+  console.log("userList", userList);
 
   // const getData = async () => {
   //   try {
@@ -81,14 +79,18 @@ const UserList = ({ userList }) => {
       </div>
 
       <div>
-        {/* {userList.map(({ date_joined, id, is_active, store, username }) => (
-          <div key={id}>
-            <p>{date_joined}</p>
-            <p>{username}</p>
-            <p>{is_active}</p>
-            <p>{store.name}</p>
-          </div>
-        ))} */}
+        {userList ? (
+          userList.map(({ date_joined, id, is_active, store, username }) => (
+            <FlexBox key={id}>
+              <p>{date_joined}</p>
+              <p>{username}</p>
+              <p>{is_active}</p>
+              <p>{store.name}</p>
+            </FlexBox>
+          ))
+        ) : (
+          <></>
+        )}
 
         {/* {posts.slice(offset, offset + limit).map(({ id, title, body }) => (
           <div key={id}>
@@ -181,14 +183,16 @@ const ProManagement = () => {
   );
 };
 
-const Overview = ({ hello }) => {
-  const { name } = useParams();
+const Overview = ({ userList }) => {
+  let results = userList?.data?.results;
+
+  console.log("results", results);
 
   return (
     <FlexBox padding="30px 70px" direction="column" width="100%">
       <StyledTitle margin="0 0 30px 0">Overview</StyledTitle>
       <FlexBox width="100%" just="space-between" height="480px">
-        <UserList />
+        <UserList userList={results} />
         <ProManagement />
       </FlexBox>
     </FlexBox>

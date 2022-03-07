@@ -34,12 +34,12 @@ class AuthStore {
   }
 
   onSilentRefresh = async () => {
-    console.log("onSilentRefresh 호출");
+    // console.log("onSilentRefresh 호출");
     const data = localStorage.getItem("refresh");
     const username = getCookie("username");
 
     if (data) {
-      console.log("onSilentRefresh / refresh token 데이터 값은 :", data);
+      // console.log("onSilentRefresh / refresh token 데이터 값은 :", data);
       try {
         const res = await axios.post(
           "/api/user/token/refresh/",
@@ -53,7 +53,7 @@ class AuthStore {
         localStorage.setItem("refresh", res.data.refresh);
 
         this.onLoginSucess(res.data.refresh, res.data.access, username);
-        console.log(res);
+        // console.log(res);
         return res;
       } catch (error) {
         console.log(error.response);
@@ -64,7 +64,7 @@ class AuthStore {
   };
 
   onLoginSucess = (refresh, access, username) => {
-    console.log("onLoginSuccess 호출");
+    // console.log("onLoginSuccess 호출");
     // console.log("onLoginSuccess data값은", data);
 
     // authenticated = true로 변경
@@ -85,6 +85,7 @@ class AuthStore {
 
     // accessToken 저장
     this.setAccessToken(access);
+    localStorage.setItem("access", access);
 
     // accessToken 설정
     // axios.defaults.headers.common["Authorization"] = `Bearer ${data}`;

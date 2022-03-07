@@ -14,6 +14,7 @@ class ListStore {
 
   @action
   callUserList = async (accessToken, page) => {
+    console.log(accessToken);
     try {
       const response = await axios.get(`/api/user?page=${page}&page_size=10`, {
         headers: {

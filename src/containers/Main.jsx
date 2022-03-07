@@ -12,31 +12,14 @@ const Main = inject(
   observer(({ authStore, listStore }) => {
     const [userList, setUserList] = useState(null);
 
-    // console.log(authStore.accessToken);
-
-    // const getUserList = async () => {
-    //   if (authStore.accessToken) {
-    //     try {
-    //       const response = await axios.get("/api/user?page=1&page_size=10", {
-    //         headers: {
-    //           Authorization: `Bearer ${authStore.accessToken}`,
-    //         },
-    //       });
-    //       console.log(response);
-    //       return response;
-    //     } catch (error) {
-    //       console.log(error.response);
-    //     }
-    //   }
-    // };
-
-    const _callUserList = async () => {
-      const response = await listStore.callUserList(authStore.accessToken, 1);
+    const _callUserList = async (access) => {
+      const response = await listStore.callUserList(access, 1);
       setUserList(response);
     };
 
     useEffect(() => {
-      _callUserList();
+      let access = localStorage.getItem("access");
+      _callUserList(access);
     }, []);
 
     console.log("Main 에서값호출", userList);
