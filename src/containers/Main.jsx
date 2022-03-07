@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { SideMenu, Header } from "../components";
 import { FlexBox } from "../components/StyledElements";
 import { inject, observer } from "mobx-react";
@@ -10,6 +10,8 @@ const Main = inject(
   "listStore"
 )(
   observer(({ authStore, listStore }) => {
+    const [userList, setUserList] = useState(null);
+
     // console.log(authStore.accessToken);
 
     // const getUserList = async () => {
@@ -28,11 +30,16 @@ const Main = inject(
     //   }
     // };
 
+    const _callUserList = async () => {
+      const response = await listStore.callUserList(authStore.accessToken, 1);
+      setUserList(response);
+    };
+
     useEffect(() => {
-      listStore.callUserList(authStore.accessToken, 1);
+      _callUserList();
     }, []);
 
-    const sss = "gg";
+    console.log("Main 에서값호출", userList);
 
     return (
       <FlexBox width="100%" height="100%" background="#ededed">
@@ -40,7 +47,7 @@ const Main = inject(
         <FlexBox direction="column" width="100%">
           <Header name={authStore._username} logout={authStore.logout} />
           <FlexBox>
-            <Outlet context={listStore.getUserList} />
+            <Outlet context={userList} />
           </FlexBox>
         </FlexBox>
       </FlexBox>

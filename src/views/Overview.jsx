@@ -12,11 +12,13 @@ import {
 import axios from "../utils/axios";
 import { Pagination } from "./index";
 
-const UserList = () => {
+const UserList = ({ userList }) => {
   const [posts, setPosts] = useState([]);
   const [limit, setLimit] = useState(10);
   const [page, setPage] = useState(1);
   const offset = (page - 1) * limit;
+
+  console.log(userList);
 
   // const getData = async () => {
   //   try {
@@ -32,12 +34,12 @@ const UserList = () => {
 
   // console.log(posts);
 
-  useEffect(() => {
-    // getData();
-    fetch("https://jsonplaceholder.typicode.com/posts")
-      .then((res) => res.json())
-      .then((data) => setPosts(data));
-  }, []);
+  // useEffect(() => {
+  //   // getData();
+  //   fetch("https://jsonplaceholder.typicode.com/posts")
+  //     .then((res) => res.json())
+  //     .then((data) => setPosts(data));
+  // }, []);
 
   // const loadMemberList = async () => {
   //   try {
@@ -79,14 +81,23 @@ const UserList = () => {
       </div>
 
       <div>
-        {posts.slice(offset, offset + limit).map(({ id, title, body }) => (
+        {/* {userList.map(({ date_joined, id, is_active, store, username }) => (
+          <div key={id}>
+            <p>{date_joined}</p>
+            <p>{username}</p>
+            <p>{is_active}</p>
+            <p>{store.name}</p>
+          </div>
+        ))} */}
+
+        {/* {posts.slice(offset, offset + limit).map(({ id, title, body }) => (
           <div key={id}>
             <h3>
               {id}.{title}
             </h3>
             <p>{body}</p>
           </div>
-        ))}
+        ))} */}
       </div>
       <footer>
         <Pagination

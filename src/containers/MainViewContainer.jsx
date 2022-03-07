@@ -17,15 +17,15 @@ const MainViewContainer = () => {
   const params = useParams();
   const menuLists = params.name;
 
-  const sss = useOutletContext();
+  const userList = useOutletContext();
 
-  console.log(sss);
+  console.log("container 값호출", userList);
   return (
     <>
       {(() => {
         switch (menuLists) {
           case "overview":
-            return <Overview />;
+            return <Overview userList={userList} />;
           case "manage":
             return <Manage />;
           case "member":
