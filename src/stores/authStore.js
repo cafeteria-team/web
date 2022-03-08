@@ -111,6 +111,7 @@ class AuthStore {
 
       return response;
     } catch (error) {
+      console.log(error);
       console.log(error.response);
       // console.log(error.response.data.detail, body);
       return false;
@@ -136,6 +137,7 @@ class AuthStore {
   logout = () => {
     this.isAuthenticated(false);
     localStorage.removeItem("refresh");
+    localStorage.removeItem("access");
     removeCookie("username");
   };
 }

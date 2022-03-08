@@ -149,6 +149,7 @@ export const Li = styled.li`
   background-image: ${(props) => props.bgImage || ""};
   background-repeat: no-repeat;
   background-size: cover;
+  border-bottom: ${(props) => props.border || ""};
   border-radius: ${(props) => props.rad || ""};
   box-shadow: ${(props) => props.shadow || ""};
   position: ${(props) => props.position || ""};

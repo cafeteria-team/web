@@ -3,54 +3,22 @@ import { useParams } from "react-router-dom";
 import {
   FlexBox,
   StyledTitle,
-  SideUl,
-  SideLi,
+  StyledLink,
   StyledBody,
   Ul,
   Li,
 } from "../components/StyledElements";
 import { Pagination } from "./index";
+import moment from "moment";
+import { useNavigate } from "react-router-dom";
 
 const UserList = ({ userList }) => {
+  const navigate = useNavigate();
   const [posts, setPosts] = useState([]);
   const [limit, setLimit] = useState(10);
   const [page, setPage] = useState(1);
   const offset = (page - 1) * limit;
   console.log("userList", userList);
-
-  // const getData = async () => {
-  //   try {
-  //     const response = await axios.post(
-  //       "https://jsonplaceholder.typicode.com/posts"
-  //     );
-  //     console.log(response);
-  //     return setPosts(response.data);
-  //   } catch (error) {
-  //     console.log(error);
-  //   }
-  // };
-
-  // console.log(posts);
-
-  // useEffect(() => {
-  //   // getData();
-  //   fetch("https://jsonplaceholder.typicode.com/posts")
-  //     .then((res) => res.json())
-  //     .then((data) => setPosts(data));
-  // }, []);
-
-  // const loadMemberList = async () => {
-  //   try {
-  //     const response = await axios.get("/api/user");
-  //     console.log(response);
-  //     return response;
-  //   } catch (error) {
-  //     return false;
-  //   }
-  // };
-  // useEffect(() => {
-  //   loadMemberList();
-  // }, []);
 
   return (
     <FlexBox
@@ -60,8 +28,12 @@ const UserList = ({ userList }) => {
       boxSizing="border-box"
       direction="column"
     >
-      <StyledBody margin="0 0 20px 0">회원관리</StyledBody>
-      <div>
+      <FlexBox just="space-between">
+        <StyledBody margin="0 0 20px 0">회원관리</StyledBody>
+        <StyledLink to="/main/member">더보기</StyledLink>
+      </FlexBox>
+
+      {/* <div>
         <label>
           페이지 당 표시할 게시물 수:&nbsp;
           <select
@@ -76,41 +48,8 @@ const UserList = ({ userList }) => {
             <option value="100">100</option>
           </select>
         </label>
-      </div>
-
-      <div>
-        {userList ? (
-          userList.map(({ date_joined, id, is_active, store, username }) => (
-            <FlexBox key={id}>
-              <p>{date_joined}</p>
-              <p>{username}</p>
-              <p>{is_active}</p>
-              <p>{store.name}</p>
-            </FlexBox>
-          ))
-        ) : (
-          <></>
-        )}
-
-        {/* {posts.slice(offset, offset + limit).map(({ id, title, body }) => (
-          <div key={id}>
-            <h3>
-              {id}.{title}
-            </h3>
-            <p>{body}</p>
-          </div>
-        ))} */}
-      </div>
-      <footer>
-        <Pagination
-          total={posts.length}
-          limit={limit}
-          page={page}
-          setPage={setPage}
-        />
-      </footer>
-
-      {/* <Ul
+      </div> */}
+      <Ul
         width="100%"
         background="#FF8400"
         padding="14px"
@@ -118,41 +57,66 @@ const UserList = ({ userList }) => {
         just="space-around"
         color="#fff"
       >
-        <Li>가입일시</Li>
-        <Li>아이디</Li>
-        <Li>구분</Li>
-        <Li>성명</Li>
-        <Li>업체명</Li>
+        <Li just="center" width="25%">
+          가입일시
+        </Li>
+        <Li just="center" width="25%">
+          아이디
+        </Li>
+        <Li just="center" width="25%">
+          구분
+        </Li>
+        <Li just="center" width="25%">
+          업체명
+        </Li>
       </Ul>
-      <Ul>
-        <Li>
-          <Ul>
-            <Li></Li>
-            <Li></Li>
-            <Li></Li>
-            <Li></Li>
-            <Li></Li>
-          </Ul>
-        </Li>
-        <Li>
-          <Ul>
-            <Li></Li>
-            <Li></Li>
-            <Li></Li>
-            <Li></Li>
-            <Li></Li>
-          </Ul>
-        </Li>
-        <Li>
-          <Ul>
-            <Li></Li>
-            <Li></Li>
-            <Li></Li>
-            <Li></Li>
-            <Li></Li>
-          </Ul>
-        </Li>
-      </Ul> */}
+      <Ul width="100%" direction="column">
+        {userList ? (
+          userList.map(({ date_joined, id, is_active, store, username }) => (
+            <Li key={id} width="100%" border="1px solid #fdcc97">
+              <Ul
+                width="100%"
+                padding="14px"
+                boxSizing="border-box"
+                just="space-around"
+              >
+                <Li just="center" width="25%">
+                  {moment(date_joined).format("L")}
+                </Li>
+                <Li just="center" width="25%">
+                  {username}
+                </Li>
+                <Li just="center" width="25%">
+                  {is_active.toString()}
+                </Li>
+                <Li just="center" width="25%">
+                  {store.name}
+                </Li>
+              </Ul>
+            </Li>
+          ))
+        ) : (
+          <></>
+        )}
+      </Ul>
+
+      {/* {posts.slice(offset, offset + limit).map(({ id, title, body }) => (
+          <div key={id}>
+            <h3>
+              {id}.{title}
+            </h3>
+            <p>{body}</p>
+          </div>
+        ))} */}
+
+      {/* <footer>
+        <Pagination
+          total={posts.length}
+          limit={limit}
+          page={page}
+          setPage={setPage}
+        />
+      </footer> */}
     </FlexBox>
   );
 };

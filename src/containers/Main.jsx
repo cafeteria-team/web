@@ -3,7 +3,6 @@ import { SideMenu, Header } from "../components";
 import { FlexBox } from "../components/StyledElements";
 import { inject, observer } from "mobx-react";
 import { Outlet } from "react-router-dom";
-import axios from "../utils/axios";
 
 const Main = inject(
   "authStore",
