@@ -70,7 +70,7 @@ const UserList = ({ userList }) => {
           업체명
         </Li>
       </Ul>
-      <Ul width="100%" direction="column">
+      <Ul width="100%" direction="column" height="360px" overflow="hidden">
         {userList ? (
           userList.map(({ date_joined, id, is_active, store, username }) => (
             <Li key={id} width="100%" border="1px solid #fdcc97">

@@ -136,9 +136,9 @@ class AuthStore {
   @action
   logout = () => {
     this.isAuthenticated(false);
+    removeCookie("username");
     localStorage.removeItem("refresh");
     localStorage.removeItem("access");
-    removeCookie("username");
   };
 }
 

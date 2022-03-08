@@ -29,7 +29,7 @@ const MainViewContainer = () => {
           case "manage":
             return <Manage />;
           case "member":
-            return <Member />;
+            return <Member userList={userList} />;
           case "request":
             return <Request />;
           case "event":

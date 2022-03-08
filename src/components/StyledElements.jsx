@@ -130,6 +130,7 @@ export const Ul = styled.ul`
   cursor: ${(props) => props.cursor || ""};
   box-sizing: ${(props) => props.boxSizing || ""};
   color: ${(props) => props.color || ""};
+  overflow: ${(props) => props.overflow || ""};
   &:hover {
     background: ${(props) => props.hoverBg || ""};
     color: ${(props) => props.hoverColor || ""};
