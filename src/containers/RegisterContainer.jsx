@@ -118,6 +118,15 @@ const Register = (props) => {
     }
   };
 
+  const checkMobile = async (phone) => {
+    try {
+      const response = await axios.post("/api/phone/auth", phone);
+      return response;
+    } catch (error) {
+      return error;
+    }
+  };
+
   const onFileChange = async (e) => {
     console.log(e);
     const uploaded = await imageUploader.upload(e.target.files[0]);
