@@ -7,6 +7,7 @@ import {
   Ul,
   Li,
 } from "../components/StyledElements";
+import { Input } from "../components";
 import moment from "moment";
 
 const Member = ({ userList }) => {
@@ -23,6 +24,10 @@ const Member = ({ userList }) => {
       >
         <FlexBox just="space-between">
           <StyledBody margin="0 0 20px 0">회원관리</StyledBody>
+          <FlexBox>
+            <StyledBody margin="0 0 20px 0">검색</StyledBody>
+            <Input />
+          </FlexBox>
         </FlexBox>
         <Ul
           width="100%"
