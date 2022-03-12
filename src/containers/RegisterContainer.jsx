@@ -154,7 +154,7 @@ const Register = (props) => {
     console.log(phone, auth_phone);
     try {
       const response = await axios.get(
-        `/api/phone/auth/?phone_num=${phone}&auth_num=${auth_phone}`
+        `/api/phone/auth?phone_num=${phone}&auth_num=${auth_phone}`
       );
       console.log(response);
       return response;
