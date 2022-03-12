@@ -33,9 +33,11 @@ const Register = (props) => {
     detail_addr: "",
     busi_num: "",
     busi_num_img: "",
+    auth_phone: "",
   });
 
   const [agreement, setAgreement] = useState(false);
+  const [clickedAuth, setClickedAuth] = useState(false);
   const [isPopup, setIsPopup] = useState(false);
 
   const popupOn = () => {
@@ -56,8 +58,21 @@ const Register = (props) => {
     }));
   };
 
-  const handleChangeUserName = (e) => {
+  // 핸드폰 정규식
+  const handleChangePhone = (e) => {
     const regex = /^[0-9\b -]{0,13}$/;
+    const { id, value } = e.target;
+    if (regex.test(value)) {
+      setState((prevState) => ({
+        ...prevState,
+        [id]: value,
+      }));
+    }
+  };
+
+  //인증번호
+  const handleChangeAuthPhone = (e) => {
+    const regex = /^[0-9\b -]{0,5}$/;
     const { id, value } = e.target;
     if (regex.test(value)) {
       setState((prevState) => ({
@@ -118,11 +133,33 @@ const Register = (props) => {
     }
   };
 
-  const checkMobile = async (phone) => {
+  const getPhoneAuth = async () => {
+    setClickedAuth((prev) => !prev);
+    const { phone } = state;
+
     try {
-      const response = await axios.post("/api/phone/auth", phone);
+      const response = await axios.post("/api/phone/auth", {
+        phone_num: phone,
+      });
+      console.log(response);
       return response;
     } catch (error) {
+      console.log(error.response);
+      return error;
+    }
+  };
+
+  const checkPhoneAuth = async () => {
+    const { phone, auth_phone } = state;
+    console.log(phone, auth_phone);
+    try {
+      const response = await axios.get(
+        `/api/phone/auth/?phone_num=${phone}&auth_num=${auth_phone}`
+      );
+      console.log(response);
+      return response;
+    } catch (error) {
+      console.log(error.response);
       return error;
     }
   };
@@ -200,7 +237,7 @@ const Register = (props) => {
                 id="phone"
                 placeholder="핸드폰번호"
                 value={state.phone}
-                onChange={handleChangeUserName}
+                onChange={handleChangePhone}
               />
               <Button
                 color="#3b86ff"
@@ -210,20 +247,20 @@ const Register = (props) => {
                 background="unset"
                 type="button"
                 width="unset"
-                title="인증하기"
+                title={clickedAuth ? "인증확인" : "인증하기"}
                 padding="unset"
                 font="14px"
+                onClick={clickedAuth ? checkPhoneAuth : getPhoneAuth}
               />
             </FlexBox>
 
-            {/* <input
-            type="text"
-            id="userName"
-            placeholder="인증번호"
-            value={state.userName}
-            className={styles.input}
-            onChange={handleChangeUserName}
-          /> */}
+            <Input
+              type="text"
+              id="auth_phone"
+              placeholder="인증번호"
+              value={state.auth_phone}
+              onChange={handleChangeAuthPhone}
+            />
 
             <FlexBox position="relative">
               <Input
