@@ -10,7 +10,7 @@ import {
 import { Input } from "../components";
 import moment from "moment";
 
-const Member = ({ userList }) => {
+const Member = ({ userList, onSearchList }) => {
   let results = userList?.data?.results;
   return (
     <FlexBox padding="30px 70px" direction="column" width="100%">
@@ -26,7 +26,7 @@ const Member = ({ userList }) => {
           <StyledBody margin="0 0 20px 0">회원관리</StyledBody>
           <FlexBox>
             <StyledBody margin="0 0 20px 0">검색</StyledBody>
-            <Input />
+            <Input onChange={(event) => onSearchList(event.target.value)} />
           </FlexBox>
         </FlexBox>
         <Ul

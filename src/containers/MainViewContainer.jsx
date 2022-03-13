@@ -17,19 +17,24 @@ const MainViewContainer = () => {
   const params = useParams();
   const menuLists = params.name;
 
-  const userList = useOutletContext();
+  const contextData = useOutletContext();
 
-  console.log("container 값호출", userList);
+  console.log("container 값호출", contextData.userList);
   return (
     <>
       {(() => {
         switch (menuLists) {
           case "overview":
-            return <Overview userList={userList} />;
+            return <Overview userList={contextData.userList} />;
           case "manage":
             return <Manage />;
           case "member":
-            return <Member userList={userList} />;
+            return (
+              <Member
+                userList={contextData.userList}
+                onSearchList={contextData.onSearchList}
+              />
+            );
           case "request":
             return <Request />;
           case "event":

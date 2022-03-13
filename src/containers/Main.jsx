@@ -21,6 +21,16 @@ const Main = inject(
       _callUserList(access);
     }, []);
 
+    const onSearchList = (title) => {
+      console.log(title);
+      // let newList = userList;
+      // newList = newList.filter((lists) => {
+      //   return lists.title.toLowerCase().search(title.toLowerCase()) !== -1;
+      // });
+
+      // setUserList(newList);
+    };
+
     console.log("Main 에서값호출", userList);
 
     return (
@@ -29,7 +39,7 @@ const Main = inject(
         <FlexBox direction="column" width="100%">
           <Header name={authStore._username} logout={authStore.logout} />
           <FlexBox>
-            <Outlet context={userList} />
+            <Outlet context={{ userList, onSearchList }} />
           </FlexBox>
         </FlexBox>
       </FlexBox>
