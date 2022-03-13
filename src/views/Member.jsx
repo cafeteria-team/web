@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import {
   FlexBox,
   StyledTitle,
@@ -12,6 +12,21 @@ import moment from "moment";
 
 const Member = ({ userList, onSearchList }) => {
   let results = userList?.data?.results;
+
+  // state
+  const [state, setState] = useState({
+    search: "",
+  });
+
+  const handleChange = (e) => {
+    const { id, value } = e.target;
+    setState((prevState) => ({
+      ...prevState,
+      [id]: value,
+    }));
+    onSearchList(state.search);
+  };
+
   return (
     <FlexBox padding="30px 70px" direction="column" width="100%">
       <StyledTitle margin="0 0 30px 0">일반회원</StyledTitle>
@@ -26,7 +41,12 @@ const Member = ({ userList, onSearchList }) => {
           <StyledBody margin="0 0 20px 0">회원관리</StyledBody>
           <FlexBox>
             <StyledBody margin="0 0 20px 0">검색</StyledBody>
-            <Input onChange={(event) => onSearchList(event.target.value)} />
+            <Input
+              onChange={handleChange}
+              id="search"
+              type="text"
+              value={state.search}
+            />
           </FlexBox>
         </FlexBox>
         <Ul
