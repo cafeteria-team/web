@@ -10,10 +10,13 @@ const Main = inject(
 )(
   observer(({ authStore, listStore }) => {
     const [userList, setUserList] = useState(null);
+    const [allList, setAllList] = useState(null);
 
     const _callUserList = async (access) => {
       const response = await listStore.callUserList(access, 1);
+      const res = await listStore.searchForList(access);
       setUserList(response);
+      setAllList(res);
     };
 
     useEffect(() => {
@@ -21,15 +24,32 @@ const Main = inject(
       _callUserList(access);
     }, []);
 
-    const onSearchList = (title) => {
-      console.log(title);
-      let newList = userList?.data?.results;
-      newList = newList?.filter((lists) => {
-        console.log(title, lists);
-        return lists.username.toLowerCase().search(title.toLowerCase()) !== -1;
-      });
+    const onSearchList = async (title) => {
+      let lists = allList.data;
+      if (title !== "") {
+        lists = lists.filter((item) => {
+          return item.username.toLowerCase().search(title.toLowerCase()) !== -1;
+        });
+        setUserList(lists);
+      } else {
+        _callUserList(authStore.accessToken);
+      }
 
-      setUserList(newList);
+      console.log(title);
+      // await listStore.searchList(authStore.accessToken).then((res) => {
+      //   let lists = res.data;
+      //   console.log(title);
+      //   if (title !== "") {
+      //     lists = lists.filter((item) => {
+      //       return (
+      //         item.username.toLowerCase().search(title.toLowerCase()) !== -1
+      //       );
+      //     });
+      //     setUserList(lists);
+      //   } else {
+      //     _callUserList(authStore.accessToken);
+      //   }
+      // });
     };
 
     console.log("Main 에서값호출", userList);

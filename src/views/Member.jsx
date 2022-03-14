@@ -11,6 +11,7 @@ import { Input } from "../components";
 import moment from "moment";
 
 const Member = ({ userList, onSearchList }) => {
+  console.log(userList);
   let results = userList?.data?.results;
 
   // state

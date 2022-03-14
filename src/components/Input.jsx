@@ -32,5 +32,4 @@ const Input = memo(
     );
   }
 );
-
 export default Input;
