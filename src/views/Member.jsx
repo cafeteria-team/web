@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   FlexBox,
   StyledTitle,
@@ -11,7 +11,7 @@ import { Input } from "../components";
 import moment from "moment";
 
 const Member = ({ userList, onSearchList }) => {
-  console.log(userList);
+  console.log("여기는 member", userList);
   let results = userList?.data?.results;
 
   // state
@@ -25,7 +25,7 @@ const Member = ({ userList, onSearchList }) => {
       ...prevState,
       [id]: value,
     }));
-    onSearchList(state.search);
+    onSearchList(e.target.value);
   };
 
   return (

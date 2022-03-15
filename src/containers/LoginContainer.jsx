@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from "react";
-import { Button, Input } from "../components";
+import React, { useState, useEffect, useCallback } from "react";
+import { Button, Input, LoginFrom } from "../components";
 import {
   StyledTitle,
   MainContainer,
@@ -19,7 +19,7 @@ const Login = inject("authStore")(
       if (localStorage.getItem("refresh")) {
         navigate("/main/overview");
       }
-    });
+    }, []);
 
     const _login = async () => {
       const response = await authStore.login(state);
@@ -44,6 +44,8 @@ const Login = inject("authStore")(
       }));
     };
 
+    console.log("렌더링");
+
     return (
       <MainContainer background="unset">
         <FlexBox
@@ -64,6 +66,13 @@ const Login = inject("authStore")(
           <StyledTitle align="center" margin="0 0 40px 0">
             Login
           </StyledTitle>
+          {/* <LoginFrom
+            username={state.username}
+            handleChange={handleChange}
+            password={state.password}
+            _onClick={_login}
+          /> */}
+
           <Form method="POST" direction="column">
             <Input
               type="email"

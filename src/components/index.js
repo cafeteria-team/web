@@ -4,5 +4,6 @@ import ImageInput from "./ImageInput";
 import PrivacyInput from "./PrivacyInput";
 import SideMenu from "./SideMenu";
 import Header from "./Header";
+import LoginFrom from "./LoginForm";
 
-export { Button, Input, ImageInput, PrivacyInput, SideMenu, Header };
+export { Button, Input, ImageInput, PrivacyInput, SideMenu, Header, LoginFrom };

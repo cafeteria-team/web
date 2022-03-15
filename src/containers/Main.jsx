@@ -25,6 +25,8 @@ const Main = inject(
     }, []);
 
     const onSearchList = async (title) => {
+      console.log("검색 실행");
+      console.log(title);
       let lists = allList.data;
       if (title !== "") {
         lists = lists.filter((item) => {
