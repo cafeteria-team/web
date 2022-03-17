@@ -1,29 +1,41 @@
+import React, { memo } from "react";
 import styled from "styled-components";
 import { Link } from "react-router-dom";
 
-export const StyledTitle = styled.h1`
+const Title = styled.h1`
   font-size: ${({ theme }) => theme.fontSizes[5]};
   font-weight: ${({ theme }) => theme.fontWeights[8]};
-  text-align: ${(props) => (props.align === "center" ? "center" : "left")};
-  margin: ${(props) => props.margin};
-  color: ${(props) => props.color || ""};
-  padding: ${(props) => props.pad || ""};
-  display: ${(props) => props.display || ""};
+  text-align: ${({ props }) => (props.align === "center" ? "center" : "left")};
+  margin: ${({ props }) => props.margin};
+  color: ${({ props }) => props.color || ""};
+  padding: ${({ props }) => props.pad || ""};
+  display: ${({ props }) => props.display || ""};
   flex-shrink: 0;
 `;
-export const StyledBody = styled.p`
+
+export const StyledTitle = memo((props) => {
+  console.log(props);
+  return <Title props={props}>{props.children}</Title>;
+});
+
+const Body = styled.p`
   font-size: ${({ theme }) => theme.fontSizes[2]};
-  margin: ${(props) => props.margin || ""};
-  padding: ${(props) => props.padding || ""};
-  color: ${(props) => props.color || ""};
-  font-weight: ${(props) => props.weight || ""};
-  display: ${(props) => props.display || ""};
+  margin: ${({ props }) => props.margin || ""};
+  padding: ${({ props }) => props.padding || ""};
+  color: ${({ props }) => props.color || ""};
+  font-weight: ${({ props }) => props.weight || ""};
+  display: ${({ props }) => props.display || ""};
   flex-shrink: 0;
   white-space: nowrap;
-  line-height: ${(props) => props.lineH || ""};
-  box-sizing: ${(props) => props.boxSizing || ""};
-  height: ${(props) => props.height || ""};
+  line-height: ${({ props }) => props.lineH || ""};
+  box-sizing: ${({ props }) => props.boxSizing || ""};
+  height: ${({ props }) => props.height || ""};
 `;
+
+export const StyledBody = memo((props) => {
+  return <Body props={props}>{props.children}</Body>;
+});
+
 export const StyledSpan = styled.span`
   align-self: ${(props) => props.align || ""};
   font-size: ${(props) => props.font || ""};
