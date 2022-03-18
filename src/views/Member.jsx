@@ -138,6 +138,7 @@ const Pagination = ({ total, limit, page, setPage }) => {
             width="20px"
             margin="0 2px"
             hover={true}
+            background={page === i + 1 ? "#FF8400" : "#808080"}
           />
         ))}
       <Button

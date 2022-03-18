@@ -39,7 +39,6 @@ const StyledButton = styled.button`
 
   &[aria-current] {
     ${({ ariaCurrent }) => {
-      console.log(ariaCurrent);
       ariaCurrent === "page" &&
         `background: deeppink;
         font-weight: bold;
