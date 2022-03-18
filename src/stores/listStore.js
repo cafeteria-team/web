@@ -19,8 +19,14 @@ class ListStore {
 
   @action
   callUserList = async (accessToken, page) => {
+    // try {
+    //   const response = await axios.get(`/api/user?page=${page}&page_size=10`, {
+    //     headers: {
+    //       Authorization: `Bearer ${accessToken}`,
+    //     },
+    //   });
     try {
-      const response = await axios.get(`/api/user?page=${page}&page_size=10`, {
+      const response = await axios.get(`/api/user`, {
         headers: {
           Authorization: `Bearer ${accessToken}`,
         },

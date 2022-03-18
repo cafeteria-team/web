@@ -338,4 +338,4 @@ const SideMenu = (props) => {
   );
 };
 
-export default SideMenu;
+export default React.memo(SideMenu);

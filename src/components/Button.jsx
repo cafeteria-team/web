@@ -1,14 +1,16 @@
+/* eslint-disable no-unused-expressions */
 import React from "react";
 import styled from "styled-components";
 
 const StyledButton = styled.button`
+  ${(props) => console.log(props)}
   width: ${({ width }) => width || "100%"};
   font-weight: ${({ weight }) => weight || "normal"};
   padding: ${({ padding }) => padding || "14px 20px"};
   border-radius: 4px;
   outline: unset;
-  transition: border 0.3s ease-in-out;
-  margin-bottom: 20px;
+  transition: border, background 0.3s ease-in-out;
+  margin: ${({ margin }) => margin || "0 0 20px 0"};
   font-size: ${({ theme, font }) => font || theme.fontSizes[2]};
   background-color: ${({ background, theme }) =>
     background ? background : theme.colors.orange};
@@ -19,6 +21,31 @@ const StyledButton = styled.button`
   position: ${({ position }) => position || ""};
   right: ${({ right }) => right || ""};
   top: ${({ top }) => top || ""};
+
+  &:hover {
+    ${({ hover }) =>
+      hover &&
+      `background: #f97316;
+    cursor: pointer;
+`}
+  }
+
+  &[disabled] {
+    ${({ disabled }) =>
+      disabled &&
+      `background: grey;
+  cursor: revert;
+  transform: revert;`}
+  }
+
+  &[aria-current] {
+    ${({ aria_current }) =>
+      aria_current &&
+      `    background: deeppink;
+    font-weight: bold;
+    cursor: revert;
+    transform: revert;`}
+  }
 `;
 
 function Button({
@@ -34,6 +61,10 @@ function Button({
   padding,
   font,
   onClick,
+  disabled,
+  aria_current,
+  hover,
+  margin,
 }) {
   return (
     <StyledButton
@@ -48,6 +79,10 @@ function Button({
       padding={padding}
       font={font}
       onClick={onClick}
+      disabled={disabled}
+      aria_current={aria_current}
+      hover={hover}
+      margin={margin}
     >
       {title}
     </StyledButton>

@@ -14,7 +14,6 @@ const Title = styled.h1`
 `;
 
 export const StyledTitle = memo((props) => {
-  console.log(props);
   return <Title props={props}>{props.children}</Title>;
 });
 

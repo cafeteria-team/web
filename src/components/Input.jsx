@@ -28,6 +28,7 @@ const Input = memo(
         value={value || ""}
         id={id || ""}
         disabled={disabled}
+        width={width || ""}
       ></StyledInput>
     );
   }

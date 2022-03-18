@@ -48,12 +48,13 @@ function Header({ name, logout }) {
         hoverColor="#fff;"
         overflow="hidden"
         mHeight={box ? "48px" : "0"}
+        onClick={_logout}
       >
         <LogoutIcon />
-        <StyledBody onClick={_logout}>로그아웃</StyledBody>
+        <StyledBody>로그아웃</StyledBody>
       </FlexBox>
     </FlexBox>
   );
 }
 
-export default Header;
+export default React.memo(Header);
