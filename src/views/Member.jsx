@@ -149,8 +149,7 @@ const Pagination = ({ total, limit, page, setPage }) => {
 
 const Member = ({ userList, onSearchList }) => {
   console.log("여기는 member", userList?.data);
-  let results = userList?.data;
-  let total = userList?.data?.length;
+  let total = userList?.length;
 
   // state
   const [state, setState] = useState({
@@ -189,7 +188,7 @@ const Member = ({ userList, onSearchList }) => {
         </FlexBox>
 
         <MemberListTitle />
-        <MemberList results={results} limit={limit} offset={offset} />
+        <MemberList results={userList} limit={limit} offset={offset} />
         <Pagination total={total} limit={limit} page={page} setPage={setPage} />
       </FlexBox>
     </FlexBox>

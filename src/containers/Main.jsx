@@ -16,7 +16,7 @@ const Main = inject(
       async (access) => {
         const response = await listStore.callUserList(access, 1);
         // const res = await listStore.searchForList(access);
-        setUserList(response);
+        setUserList(response.data);
         // setAllList(res);
       },
       [listStore]
@@ -30,7 +30,7 @@ const Main = inject(
     const onSearchList = async (title) => {
       console.log("검색 실행");
       console.log(title);
-      let lists = userList?.data;
+      let lists = userList;
       console.log(lists);
       if (title !== "") {
         lists = lists?.filter((item) => {
