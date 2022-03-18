@@ -131,7 +131,7 @@ const Pagination = ({ total, limit, page, setPage }) => {
           <Button
             key={i + 1}
             onClick={() => setPage(i + 1)}
-            aria_current={page === i + 1 ? "page" : null}
+            ariaCurrent={page === i + 1 ? "page" : null}
             title={i + 1}
             color="white"
             padding="6px"

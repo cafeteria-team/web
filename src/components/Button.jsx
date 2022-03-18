@@ -3,7 +3,6 @@ import React from "react";
 import styled from "styled-components";
 
 const StyledButton = styled.button`
-  ${(props) => console.log(props)}
   width: ${({ width }) => width || "100%"};
   font-weight: ${({ weight }) => weight || "normal"};
   padding: ${({ padding }) => padding || "14px 20px"};
@@ -39,12 +38,14 @@ const StyledButton = styled.button`
   }
 
   &[aria-current] {
-    ${({ aria_current }) =>
-      aria_current &&
-      `    background: deeppink;
-    font-weight: bold;
-    cursor: revert;
-    transform: revert;`}
+    ${({ ariaCurrent }) => {
+      console.log(ariaCurrent);
+      ariaCurrent === "page" &&
+        `background: deeppink;
+        font-weight: bold;
+        cursor: revert;
+        transform: revert`;
+    }}
   }
 `;
 
@@ -62,7 +63,7 @@ function Button({
   font,
   onClick,
   disabled,
-  aria_current,
+  ariaCurrent,
   hover,
   margin,
 }) {
@@ -80,7 +81,7 @@ function Button({
       font={font}
       onClick={onClick}
       disabled={disabled}
-      aria_current={aria_current}
+      ariaCurrent={ariaCurrent}
       hover={hover}
       margin={margin}
     >
