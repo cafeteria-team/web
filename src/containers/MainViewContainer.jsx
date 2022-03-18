@@ -33,6 +33,7 @@ const MainViewContainer = () => {
               <Member
                 userList={contextData.userList}
                 onSearchList={contextData.onSearchList}
+                deleteUser={contextData.deleteUser}
               />
             );
           case "request":

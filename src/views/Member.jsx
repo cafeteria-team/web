@@ -58,7 +58,7 @@ const MemberListTitle = memo(() => {
   );
 });
 
-const MemberList = ({ results, offset, limit }) => {
+const MemberList = ({ results, offset, limit, deleteUser }) => {
   return (
     <Ul width="100%" direction="column">
       {results ? (
@@ -71,6 +71,7 @@ const MemberList = ({ results, offset, limit }) => {
                 padding="14px"
                 boxSizing="border-box"
                 just="space-around"
+                align="center"
               >
                 <Li just="center" width="16.6666666667%">
                   {id}
@@ -88,7 +89,14 @@ const MemberList = ({ results, offset, limit }) => {
                   {store.name}
                 </Li>
                 <Li just="center" width="16.6666666667%">
-                  관리
+                  <Button
+                    title="탈퇴"
+                    margin="0"
+                    padding="4px"
+                    width="40px"
+                    background="tomato"
+                    onClick={() => deleteUser(username)}
+                  />
                 </Li>
               </Ul>
             </Li>
@@ -147,7 +155,7 @@ const Pagination = ({ total, limit, page, setPage }) => {
   );
 };
 
-const Member = ({ userList, onSearchList }) => {
+const Member = ({ userList, onSearchList, deleteUser }) => {
   console.log("여기는 member", userList?.data);
   let total = userList?.length;
 
@@ -188,7 +196,12 @@ const Member = ({ userList, onSearchList }) => {
         </FlexBox>
 
         <MemberListTitle />
-        <MemberList results={userList} limit={limit} offset={offset} />
+        <MemberList
+          results={userList}
+          limit={limit}
+          offset={offset}
+          deleteUser={deleteUser}
+        />
         <Pagination total={total} limit={limit} page={page} setPage={setPage} />
       </FlexBox>
     </FlexBox>

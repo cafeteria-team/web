@@ -7,24 +7,14 @@ class ListStore {
   //유저리스트
   @observable
   _userList = [];
-  _newUserList = [];
 
   get getUserList() {
     return toJS(this._userList);
   }
 
-  get getNewUserList() {
-    return toJS(this._newUserList);
-  }
-
+  // call userList
   @action
-  callUserList = async (accessToken, page) => {
-    // try {
-    //   const response = await axios.get(`/api/user?page=${page}&page_size=10`, {
-    //     headers: {
-    //       Authorization: `Bearer ${accessToken}`,
-    //     },
-    //   });
+  callUserList = async (accessToken) => {
     try {
       const response = await axios.get(`/api/user`, {
         headers: {
@@ -39,26 +29,18 @@ class ListStore {
     }
   };
 
+  // set userList
   @action
   setUserList = (body) => {
     this._userList = body;
   };
 
+  // delete userList
   @action
-  setNewUserList = (body) => {
-    this._NewUserList = body;
-  };
-
-  @action
-  searchForList = async (accessToken) => {
+  deleteUser = async (userId) => {
     try {
-      const response = await axios.get(`/api/user`, {
-        headers: {
-          Authorization: `Bearer ${accessToken}`,
-        },
-      });
+      const response = await axios.delete(`/api/user/${userId}`);
       console.log(response);
-      this.setNewUserList(response.data.results);
       return response;
     } catch (error) {
       console.log(error.response);
