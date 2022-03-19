@@ -10,7 +10,7 @@ import {
 import { Button } from "../components";
 import { Input } from "../components";
 import moment from "moment";
-import { Route, Routes, useNavigate, Outlet } from "react-router-dom";
+import { useNavigate, Outlet } from "react-router-dom";
 import { useParams } from "react-router";
 
 const SearchBar = ({ handleChange, search }) => {
@@ -167,8 +167,14 @@ const Pagination = ({ total, limit, page, setPage }) => {
   );
 };
 
-const Member = ({ userList, onSearchList, deleteUser, editUser }) => {
-  console.log("여기는 member", Member);
+const Member = ({
+  userList,
+  onSearchList,
+  deleteUser,
+  editUser,
+  selectedUser,
+}) => {
+  console.log("여기는 member 렌더링됨", selectedUser);
   let total = userList?.length;
 
   const params = useParams();
@@ -197,8 +203,9 @@ const Member = ({ userList, onSearchList, deleteUser, editUser }) => {
 
   useEffect(() => {}, [userList]);
 
-  const move = (userId) => {
-    editUser(userId);
+  const move = async (userId) => {
+    localStorage.setItem("userId", userId);
+    await editUser();
     navigate(`${userId}`);
   };
 
@@ -223,7 +230,7 @@ const Member = ({ userList, onSearchList, deleteUser, editUser }) => {
         </FlexBox>
 
         {params.detail ? (
-          <Outlet />
+          <Outlet context={selectedUser} />
         ) : (
           <FlexBox direction="column">
             <MemberListTitle />

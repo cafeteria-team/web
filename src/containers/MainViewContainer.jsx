@@ -19,7 +19,7 @@ const MainViewContainer = () => {
 
   const contextData = useOutletContext();
 
-  console.log("container 값호출", contextData.userList);
+  // console.log("container 값호출", contextData.userList);
   return (
     <>
       {(() => {
@@ -35,6 +35,7 @@ const MainViewContainer = () => {
                 onSearchList={contextData.onSearchList}
                 deleteUser={contextData.deleteUser}
                 editUser={contextData.editUser}
+                selectedUser={contextData.selectedUser}
               />
             );
           case "request":

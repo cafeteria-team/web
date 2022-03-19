@@ -10,6 +10,8 @@ const Main = inject(
 )(
   observer(({ authStore, listStore }) => {
     const [userList, setUserList] = useState(null);
+    const [selectedUser, setSelectedUser] = useState(null);
+
     const _callUserList = useCallback(
       async (access) => {
         const response = await listStore.callUserList(access);
@@ -17,11 +19,6 @@ const Main = inject(
       },
       [listStore]
     );
-
-    useEffect(() => {
-      let access = localStorage.getItem("access");
-      _callUserList(access);
-    }, [_callUserList]);
 
     const onSearchList = (title) => {
       let lists = userList;
@@ -43,12 +40,20 @@ const Main = inject(
       _callUserList(access);
     };
 
-    const editUser = async (userId) => {
+    const editUser = async () => {
+      let userId = localStorage.getItem("access");
       const response = await listStore.editUser(userId);
-      console.log(response);
+      console.log(response?.data);
+      setSelectedUser(response?.data);
     };
 
-    console.log("Main 에서값호출", userList);
+    useEffect(() => {
+      let access = localStorage.getItem("access");
+
+      _callUserList(access);
+    }, [_callUserList]);
+
+    // console.log("Main 에서값호출", userList);
 
     return (
       <FlexBox width="100%" height="100%" background="#ededed">
@@ -57,7 +62,13 @@ const Main = inject(
           <Header name={authStore._username} logout={authStore.logout} />
           <FlexBox>
             <Outlet
-              context={{ userList, onSearchList, deleteUser, editUser }}
+              context={{
+                userList,
+                onSearchList,
+                deleteUser,
+                editUser,
+                selectedUser,
+              }}
             />
           </FlexBox>
         </FlexBox>

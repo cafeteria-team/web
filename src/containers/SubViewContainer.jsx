@@ -8,13 +8,14 @@ const SubViewContainer = (props) => {
   const menuLists = params.name;
 
   const contextData = useOutletContext();
+  console.log(contextData);
 
   return (
     <>
       {(() => {
         switch (menuLists) {
           case "member":
-            return <MemberEdit />;
+            return <MemberEdit selectedUser={contextData} />;
           default:
             return <NotFound />;
         }
