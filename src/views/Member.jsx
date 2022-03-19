@@ -11,6 +11,7 @@ import { Button } from "../components";
 import { Input } from "../components";
 import moment from "moment";
 import { Route, Routes, useNavigate, Outlet } from "react-router-dom";
+import { useParams } from "react-router";
 
 const SearchBar = ({ handleChange, search }) => {
   return (
@@ -167,8 +168,10 @@ const Pagination = ({ total, limit, page, setPage }) => {
 };
 
 const Member = ({ userList, onSearchList, deleteUser, editUser }) => {
-  console.log("여기는 member", userList?.data);
+  console.log("여기는 member", Member);
   let total = userList?.length;
+
+  const params = useParams();
 
   const navigate = useNavigate();
 
@@ -176,6 +179,7 @@ const Member = ({ userList, onSearchList, deleteUser, editUser }) => {
   const [state, setState] = useState({
     search: "",
   });
+  const [detail, setDetail] = useState(false);
 
   // for pagination
   const [limit, setLimit] = useState(10);
@@ -200,6 +204,7 @@ const Member = ({ userList, onSearchList, deleteUser, editUser }) => {
   return (
     <FlexBox padding="30px 70px" direction="column" width="100%">
       <StyledTitle margin="0 0 30px 0">일반회원</StyledTitle>
+
       <FlexBox
         width="100%"
         background="#fff"
@@ -208,20 +213,36 @@ const Member = ({ userList, onSearchList, deleteUser, editUser }) => {
         direction="column"
       >
         <FlexBox just="space-between" align="center">
-          <StyledBody margin="0 0 20px 0">회원관리</StyledBody>
-          <SearchBar search={state.search} handleChange={handleChange} />
+          <StyledBody margin="0 0 20px 0">
+            회원관리 {params.detail && "- 기본정보"}
+          </StyledBody>
+          {!params.detail && (
+            <SearchBar search={state.search} handleChange={handleChange} />
+          )}
         </FlexBox>
 
-        <MemberListTitle />
-        <MemberList
-          results={userList}
-          limit={limit}
-          offset={offset}
-          deleteUser={deleteUser}
-          editUser={editUser}
-          move={move}
-        />
-        <Pagination total={total} limit={limit} page={page} setPage={setPage} />
+        {params.detail ? (
+          <Outlet />
+        ) : (
+          <FlexBox direction="column">
+            <MemberListTitle />
+            <MemberList
+              results={userList}
+              limit={limit}
+              offset={offset}
+              deleteUser={deleteUser}
+              editUser={editUser}
+              move={move}
+            />
+
+            <Pagination
+              total={total}
+              limit={limit}
+              page={page}
+              setPage={setPage}
+            />
+          </FlexBox>
+        )}
       </FlexBox>
     </FlexBox>
   );

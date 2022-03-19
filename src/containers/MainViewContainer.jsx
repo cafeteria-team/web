@@ -1,5 +1,6 @@
 import React from "react";
 import { useParams } from "react-router";
+import { useOutletContext } from "react-router-dom";
 import {
   Overview,
   Manage,
@@ -11,7 +12,6 @@ import {
   Event,
   NotFound,
 } from "../views";
-import { useOutletContext, Outlet } from "react-router-dom";
 
 const MainViewContainer = () => {
   const params = useParams();
@@ -35,9 +35,7 @@ const MainViewContainer = () => {
                 onSearchList={contextData.onSearchList}
                 deleteUser={contextData.deleteUser}
                 editUser={contextData.editUser}
-              >
-                <Outlet />
-              </Member>
+              />
             );
           case "request":
             return <Request />;

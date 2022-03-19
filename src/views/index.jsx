@@ -8,6 +8,7 @@ import Website from "./Website";
 import Event from "./Event";
 import Request from "./Request";
 import Pagination from "./Pagination";
+import MemberEdit from "./MemberEdit";
 
 export {
   Overview,
@@ -20,4 +21,5 @@ export {
   Request,
   Event,
   Pagination,
+  MemberEdit,
 };

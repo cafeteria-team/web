@@ -3,6 +3,7 @@ import LoginContainer from "./LoginContainer";
 import CompleteContainer from "./CompleteContainer";
 import Main from "./Main";
 import MainViewContainer from "./MainViewContainer";
+import SubViewContainer from "./SubViewContainer";
 
 export {
   RegisterContainer,
@@ -10,4 +11,5 @@ export {
   CompleteContainer,
   Main,
   MainViewContainer,
+  SubViewContainer,
 };
