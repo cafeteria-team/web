@@ -43,8 +43,9 @@ const Main = inject(
       _callUserList(access);
     };
 
-    const editUser = (userId) => {
-      console.log(userId);
+    const editUser = async (userId) => {
+      const response = await listStore.editUser(userId);
+      console.log(response);
     };
 
     console.log("Main 에서값호출", userList);

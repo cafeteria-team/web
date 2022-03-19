@@ -198,6 +198,7 @@ const Member = ({ userList, onSearchList, deleteUser, editUser }) => {
   useEffect(() => {}, [userList]);
 
   const move = (userId) => {
+    editUser(userId);
     navigate(`${userId}`);
   };
 

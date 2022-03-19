@@ -2,7 +2,9 @@ import { observable, action, makeObservable, toJS, computed } from "mobx";
 import axios from "../utils/axios";
 
 class ListStore {
-  constructor() {}
+  constructor() {
+    makeObservable(this);
+  }
 
   //유저리스트
   @observable
@@ -41,6 +43,17 @@ class ListStore {
     try {
       const response = await axios.delete(`/api/user/${userId}`);
       console.log(response);
+      return response;
+    } catch (error) {
+      console.log(error.response);
+    }
+  };
+
+  // edit userList
+  @action
+  editUser = async (userId) => {
+    try {
+      const response = await axios.get(`/api/user/${userId}`);
       return response;
     } catch (error) {
       console.log(error.response);
