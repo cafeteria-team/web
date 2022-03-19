@@ -38,7 +38,13 @@ const Main = inject(
     };
 
     const deleteUser = async (userId) => {
-      listStore.deleteUser(userId);
+      let access = localStorage.getItem("access");
+      await listStore.deleteUser(userId);
+      _callUserList(access);
+    };
+
+    const editUser = (userId) => {
+      console.log(userId);
     };
 
     console.log("Main 에서값호출", userList);
@@ -49,7 +55,9 @@ const Main = inject(
         <FlexBox direction="column" width="100%">
           <Header name={authStore._username} logout={authStore.logout} />
           <FlexBox>
-            <Outlet context={{ userList, onSearchList, deleteUser }} />
+            <Outlet
+              context={{ userList, onSearchList, deleteUser, editUser }}
+            />
           </FlexBox>
         </FlexBox>
       </FlexBox>

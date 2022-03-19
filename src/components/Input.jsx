@@ -3,7 +3,7 @@ import styled from "styled-components";
 
 const StyledInput = styled.input`
   width: ${({ width }) => width || "300px"};
-  padding: 14px 20px;
+  padding: ${({ padding }) => padding || "14px 20px"};
   border: 1px solid #ccc;
   border-radius: ${({ theme }) => theme.radii[2]};
   outline: unset;
@@ -19,7 +19,7 @@ const StyledInput = styled.input`
 `;
 
 const Input = memo(
-  ({ placeholder, type, onChange, value, width, id, disabled }) => {
+  ({ placeholder, type, onChange, value, width, id, disabled, padding }) => {
     return (
       <StyledInput
         placeholder={placeholder}
@@ -29,6 +29,7 @@ const Input = memo(
         id={id || ""}
         disabled={disabled}
         width={width || ""}
+        padding={padding || ""}
       ></StyledInput>
     );
   }

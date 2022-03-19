@@ -10,6 +10,7 @@ import {
 import { Button } from "../components";
 import { Input } from "../components";
 import moment from "moment";
+import { Route, Routes, useNavigate, Outlet } from "react-router-dom";
 
 const SearchBar = ({ handleChange, search }) => {
   return (
@@ -21,6 +22,7 @@ const SearchBar = ({ handleChange, search }) => {
         type="text"
         value={search}
         width="140px"
+        padding="10px 20px"
       />
     </FlexBox>
   );
@@ -58,7 +60,7 @@ const MemberListTitle = memo(() => {
   );
 });
 
-const MemberList = ({ results, offset, limit, deleteUser }) => {
+const MemberList = ({ results, offset, limit, deleteUser, editUser, move }) => {
   return (
     <Ul width="100%" direction="column">
       {results ? (
@@ -68,7 +70,7 @@ const MemberList = ({ results, offset, limit, deleteUser }) => {
             <Li key={id} width="100%" border="1px solid #fdcc97">
               <Ul
                 width="100%"
-                padding="14px"
+                padding="8px"
                 boxSizing="border-box"
                 just="space-around"
                 align="center"
@@ -90,12 +92,20 @@ const MemberList = ({ results, offset, limit, deleteUser }) => {
                 </Li>
                 <Li just="center" width="16.6666666667%">
                   <Button
+                    title="수정"
+                    margin="0 10px 0 0"
+                    padding="4px"
+                    width="40px"
+                    background="#06c"
+                    onClick={() => move(id)}
+                  />
+                  <Button
                     title="탈퇴"
                     margin="0"
                     padding="4px"
                     width="40px"
                     background="tomato"
-                    onClick={() => deleteUser(username)}
+                    onClick={() => deleteUser(id)}
                   />
                 </Li>
               </Ul>
@@ -112,7 +122,7 @@ const Pagination = ({ total, limit, page, setPage }) => {
   const numPages = Math.ceil(total / limit);
   console.log(total, limit, page, numPages);
   return total ? (
-    <FlexBox just="center" margin="50px -10px 0 -10px">
+    <FlexBox just="center" margin="32px -10px 0 -10px">
       <Button
         onClick={() => {
           setPage(page - 1);
@@ -156,9 +166,11 @@ const Pagination = ({ total, limit, page, setPage }) => {
   );
 };
 
-const Member = ({ userList, onSearchList, deleteUser }) => {
+const Member = ({ userList, onSearchList, deleteUser, editUser }) => {
   console.log("여기는 member", userList?.data);
   let total = userList?.length;
+
+  const navigate = useNavigate();
 
   // state
   const [state, setState] = useState({
@@ -181,6 +193,10 @@ const Member = ({ userList, onSearchList, deleteUser }) => {
 
   useEffect(() => {}, [userList]);
 
+  const move = (userId) => {
+    navigate(`${userId}`);
+  };
+
   return (
     <FlexBox padding="30px 70px" direction="column" width="100%">
       <StyledTitle margin="0 0 30px 0">일반회원</StyledTitle>
@@ -191,7 +207,7 @@ const Member = ({ userList, onSearchList, deleteUser }) => {
         boxSizing="border-box"
         direction="column"
       >
-        <FlexBox just="space-between">
+        <FlexBox just="space-between" align="center">
           <StyledBody margin="0 0 20px 0">회원관리</StyledBody>
           <SearchBar search={state.search} handleChange={handleChange} />
         </FlexBox>
@@ -202,6 +218,8 @@ const Member = ({ userList, onSearchList, deleteUser }) => {
           limit={limit}
           offset={offset}
           deleteUser={deleteUser}
+          editUser={editUser}
+          move={move}
         />
         <Pagination total={total} limit={limit} page={page} setPage={setPage} />
       </FlexBox>

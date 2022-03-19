@@ -11,7 +11,7 @@ import {
   Event,
   NotFound,
 } from "../views";
-import { useOutletContext } from "react-router-dom";
+import { useOutletContext, Outlet } from "react-router-dom";
 
 const MainViewContainer = () => {
   const params = useParams();
@@ -34,7 +34,10 @@ const MainViewContainer = () => {
                 userList={contextData.userList}
                 onSearchList={contextData.onSearchList}
                 deleteUser={contextData.deleteUser}
-              />
+                editUser={contextData.editUser}
+              >
+                <Outlet />
+              </Member>
             );
           case "request":
             return <Request />;

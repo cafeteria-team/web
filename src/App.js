@@ -12,6 +12,7 @@ import theme from "./styles/theme";
 import ProtectedRoutes from "./containers/ProtectedRoutes";
 import React, { useEffect } from "react";
 import { inject, observer } from "mobx-react";
+import What from "./views/What";
 
 const App = inject("authStore")(
   observer(({ authStore }) => {
@@ -38,8 +39,14 @@ const App = inject("authStore")(
                 />
               }
             >
-              <Route path="/main" element={<Main />}>
+              {/* <Route path="/main" element={<Main />}>
                 <Route path=":name" element={<MainViewContainer />} />
+              </Route> */}
+
+              <Route path="/main" element={<Main />}>
+                <Route path=":name" element={<MainViewContainer />}>
+                  <Route path=":user" element={<What />} />
+                </Route>
               </Route>
             </Route>
             <Route path="*" element={<NotFound />} />
