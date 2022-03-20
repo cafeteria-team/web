@@ -29,6 +29,7 @@ const Input = memo(
     disabled,
     padding,
     margin,
+    dataId,
   }) => {
     return (
       <StyledInput
@@ -41,6 +42,7 @@ const Input = memo(
         width={width || ""}
         padding={padding || ""}
         margin={margin || ""}
+        data-id={dataId}
       ></StyledInput>
     );
   }

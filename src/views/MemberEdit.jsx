@@ -12,7 +12,7 @@ import { useNavigate } from "react-router-dom";
 
 const InputData = [
   {
-    body: (selectedUser, onClicked, index) => (
+    body: (selectedUser) => (
       <>
         <FlexBox margin="0 10px 0 0" minW="80px">
           아이디
@@ -28,7 +28,7 @@ const InputData = [
     ),
   },
   {
-    body: (selectedUser, onClicked, handleChange, state, index) => (
+    body: (selectedUser, handleChange, state) => (
       <>
         <FlexBox margin="0 10px 0 0" minW="80px">
           이메일
@@ -37,46 +37,40 @@ const InputData = [
           type="email"
           id="email"
           margin="0"
-          value={onClicked === index ? state.email : selectedUser?.email}
-          onChange={(e) => handleChange(e, index)}
+          value={state.email}
+          onChange={(e) => handleChange(e)}
         />
       </>
     ),
   },
   {
-    body: (selectedUser, onClicked, handleChange, state, index) => (
+    body: (selectedUser, handleChange, state) => (
       <>
         <FlexBox margin="0 10px 0 0" minW="80px">
           가게명
         </FlexBox>
         <Input
           type="text"
-          id={state.store}
+          id="name"
           margin="0"
-          value={
-            onClicked === index ? state.store.name : selectedUser?.store.name
-          }
-          onChange={handleChange}
+          value={state.name}
+          onChange={(e) => handleChange(e)}
         />
       </>
     ),
   },
   {
-    body: (selectedUser, onClicked, handleChange, state, index) => (
+    body: (selectedUser, handleChange, state) => (
       <>
         <FlexBox margin="0 10px 0 0" minW="80px">
           사업자번호
         </FlexBox>
         <Input
           type="text"
-          id="password"
+          id="busi_num"
           margin="0"
-          value={
-            onClicked === index
-              ? state.store.busi_num
-              : selectedUser?.store.busi_num
-          }
-          onChange={handleChange}
+          value={state.busi_num}
+          onChange={(e) => handleChange(e)}
         />
       </>
     ),
@@ -88,32 +82,34 @@ const MemberEdit = ({ selectedUser }) => {
 
   const [state, setState] = useState({
     email: "",
-    store: {
-      name: "",
-      busi_num: "",
-    },
+    name: "",
+    busi_num: "",
   });
 
-  console.log(state.store);
+  console.log(state);
 
-  const [onClicked, setOnClicked] = useState(false);
+  const [onFocused, setOnFocused] = useState(false);
 
-  useEffect(() => {}, [selectedUser]);
+  useEffect(() => {
+    setState({
+      email: selectedUser?.email,
+      name: selectedUser?.store.name,
+      busi_num: selectedUser?.store.busi_num,
+    });
+  }, [selectedUser]);
 
-  // const _onClick = () => {
-  //   setOnClicked(true);
-  // };
-
-  const handleChange = (e, index) => {
-    console.log(e.target);
-    setOnClicked(index);
+  const handleChange = (e) => {
     const { id, value } = e.target;
-    console.log(id);
     setState((prev) => ({
       ...prev,
       [id]: value,
     }));
   };
+
+  const goBacktoList = () => {
+    navigate("/main/member", { replace: true });
+  };
+
   return (
     <>
       <Form method="POST" direction="column">
@@ -168,7 +164,7 @@ const MemberEdit = ({ selectedUser }) => {
           </FlexBox> */}
           {InputData.map((item, index) => (
             <FlexBox align="center" width="40%" margin="20px 30px" key={index}>
-              {item.body(selectedUser, onClicked, handleChange, state, index)}
+              {item.body(selectedUser, handleChange, state)}
             </FlexBox>
           ))}
         </FlexBox>
@@ -186,6 +182,7 @@ const MemberEdit = ({ selectedUser }) => {
             width="150px"
             margin="30px 0 0 0"
             background="#33a66c"
+            onClick={goBacktoList}
           />
         </FlexBox>
       </Form>
