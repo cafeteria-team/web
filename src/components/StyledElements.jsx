@@ -73,8 +73,10 @@ export const FlexBox = styled.div`
   border-radius: ${(props) => props.rad || ""};
   box-shadow: ${(props) => props.shadow || ""};
   position: ${(props) => props.position || ""};
+  min-width: ${(props) => props.minW || ""};
   max-width: ${(props) => props.maxW || ""};
   flex: ${(props) => props.flex || ""};
+  flex-wrap: ${(props) => props.wrap || ""};
   transition: all 0.6s ease;
   max-height: ${(props) => props.mHeight || ""};
   min-height: ${(props) => props.minHeight || ""};

@@ -15,7 +15,7 @@ const Main = inject(
     const _callUserList = useCallback(
       async (access) => {
         const response = await listStore.callUserList(access);
-        setUserList(response.data);
+        setUserList(response?.data);
       },
       [listStore]
     );
@@ -40,18 +40,20 @@ const Main = inject(
       _callUserList(access);
     };
 
-    const editUser = async () => {
-      let userId = localStorage.getItem("access");
-      const response = await listStore.editUser(userId);
-      console.log(response?.data);
-      setSelectedUser(response?.data);
-    };
+    const editUser = useCallback(async () => {
+      let userId = localStorage.getItem("userId");
+      if (userId) {
+        const response = await listStore.editUser(userId);
+        setSelectedUser(response.data);
+      }
+    }, [listStore]);
 
     useEffect(() => {
       let access = localStorage.getItem("access");
 
       _callUserList(access);
-    }, [_callUserList]);
+      editUser();
+    }, [_callUserList, editUser]);
 
     // console.log("Main 에서값호출", userList);
 
