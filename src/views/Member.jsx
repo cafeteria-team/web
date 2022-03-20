@@ -171,8 +171,9 @@ const Member = ({
   userList,
   onSearchList,
   deleteUser,
-  editUser,
+  getEditUser,
   selectedUser,
+  editUser,
 }) => {
   console.log("여기는 member 렌더링됨", selectedUser);
   let total = userList?.length;
@@ -191,6 +192,7 @@ const Member = ({
   const [limit, setLimit] = useState(10);
   const [page, setPage] = useState(1);
   const offset = (page - 1) * limit;
+  const [id, setId] = useState("");
 
   const handleChange = (e) => {
     const { id, value } = e.target;
@@ -204,8 +206,9 @@ const Member = ({
   useEffect(() => {}, [userList]);
 
   const move = async (userId) => {
-    localStorage.setItem("userId", userId);
-    await editUser();
+    const _userId = localStorage.setItem("userId", userId);
+    setId(_userId);
+    await getEditUser();
     navigate(`${userId}`);
   };
 
@@ -230,7 +233,7 @@ const Member = ({
         </FlexBox>
 
         {params.detail ? (
-          <Outlet context={selectedUser} />
+          <Outlet context={{ selectedUser, id, editUser }} />
         ) : (
           <FlexBox direction="column">
             <MemberListTitle />
@@ -239,7 +242,7 @@ const Member = ({
               limit={limit}
               offset={offset}
               deleteUser={deleteUser}
-              editUser={editUser}
+              getEditUser={getEditUser}
               move={move}
             />
 

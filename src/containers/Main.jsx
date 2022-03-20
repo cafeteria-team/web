@@ -40,20 +40,29 @@ const Main = inject(
       _callUserList(access);
     };
 
-    const editUser = useCallback(async () => {
+    const getEditUser = useCallback(async () => {
       let userId = localStorage.getItem("userId");
       if (userId) {
-        const response = await listStore.editUser(userId);
+        const response = await listStore.getEditUser(userId);
         setSelectedUser(response.data);
       }
     }, [listStore]);
+
+    const editUser = async () => {
+      let userId = localStorage.getItem("userId");
+      let access = localStorage.getItem("access");
+      if (userId) {
+        await listStore.editUser(userId);
+        return _callUserList(access);
+      }
+    };
 
     useEffect(() => {
       let access = localStorage.getItem("access");
 
       _callUserList(access);
-      editUser();
-    }, [_callUserList, editUser]);
+      getEditUser();
+    }, [_callUserList, getEditUser]);
 
     // console.log("Main 에서값호출", userList);
 
@@ -68,8 +77,9 @@ const Main = inject(
                 userList,
                 onSearchList,
                 deleteUser,
-                editUser,
+                getEditUser,
                 selectedUser,
+                editUser,
               }}
             />
           </FlexBox>

@@ -49,11 +49,29 @@ class ListStore {
     }
   };
 
-  // edit userList
+  // get selected edituserList
   @action
-  editUser = async (userId) => {
+  getEditUser = async (userId) => {
     try {
       const response = await axios.get(`/api/user/${userId}`);
+      return response;
+    } catch (error) {
+      console.log(error.response);
+    }
+  };
+  //edit userList
+  @action
+  editUser = async (userId, data) => {
+    try {
+      const { email, name, busi_num } = data;
+      const response = await axios.get(`/api/user/${userId}`, {
+        email,
+        store: {
+          name,
+          busi_num,
+        },
+      });
+      console.log(response);
       return response;
     } catch (error) {
       console.log(error.response);

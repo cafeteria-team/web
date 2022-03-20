@@ -34,6 +34,7 @@ const MainViewContainer = () => {
                 userList={contextData.userList}
                 onSearchList={contextData.onSearchList}
                 deleteUser={contextData.deleteUser}
+                getEditUser={contextData.getEditUser}
                 editUser={contextData.editUser}
                 selectedUser={contextData.selectedUser}
               />

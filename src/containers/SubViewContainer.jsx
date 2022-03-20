@@ -15,7 +15,13 @@ const SubViewContainer = (props) => {
       {(() => {
         switch (menuLists) {
           case "member":
-            return <MemberEdit selectedUser={contextData} />;
+            return (
+              <MemberEdit
+                selectedUser={contextData.selectedUser}
+                id={contextData.id}
+                editUser={contextData.editUser}
+              />
+            );
           default:
             return <NotFound />;
         }
