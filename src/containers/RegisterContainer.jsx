@@ -272,6 +272,12 @@ const Register = (props) => {
     }
   };
 
+  // 핸드폰 인증취소
+  const cancelPhone = () => {
+    setClickedPhone(false);
+    setClickedAuth(false);
+  };
+
   // 이미지업로드
   const onFileChange = async (e) => {
     const uploaded = await imageUploader.upload(e.target.files[0]);
@@ -349,7 +355,7 @@ const Register = (props) => {
                 disabled={clickedPhone ? true : false}
               />
               <Button
-                color={clickedAuth ? "tomato" : "#3b86ff"}
+                color="#3b86ff"
                 position="absolute"
                 right="10px"
                 top="13.5px"
@@ -361,6 +367,21 @@ const Register = (props) => {
                 font="14px"
                 onClick={clickedAuth ? checkPhoneAuth : getPhoneAuth}
               />
+              {clickedAuth && (
+                <Button
+                  color="tomato"
+                  position="absolute"
+                  right="75px"
+                  top="13.5px"
+                  background="unset"
+                  type="button"
+                  width="unset"
+                  title="취소하기"
+                  padding="unset"
+                  font="14px"
+                  onClick={cancelPhone}
+                />
+              )}
             </FlexBox>
 
             {clickedAuth && (
