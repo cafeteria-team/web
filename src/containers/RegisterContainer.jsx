@@ -78,6 +78,7 @@ const Register = (props) => {
   // 핸드폰 인증번호 완료
   const [phoneChecked, setPhoneChecked] = useState(false);
   const [clickedPhone, setClickedPhone] = useState(false);
+  const [phoneAuthed, setPhoneAuthed] = useState(false);
 
   // timer done
   const timesUp = () => {
@@ -103,6 +104,25 @@ const Register = (props) => {
       ...prevState,
       [id]: value,
     }));
+  };
+
+  // 이메일 정규식
+
+  const checkEmail = (email) => {
+    // const emailRegex =
+    //   /^(([^<>()\[\].,;:\s@"]+(\.[^<>()\[\].,;:\s@"]+)*)|(".+"))@(([^<>()[\].,;:\s@"]+\.)+[^<>()[\].,;:\s@"]{2,})$/i;
+
+    // const { id, value } = e.target;
+    // if (emailRegex.test(value)) {
+    //   setState((prevState) => ({
+    //     ...prevState,
+    //     [id]: value,
+    //   }));
+    // }
+    const emailRegex =
+      /^(([^<>()\[\].,;:\s@"]+(\.[^<>()\[\].,;:\s@"]+)*)|(".+"))@(([^<>()[\].,;:\s@"]+\.)+[^<>()[\].,;:\s@"]{2,})$/i;
+
+    return emailRegex.test(email);
   };
 
   // 핸드폰 정규식
@@ -131,17 +151,41 @@ const Register = (props) => {
 
   const handleSubmitClick = (e) => {
     e.preventDefault();
+
     if (!agreement) {
       alert("개인정보 이용약관에 동의해주세요");
+    } else if (state.username === "") {
+      alert("아이디를 입력해주세요");
+    } else if (state.password === "") {
+      alert("비밀번호를 입력해주세요");
+    } else if (state.confirm_password === "") {
+      alert("비밀번호확인을 입력해주세요");
+    } else if (state.email === "") {
+      alert("이메일을 입력해주세요");
+    } else if (state.phone === "") {
+      alert("핸드폰번호를 입력해주세요");
+    } else if (state.name === "") {
+      alert("가게명을 입력해주세요");
+    } else if (state.addr === "") {
+      alert("주소를 입력해주세요");
+    } else if (state.zip_code === "") {
+      alert("주소를 입력해주세요");
+    } else if (state.busi_num === "") {
+      alert("사업자번호를 입력해주세요");
+    } else if (state.busi_num_img === "") {
+      alert("사업자등록증을 등록해주세요");
+    } else if (state.password !== state.confirm_password) {
+      alert("비밀번호가 일치하지않습니다.");
+    } else if (!phoneAuthed) {
+      alert("핸드폰번호를 인증해주세요.");
+    } else if (checkEmail(state.email)) {
+      alert("옳바른 이메일을 등록해주세요.");
     } else {
-      if (state.password === state.confirm_password) {
-        register();
-      } else {
-        console.log("비밀번호가 일치하지않습니다.");
-      }
+      register();
     }
   };
 
+  // 회원강비 등록
   const register = async () => {
     const {
       username,
@@ -171,7 +215,6 @@ const Register = (props) => {
         busi_num,
         busi_num_img,
       });
-      console.log(response);
       navigate("/complete");
       return response;
     } catch (error) {
@@ -180,6 +223,7 @@ const Register = (props) => {
     }
   };
 
+  // 핸드폰 번호체크
   const getPhoneAuth = async () => {
     const { phone } = state;
 
@@ -207,6 +251,7 @@ const Register = (props) => {
     }
   };
 
+  // 핸드폰 인증번호확인
   const checkPhoneAuth = async () => {
     const { phone, auth_phone } = state;
 
@@ -216,6 +261,7 @@ const Register = (props) => {
       );
       console.log(response);
       setPhoneChecked(true);
+      setPhoneAuthed(true);
       return response;
     } catch (error) {
       alert("인증번호가 다릅니다. 확인 후 다시 시도해주세요.");
@@ -225,8 +271,8 @@ const Register = (props) => {
     }
   };
 
+  // 이미지업로드
   const onFileChange = async (e) => {
-    console.log(e);
     const uploaded = await imageUploader.upload(e.target.files[0]);
     setState((prev) => ({
       ...prev,
@@ -347,7 +393,7 @@ const Register = (props) => {
               />
             </FlexBox>
             <StyledSpan font="12px" color="#838383" align="flex-end">
-              *사업자 번호 또는 이미지로 등록가능합니다.
+              *사업자 번호와 사업자등록증을 등록해야합니다.
             </StyledSpan>
           </FlexBox>
 
