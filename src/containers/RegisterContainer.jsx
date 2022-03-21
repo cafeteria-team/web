@@ -109,16 +109,6 @@ const Register = (props) => {
   // 이메일 정규식
 
   const checkEmail = (email) => {
-    // const emailRegex =
-    //   /^(([^<>()\[\].,;:\s@"]+(\.[^<>()\[\].,;:\s@"]+)*)|(".+"))@(([^<>()[\].,;:\s@"]+\.)+[^<>()[\].,;:\s@"]{2,})$/i;
-
-    // const { id, value } = e.target;
-    // if (emailRegex.test(value)) {
-    //   setState((prevState) => ({
-    //     ...prevState,
-    //     [id]: value,
-    //   }));
-    // }
     const emailRegex =
       /^(([^<>()\[\].,;:\s@"]+(\.[^<>()\[\].,;:\s@"]+)*)|(".+"))@(([^<>()[\].,;:\s@"]+\.)+[^<>()[\].,;:\s@"]{2,})$/i;
 
@@ -128,6 +118,17 @@ const Register = (props) => {
   // 핸드폰 정규식
   const handleChangePhone = (e) => {
     const regex = /^[0-9\b -]{0,11}$/;
+    const { id, value } = e.target;
+    if (regex.test(value)) {
+      setState((prevState) => ({
+        ...prevState,
+        [id]: value,
+      }));
+    }
+  };
+
+  const handleChangeBusiness = (e) => {
+    const regex = /^[0-9\b -]{0,10}$/;
     const { id, value } = e.target;
     if (regex.test(value)) {
       setState((prevState) => ({
@@ -237,8 +238,8 @@ const Register = (props) => {
         console.log(response);
         return response;
       } catch (error) {
-        alert(error?.response?.data?.detail);
         if (error?.response?.status === 409) {
+          alert("이미 등록된 핸드폰번호입니다.");
           setClickedPhone(false);
           setClickedAuth(false);
         }
@@ -279,8 +280,6 @@ const Register = (props) => {
       busi_num_img: uploaded.url,
     }));
   };
-
-  // useEffect(() => {}, []);
 
   return (
     <MainContainer bgImage="url('/img/mainbg.jpg')">
@@ -384,7 +383,7 @@ const Register = (props) => {
                 placeholder="사업자번호"
                 value={state.busi_num}
                 id="busi_num"
-                onChange={handleChange}
+                onChange={handleChangeBusiness}
               />
               <ImageInput
                 onChange={onFileChange}
