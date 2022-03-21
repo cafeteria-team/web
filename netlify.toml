@@ -1,0 +1,5 @@
+[[redirects]]
+  from = "/proxy/*"
+  to = "https://www.good-cafeteria.cf/:splat"
+  status = 200
+  force = true

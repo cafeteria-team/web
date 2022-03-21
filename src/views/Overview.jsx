@@ -33,22 +33,6 @@ const UserList = ({ userList }) => {
         <StyledLink to="/main/member">더보기</StyledLink>
       </FlexBox>
 
-      {/* <div>
-        <label>
-          페이지 당 표시할 게시물 수:&nbsp;
-          <select
-            type="number"
-            value={limit}
-            onChange={({ target: { value } }) => setLimit(Number(value))}
-          >
-            <option value="10">10</option>
-            <option value="12">12</option>
-            <option value="20">20</option>
-            <option value="50">50</option>
-            <option value="100">100</option>
-          </select>
-        </label>
-      </div> */}
       <Ul
         width="100%"
         background="#FF8400"
@@ -150,13 +134,13 @@ const ProManagement = () => {
 const Overview = ({ userList }) => {
   let results = userList?.data?.results;
 
-  console.log("results", results);
+  console.log("results", userList);
 
   return (
     <FlexBox padding="30px 70px" direction="column" width="100%">
       <StyledTitle margin="0 0 30px 0">Overview</StyledTitle>
       <FlexBox width="100%" just="space-between" height="480px">
-        <UserList userList={results} />
+        <UserList userList={userList} />
         <ProManagement />
       </FlexBox>
     </FlexBox>
