@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, memo, useEffect } from "react";
 import axios from "../utils/axios";
 import Post from "../utils/Post";
 import ImageUploader from "../utils/imageuploader";
@@ -16,6 +16,41 @@ import {
 } from "../components/StyledElements";
 
 const imageUploader = new ImageUploader();
+
+const Timer = memo(({ timesUp, phoneChecked }) => {
+  const [minutes, setMinutes] = useState(3);
+  const [seconds, setSeconds] = useState(0);
+
+  useEffect(() => {
+    const countdown = setInterval(() => {
+      if (parseInt(seconds) > 0) {
+        setSeconds(parseInt(seconds) - 1);
+      }
+      if (parseInt(seconds) === 0) {
+        if (parseInt(minutes) === 0) {
+          timesUp();
+          clearInterval(countdown);
+        } else {
+          setMinutes(parseInt(minutes) - 1);
+          setSeconds(59);
+        }
+      }
+    }, 1000);
+    if (phoneChecked) {
+      clearInterval(countdown);
+    }
+    return () => {
+      // timesUp();
+      clearInterval(countdown);
+    };
+  }, [minutes, seconds]);
+
+  return (
+    <FlexBox position="absolute" right="10px" top="13.5px" width="unset">
+      {minutes}:{seconds < 10 ? `0${seconds}` : seconds}
+    </FlexBox>
+  );
+});
 
 const Register = (props) => {
   const navigate = useNavigate();
@@ -38,7 +73,19 @@ const Register = (props) => {
 
   const [agreement, setAgreement] = useState(false);
   const [clickedAuth, setClickedAuth] = useState(false);
-  const [isPopup, setIsPopup] = useState(false);
+  const [isPopup, setIsPopup] = useState("");
+
+  // 핸드폰 인증번호 완료
+  const [phoneChecked, setPhoneChecked] = useState(false);
+  const [clickedPhone, setClickedPhone] = useState(false);
+
+  // timer done
+  const timesUp = () => {
+    alert("인증번호가 만료되었습니다.");
+    setState((prev) => ({ ...prev, auth_phone: "" }));
+    setClickedPhone(false);
+    return setClickedAuth(false);
+  };
 
   const popupOn = () => {
     setIsPopup((prev) => !prev);
@@ -60,7 +107,7 @@ const Register = (props) => {
 
   // 핸드폰 정규식
   const handleChangePhone = (e) => {
-    const regex = /^[0-9\b -]{0,13}$/;
+    const regex = /^[0-9\b -]{0,11}$/;
     const { id, value } = e.target;
     if (regex.test(value)) {
       setState((prevState) => ({
@@ -134,32 +181,46 @@ const Register = (props) => {
   };
 
   const getPhoneAuth = async () => {
-    setClickedAuth((prev) => !prev);
     const { phone } = state;
 
-    try {
-      const response = await axios.post("/api/phone/auth", {
-        phone_num: phone,
-      });
-      console.log(response);
-      return response;
-    } catch (error) {
-      console.log(error.response);
-      return error;
+    if (phone && phone.length === 11) {
+      setClickedPhone(true);
+      setClickedAuth(true);
+      try {
+        const response = await axios.post("/api/phone/auth", {
+          phone_num: phone,
+        });
+        console.log(response);
+        return response;
+      } catch (error) {
+        alert(error?.response?.data?.detail);
+        if (error?.response?.status === 409) {
+          setClickedPhone(false);
+          setClickedAuth(false);
+        }
+        return error;
+      }
+    } else {
+      alert("옳바른 핸드폰 번호를 입력해주세요");
+      setClickedPhone(false);
+      setClickedAuth(false);
     }
   };
 
   const checkPhoneAuth = async () => {
     const { phone, auth_phone } = state;
-    console.log(phone, auth_phone);
+
     try {
       const response = await axios.get(
         `/api/phone/auth?phone_num=${phone}&auth_num=${auth_phone}`
       );
       console.log(response);
+      setPhoneChecked(true);
       return response;
     } catch (error) {
-      console.log(error.response);
+      alert("인증번호가 다릅니다. 확인 후 다시 시도해주세요.");
+      setClickedPhone(false);
+      setClickedAuth(false);
       return error;
     }
   };
@@ -172,6 +233,8 @@ const Register = (props) => {
       busi_num_img: uploaded.url,
     }));
   };
+
+  // useEffect(() => {}, []);
 
   return (
     <MainContainer bgImage="url('/img/mainbg.jpg')">
@@ -238,9 +301,10 @@ const Register = (props) => {
                 placeholder="핸드폰번호"
                 value={state.phone}
                 onChange={handleChangePhone}
+                disabled={clickedPhone ? true : false}
               />
               <Button
-                color="#3b86ff"
+                color={clickedAuth ? "tomato" : "#3b86ff"}
                 position="absolute"
                 right="10px"
                 top="13.5px"
@@ -254,13 +318,19 @@ const Register = (props) => {
               />
             </FlexBox>
 
-            <Input
-              type="text"
-              id="auth_phone"
-              placeholder="인증번호"
-              value={state.auth_phone}
-              onChange={handleChangeAuthPhone}
-            />
+            {clickedAuth && (
+              <FlexBox position="relative">
+                <Input
+                  type="text"
+                  id="auth_phone"
+                  placeholder="인증번호"
+                  value={state.auth_phone}
+                  onChange={handleChangeAuthPhone}
+                  disabled={phoneChecked ? true : false}
+                />
+                {<Timer timesUp={timesUp} phoneChecked={phoneChecked} />}
+              </FlexBox>
+            )}
 
             <FlexBox position="relative">
               <Input

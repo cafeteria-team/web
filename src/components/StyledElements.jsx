@@ -82,6 +82,7 @@ export const FlexBox = styled.div`
   min-height: ${(props) => props.minHeight || ""};
   overflow: ${(props) => props.overflow || ""};
   top: ${(props) => props.top || ""};
+  right: ${(props) => props.right || ""};
   cursor: ${(props) => props.cursor || ""};
   box-sizing: ${(props) => props.boxSizing || ""};
   &:hover {
