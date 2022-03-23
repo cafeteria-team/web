@@ -37,6 +37,7 @@ const MainViewContainer = () => {
                 getEditUser={contextData.getEditUser}
                 editUser={contextData.editUser}
                 selectedUser={contextData.selectedUser}
+                approveUser={contextData.approveUser}
               />
             );
           case "request":

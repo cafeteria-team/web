@@ -12,6 +12,7 @@ const Main = inject(
     const [userList, setUserList] = useState(null);
     const [selectedUser, setSelectedUser] = useState(null);
 
+    // 유저 리스트 불러오기
     const _callUserList = useCallback(
       async (access) => {
         const response = await listStore.callUserList(access);
@@ -20,6 +21,7 @@ const Main = inject(
       [listStore]
     );
 
+    // 유저검색
     const onSearchList = (title) => {
       let lists = userList;
       if (title !== "") {
@@ -34,12 +36,14 @@ const Main = inject(
       }
     };
 
+    // 유저삭제
     const deleteUser = async (userId) => {
       let access = localStorage.getItem("access");
       await listStore.deleteUser(userId);
       _callUserList(access);
     };
 
+    // 선택된 유저 불러오기
     const getEditUser = useCallback(async () => {
       let userId = localStorage.getItem("userId");
       if (userId) {
@@ -49,11 +53,22 @@ const Main = inject(
       }
     }, [listStore]);
 
+    // 유저수정
     const editUser = async () => {
       let userId = localStorage.getItem("userId");
       let access = localStorage.getItem("access");
       if (userId) {
         await listStore.editUser(userId);
+        return _callUserList(access);
+      }
+    };
+
+    // 유저 권한수정
+    const approveUser = async (data) => {
+      let userId = localStorage.getItem("userId");
+      let access = localStorage.getItem("access");
+      if (userId) {
+        await listStore.approveUser(userId, data);
         return _callUserList(access);
       }
     };
@@ -81,6 +96,7 @@ const Main = inject(
                 getEditUser,
                 selectedUser,
                 editUser,
+                approveUser,
               }}
             />
           </FlexBox>

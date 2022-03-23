@@ -78,5 +78,18 @@ class ListStore {
       console.log(error.response);
     }
   };
+
+  @action
+  approveUser = async (userId, data) => {
+    try {
+      const { is_active } = data;
+      const response = await axios.get(`/api/user/${userId}`, {
+        is_active,
+      });
+      return response;
+    } catch (error) {
+      console.log(error.response);
+    }
+  };
 }
 export default new ListStore();

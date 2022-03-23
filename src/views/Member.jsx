@@ -7,11 +7,12 @@ import {
   Ul,
   Li,
 } from "../components/StyledElements";
-import { Button } from "../components";
-import { Input } from "../components";
+import { Button, Input } from "../components";
+import Toggle from "react-toggle";
 import moment from "moment";
 import { useNavigate, Outlet } from "react-router-dom";
 import { useParams } from "react-router";
+import "react-toggle/style.css";
 
 const SearchBar = ({ handleChange, search }) => {
   return (
@@ -61,7 +62,15 @@ const MemberListTitle = memo(() => {
   );
 });
 
-const MemberList = ({ results, offset, limit, deleteUser, editUser, move }) => {
+const MemberList = ({
+  results,
+  offset,
+  limit,
+  deleteUser,
+  editUser,
+  move,
+  changeToggled,
+}) => {
   return (
     <Ul width="100%" direction="column">
       {results ? (
@@ -86,7 +95,13 @@ const MemberList = ({ results, offset, limit, deleteUser, editUser, move }) => {
                   {username}
                 </Li>
                 <Li just="center" width="16.6666666667%">
-                  {is_active.toString()}
+                  <Toggle
+                    defaultChecked={is_active}
+                    aria-label="No label tag"
+                    onChange={() => {
+                      changeToggled(id, is_active);
+                    }}
+                  />
                 </Li>
                 <Li just="center" width="16.6666666667%">
                   {store.name}
@@ -174,6 +189,7 @@ const Member = ({
   getEditUser,
   selectedUser,
   editUser,
+  approveUser,
 }) => {
   console.log("여기는 member 렌더링됨", selectedUser);
   let total = userList?.length;
@@ -188,11 +204,20 @@ const Member = ({
   });
   const [detail, setDetail] = useState(false);
 
+  // toggle
+  const [toggled, setToggled] = useState(null);
+
   // for pagination
   const [limit, setLimit] = useState(10);
   const [page, setPage] = useState(1);
   const offset = (page - 1) * limit;
   const [id, setId] = useState("");
+
+  // change toggle status
+  const changeToggled = (id, toggle) => {
+    toggle = toggle ? false : true;
+    approveUser(id, toggle);
+  };
 
   const handleChange = (e) => {
     const { id, value } = e.target;
@@ -244,6 +269,7 @@ const Member = ({
               deleteUser={deleteUser}
               getEditUser={getEditUser}
               move={move}
+              changeToggled={changeToggled}
             />
 
             <Pagination
