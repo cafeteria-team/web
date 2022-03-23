@@ -63,12 +63,13 @@ class ListStore {
   @action
   editUser = async (userId, data) => {
     try {
-      const { email, name, busi_num } = data;
+      const { email, name, busi_num, busi_num_img } = data;
       const response = await axios.get(`/api/user/${userId}`, {
         email,
         store: {
           name,
           busi_num,
+          busi_num_img,
         },
       });
       console.log(response);

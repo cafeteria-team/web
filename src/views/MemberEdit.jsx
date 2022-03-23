@@ -86,6 +86,7 @@ const MemberEdit = ({ selectedUser, id, editUser }) => {
       email: selectedUser?.email,
       name: selectedUser?.store.name,
       busi_num: selectedUser?.store.busi_num,
+      busi_num_img: selectedUser?.store.busi_num_img,
     });
   }, [selectedUser]);
 

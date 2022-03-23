@@ -44,7 +44,8 @@ const Main = inject(
       let userId = localStorage.getItem("userId");
       if (userId) {
         const response = await listStore.getEditUser(userId);
-        setSelectedUser(response.data);
+        console.log(response);
+        // setSelectedUser(response.data);
       }
     }, [listStore]);
 
