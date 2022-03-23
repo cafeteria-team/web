@@ -46,8 +46,9 @@ const Main = inject(
     // 선택된 유저 불러오기
     const getEditUser = useCallback(async () => {
       let userId = localStorage.getItem("userId");
+      let access = localStorage.getItem("access");
       if (userId) {
-        const response = await listStore.getEditUser(userId);
+        const response = await listStore.getEditUser(userId, access);
         console.log(response);
         // setSelectedUser(response.data);
       }
@@ -64,8 +65,7 @@ const Main = inject(
     };
 
     // 유저 권한수정
-    const approveUser = async (data) => {
-      let userId = localStorage.getItem("userId");
+    const approveUser = async (userId, data) => {
       let access = localStorage.getItem("access");
       if (userId) {
         await listStore.approveUser(userId, data);

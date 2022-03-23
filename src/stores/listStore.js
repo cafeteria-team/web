@@ -51,9 +51,13 @@ class ListStore {
 
   // get selected edituserList
   @action
-  getEditUser = async (userId) => {
+  getEditUser = async (userId, accessToken) => {
     try {
-      const response = await axios.get(`/api/user/${userId}`);
+      const response = await axios.get(`/api/user/${userId}`, {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+      });
       return response;
     } catch (error) {
       console.log(error.response);
@@ -83,9 +87,11 @@ class ListStore {
   approveUser = async (userId, data) => {
     try {
       const { is_active } = data;
+      console.log(data);
       const response = await axios.get(`/api/user/${userId}`, {
         is_active,
       });
+      console.log(response);
       return response;
     } catch (error) {
       console.log(error.response);

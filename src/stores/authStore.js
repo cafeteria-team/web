@@ -88,7 +88,7 @@ class AuthStore {
     localStorage.setItem("access", access);
 
     // accessToken 설정
-    // axios.defaults.headers.common["Authorization"] = `Bearer ${data}`;
+    axios.defaults.headers.common["Authorization"] = `Bearer ${access}`;
 
     // accessToken 만료하기 1분전에 로그인 연장
     setTimeout(this.onSilentRefresh, this.JWT_EXPIRY_TIME - 60000);
