@@ -86,10 +86,8 @@ class ListStore {
   @action
   approveUser = async (userId, data) => {
     try {
-      const { is_active } = data;
-      console.log(data);
-      const response = await axios.get(`/api/user/${userId}`, {
-        is_active,
+      const response = await axios.patch("/api/user/" + userId + "/approve", {
+        is_active: data,
       });
       console.log(response);
       return response;
