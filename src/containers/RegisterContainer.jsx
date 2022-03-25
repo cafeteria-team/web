@@ -325,12 +325,18 @@ const Register = (props) => {
 
   // 이미지업로드
   const onFileChange = async (e) => {
-    const uploaded = await imageUploader.upload(e.target.files[0]);
-    console.log(uploaded);
-    setState((prev) => ({
-      ...prev,
-      busi_num_img: uploaded?.url,
-    }));
+    const maxSize = 10 * 1024 * 1024;
+    const imgSize = e.target.files[0].size;
+
+    if (imgSize > maxSize) {
+      alert("이미지 용량은 10MB 이내로 등록가능합니다.");
+    } else {
+      const uploaded = await imageUploader.upload(e.target.files[0]);
+      setState((prev) => ({
+        ...prev,
+        busi_num_img: uploaded,
+      }));
+    }
   };
 
   return (

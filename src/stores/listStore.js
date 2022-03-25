@@ -68,7 +68,7 @@ class ListStore {
   editUser = async (userId, data) => {
     try {
       const { email, name, busi_num, busi_num_img } = data;
-      const response = await axios.get(`/api/user/${userId}`, {
+      const response = await axios.patch(`/api/user/${userId}`, {
         email,
         store: {
           name,

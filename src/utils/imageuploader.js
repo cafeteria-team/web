@@ -7,17 +7,17 @@ class ImageUploader {
   }
 
   async upload(file) {
-    const data = new FormData();
-    data.append("file", file);
-    data.append("upload_preset", this.UPLOADKEY);
+    const formData = new FormData();
+    formData.append("file", file);
+    formData.append("upload_preset", this.UPLOADKEY);
 
     try {
       const response = await axios.post(
-        `https://api.cloudinary.com/v1_1/${this.APIKEY}/upload`,
-        { data }
+        `https://api.cloudinary.com/v1_1/${this.APIKEY}/image/upload`,
+        formData
       );
-      console.log(response);
-      return response;
+      console.log(response.data.secure_url);
+      return response.data.secure_url;
     } catch (error) {
       console.log(error.response);
     }

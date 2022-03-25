@@ -55,11 +55,11 @@ const Main = inject(
     }, [listStore]);
 
     // 유저수정
-    const editUser = async () => {
+    const editUser = async (id, state) => {
       let userId = localStorage.getItem("userId");
       let access = localStorage.getItem("access");
       if (userId) {
-        await listStore.editUser(userId);
+        await listStore.editUser(userId, state);
         return _callUserList(access);
       }
     };
