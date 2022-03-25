@@ -36,6 +36,7 @@ class AuthStore {
   onSilentRefresh = async () => {
     // console.log("onSilentRefresh 호출");
     const data = localStorage.getItem("refresh");
+    const access = localStorage.getItem("access");
     const username = getCookie("username");
 
     if (data) {

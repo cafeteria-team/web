@@ -23,7 +23,7 @@ Modal.setAppElement("#root");
 const imageUploader = new ImageUploader();
 
 // 인증 타이머
-const Timer = memo(({ timesUp, phoneAuthed }) => {
+const Timer = memo(({ timesUp, phoneAuthed, resendCode }) => {
   const [minutes, setMinutes] = useState(3);
   const [seconds, setSeconds] = useState(0);
 
@@ -44,15 +44,19 @@ const Timer = memo(({ timesUp, phoneAuthed }) => {
     }, 1000);
     if (phoneAuthed) {
       clearInterval(countdown);
+    } else if (resendCode) {
+      clearInterval(countdown);
+      setMinutes(3);
+      setSeconds(0);
     }
     return () => {
       // timesUp();
       clearInterval(countdown);
     };
-  }, [minutes, seconds]);
+  }, [minutes, seconds, resendCode]);
 
   return (
-    <FlexBox position="absolute" right="16px" top="16px" width="unset">
+    <FlexBox position="absolute" right="70px" top="16px" width="unset">
       {minutes}:{seconds < 10 ? `0${seconds}` : seconds}
     </FlexBox>
   );
@@ -83,6 +87,7 @@ const Register = (props) => {
   // 핸드폰 인증번호 완료
   const [phoneAuthed, setPhoneAuthed] = useState(false);
   const [showModal, setShowModal] = useState(false);
+  const [resendCode, setResendCode] = useState(false);
 
   // 핸드폰 번호체크
   const getPhoneAuth = async () => {
@@ -94,6 +99,7 @@ const Register = (props) => {
           phone_num: phone,
         });
         openModal();
+        setResendCode(false);
         return response;
       } catch (error) {
         if (error?.response?.status === 409) {
@@ -114,8 +120,9 @@ const Register = (props) => {
       const response = await axios.get(
         `/api/phone/auth?phone_num=${phone}&auth_num=${auth_phone}`
       );
-      console.log(response);
+      setResendCode(false);
       setPhoneAuthed(true);
+      closeModal();
       return response;
     } catch (error) {
       alert("인증번호가 다릅니다. 확인 후 다시 시도해주세요.");
@@ -126,6 +133,7 @@ const Register = (props) => {
   // 핸드폰 인증취소
   const cancelPhone = () => {
     setState((prev) => ({ ...prev, auth_phone: "" }));
+    closeModal();
   };
 
   //인증번호
@@ -140,14 +148,22 @@ const Register = (props) => {
     }
   };
 
+  //인증번호 재전송
+  const mobileAuthResend = () => {
+    setResendCode(true);
+    getPhoneAuth();
+  };
+
   // 모달 actions
   const openModal = () => {
     setShowModal(true);
   };
   const closeModal = () => {
     setShowModal(false);
-    cancelPhone();
   };
+
+  // 인증완료
+  const mobileDone = () => {};
 
   // modal style
   const modalStyle = {
@@ -310,9 +326,10 @@ const Register = (props) => {
   // 이미지업로드
   const onFileChange = async (e) => {
     const uploaded = await imageUploader.upload(e.target.files[0]);
+    console.log(uploaded);
     setState((prev) => ({
       ...prev,
-      busi_num_img: uploaded.url,
+      busi_num_img: uploaded?.url,
     }));
   };
 
@@ -335,26 +352,42 @@ const Register = (props) => {
       >
         <Modal
           isOpen={showModal}
-          contentLabel="onRequestClose Example"
+          contentLabel="phone check"
           onRequestClose={closeModal}
           style={modalStyle}
-          // overlayClassName={modalOveray}
         >
           <FlexBox direction="column">
-            <FlexBox position="relative" width="342px">
+            <FlexBox position="relative" width="342px" align="center">
               <Input
                 type="text"
                 id="auth_phone"
                 placeholder="인증번호"
                 value={state.auth_phone}
                 onChange={handleChangeAuthPhone}
+                margin="0 20px 10px 0"
+                width="240px"
+              />
+              <Timer
+                timesUp={timesUp}
+                phoneAuthed={phoneAuthed}
+                resendCode={resendCode}
+              />
+              <Button
+                color="tomato"
+                background="unset"
+                type="button"
+                width="unset"
+                title="재전송"
+                padding="unset"
+                font="14px"
+                textAlign="right"
+                onClick={mobileAuthResend}
                 margin="0 0 10px 0"
               />
-              {<Timer timesUp={timesUp} phoneAuthed={phoneAuthed} />}
             </FlexBox>
             <FlexBox direction="column">
               <StyledSpan font="12px" color="#838383" margin="0 0 10px 0">
-                * 3분 이내로 인증번호(6자리를) 입력해 주세요.
+                * 3분 이내로 인증번호(5자리를) 입력해 주세요.
               </StyledSpan>
               <StyledSpan font="12px" color="#838383">
                 *인증번호가 전송되지 않을경우 "재전송" 버튼을 눌러주세요.
@@ -373,7 +406,7 @@ const Register = (props) => {
               type="button"
               title="취소"
               width="300px"
-              onClick={closeModal}
+              onClick={cancelPhone}
               margin="0"
               background="unset"
               border="1px solid #FF8400"
@@ -432,17 +465,17 @@ const Register = (props) => {
                 disabled={phoneAuthed ? true : false}
               />
               <Button
-                color="#3b86ff"
+                color={phoneAuthed ? "tomato" : "#3b86ff"}
                 position="absolute"
                 right="10px"
                 top="13.5px"
                 background="unset"
                 type="button"
                 width="unset"
-                title="인증하기"
+                title={phoneAuthed ? "인증완료" : "인증하기"}
                 padding="unset"
                 font="14px"
-                onClick={getPhoneAuth}
+                onClick={phoneAuthed ? mobileDone : getPhoneAuth}
               />
             </FlexBox>
 

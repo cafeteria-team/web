@@ -20,6 +20,7 @@ const StyledButton = styled.button`
   position: ${({ position }) => position || ""};
   right: ${({ right }) => right || ""};
   top: ${({ top }) => top || ""};
+  text-align: ${({ textAlign }) => textAlign || ""};
 
   &:hover {
     ${({ hover }) =>
@@ -66,6 +67,7 @@ function Button({
   hover,
   margin,
   border,
+  textAlign,
 }) {
   return (
     <StyledButton
@@ -85,6 +87,7 @@ function Button({
       hover={hover}
       margin={margin}
       border={border}
+      textAlign={textAlign}
     >
       {title}
     </StyledButton>

@@ -19,9 +19,9 @@ class ListStore {
   callUserList = async (accessToken) => {
     try {
       const response = await axios.get(`/api/user`, {
-        headers: {
-          Authorization: `Bearer ${accessToken}`,
-        },
+        // headers: {
+        //   Authorization: `Bearer ${accessToken}`,
+        // },
       });
       console.log(response);
       this.setUserList(response.data.results);
@@ -54,9 +54,9 @@ class ListStore {
   getEditUser = async (userId, accessToken) => {
     try {
       const response = await axios.get(`/api/user/${userId}`, {
-        headers: {
-          Authorization: `Bearer ${accessToken}`,
-        },
+        // headers: {
+        //   Authorization: `Bearer ${accessToken}`,
+        // },
       });
       return response;
     } catch (error) {

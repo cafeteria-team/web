@@ -1,13 +1,38 @@
 import React, { useEffect, useState } from "react";
-import { Button, Input } from "../components";
-import { Form, FlexBox } from "../components/StyledElements";
+import { Button, Input, ImageInput } from "../components";
+import { Form, FlexBox, StyledBody } from "../components/StyledElements";
 import { useNavigate } from "react-router-dom";
+import ImageUploader from "../utils/imageuploader";
+
+// 이미지 클라우드
+const imageUploader = new ImageUploader();
+
+const imageStyle = {
+  wrap: {
+    width: "342px",
+  },
+  div: {
+    position: "relative",
+    paddingTop: "100%",
+    overflow: "hidden",
+    borderRadius: "4px",
+  },
+  image: {
+    position: "absolute",
+    top: "0",
+    left: "0",
+    right: "0",
+    bottom: "0",
+    maxWidth: "100%",
+    height: "100%",
+  },
+};
 
 const InputData = [
   {
     body: (selectedUser) => (
       <>
-        <FlexBox margin="0 10px 0 0" minW="80px">
+        <FlexBox margin="0 10px 0 0" minW="100px">
           아이디
         </FlexBox>
         <Input
@@ -23,7 +48,7 @@ const InputData = [
   {
     body: (selectedUser, handleChange, state) => (
       <>
-        <FlexBox margin="0 10px 0 0" minW="80px">
+        <FlexBox margin="0 10px 0 0" minW="100px">
           이메일
         </FlexBox>
         <Input
@@ -39,7 +64,7 @@ const InputData = [
   {
     body: (selectedUser, handleChange, state) => (
       <>
-        <FlexBox margin="0 10px 0 0" minW="80px">
+        <FlexBox margin="0 10px 0 0" minW="100px">
           가게명
         </FlexBox>
         <Input
@@ -55,7 +80,7 @@ const InputData = [
   {
     body: (selectedUser, handleChange, state) => (
       <>
-        <FlexBox margin="0 10px 0 0" minW="80px">
+        <FlexBox margin="0 10px 0 0" minW="100px">
           사업자번호
         </FlexBox>
         <Input
@@ -69,12 +94,26 @@ const InputData = [
     ),
   },
   {
-    body: (selectedUser, handleChange, state) => (
+    body: (selectedUser, handleChange, state, onFileChange, editImage) => (
       <>
-        <FlexBox margin="0 10px 0 0" minW="80px">
-          사업자 이미지
+        <FlexBox margin="0 10px 0 0" minW="100px" direction="column">
+          <StyledBody margin="0 0 10px 0">사업자 이미지</StyledBody>
+          <ImageInput
+            onChange={onFileChange}
+            id="editImageInput"
+            accept="image/*"
+            editImage={editImage}
+          />
         </FlexBox>
-        <img src={state.busi_num_img} />
+        <div style={imageStyle.wrap}>
+          <div style={imageStyle.div}>
+            <img
+              src={state.busi_num_img}
+              alt="business_img"
+              style={imageStyle.image}
+            />
+          </div>
+        </div>
       </>
     ),
   },
@@ -83,13 +122,14 @@ const InputData = [
 const MemberEdit = ({ selectedUser, id, editUser }) => {
   const navigate = useNavigate();
 
-  console.log(selectedUser, id);
-
   const [state, setState] = useState({
     email: "",
     name: "",
     busi_num: "",
+    busi_num_img: "",
   });
+
+  const editImage = true;
 
   useEffect(() => {
     setState({
@@ -116,13 +156,28 @@ const MemberEdit = ({ selectedUser, id, editUser }) => {
     editUser(id, state);
   };
 
+  // 이미지업로드
+  const onFileChange = async (e) => {
+    const uploaded = await imageUploader.upload(e.target.files[0]);
+    setState((prev) => ({
+      ...prev,
+      busi_num_img: uploaded.url,
+    }));
+  };
+
   return (
     <>
       <Form method="POST" direction="column">
         <FlexBox wrap="wrap" width="100%">
           {InputData.map((item, index) => (
             <FlexBox align="center" width="40%" margin="20px 30px" key={index}>
-              {item.body(selectedUser, handleChange, state)}
+              {item.body(
+                selectedUser,
+                handleChange,
+                state,
+                onFileChange,
+                editImage
+              )}
             </FlexBox>
           ))}
         </FlexBox>

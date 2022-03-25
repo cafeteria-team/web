@@ -17,7 +17,16 @@ const StyledLabel = styled.label`
   z-index: 2;
 `;
 
-function ImageInput({ onClick, onChange, id, accept }) {
+const EditLabel = styled.label`
+  background-color: unset;
+  border: unset;
+  color: #3b86ff;
+  font-size: 14px;
+  cursor: pointer;
+  z-index: 2;
+`;
+
+function ImageInput({ onClick, onChange, id, accept, editImage }) {
   return (
     <>
       <StyledInput
@@ -26,9 +35,15 @@ function ImageInput({ onClick, onChange, id, accept }) {
         accept={accept}
         id={id}
       />
-      <StyledLabel htmlFor={id}>
-        <p>이미지 등록</p>
-      </StyledLabel>
+      {editImage ? (
+        <EditLabel htmlFor={id}>
+          <p>수정하기</p>
+        </EditLabel>
+      ) : (
+        <StyledLabel htmlFor={id}>
+          <p>이미지 등록</p>
+        </StyledLabel>
+      )}
     </>
   );
 }

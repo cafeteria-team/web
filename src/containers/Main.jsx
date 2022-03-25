@@ -50,7 +50,7 @@ const Main = inject(
       if (userId) {
         const response = await listStore.getEditUser(userId, access);
         console.log(response);
-        // setSelectedUser(response.data);
+        setSelectedUser(response.data);
       }
     }, [listStore]);
 

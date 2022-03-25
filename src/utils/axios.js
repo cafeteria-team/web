@@ -10,6 +10,9 @@ const instance = axios.create({
   timeout: 1000,
 });
 
+const access = localStorage.getItem("access");
+instance.defaults.headers.common["Authorization"] = `Bearer ${access}`;
+
 // axios.interceptors.request.use(async (config) => {
 //   if (!config.headers["Authorization"]) {
 //     config.headers[
