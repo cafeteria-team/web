@@ -68,6 +68,16 @@ const InputData = [
       </>
     ),
   },
+  {
+    body: (selectedUser, handleChange, state) => (
+      <>
+        <FlexBox margin="0 10px 0 0" minW="80px">
+          사업자 이미지
+        </FlexBox>
+        <img src={state.busi_num_img} />
+      </>
+    ),
+  },
 ];
 
 const MemberEdit = ({ selectedUser, id, editUser }) => {

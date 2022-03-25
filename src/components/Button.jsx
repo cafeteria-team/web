@@ -14,7 +14,7 @@ const StyledButton = styled.button`
   background-color: ${({ background, theme }) =>
     background ? background : theme.colors.orange};
   color: ${({ color }) => color || "#fff"};
-  border: unset;
+  border: ${({ border }) => border || "unset"};
   cursor: pointer;
   box-sizing: content-box;
   position: ${({ position }) => position || ""};
@@ -65,6 +65,7 @@ function Button({
   ariaCurrent,
   hover,
   margin,
+  border,
 }) {
   return (
     <StyledButton
@@ -83,6 +84,7 @@ function Button({
       ariaCurrent={ariaCurrent}
       hover={hover}
       margin={margin}
+      border={border}
     >
       {title}
     </StyledButton>

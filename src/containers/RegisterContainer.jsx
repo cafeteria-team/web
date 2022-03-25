@@ -14,10 +14,16 @@ import {
   StyledLink,
   StyledSpan,
 } from "../components/StyledElements";
+import Modal from "react-modal";
 
+// 모달
+Modal.setAppElement("#root");
+
+// 이미지 클라우드
 const imageUploader = new ImageUploader();
 
-const Timer = memo(({ timesUp, phoneChecked }) => {
+// 인증 타이머
+const Timer = memo(({ timesUp, phoneAuthed }) => {
   const [minutes, setMinutes] = useState(3);
   const [seconds, setSeconds] = useState(0);
 
@@ -36,7 +42,7 @@ const Timer = memo(({ timesUp, phoneChecked }) => {
         }
       }
     }, 1000);
-    if (phoneChecked) {
+    if (phoneAuthed) {
       clearInterval(countdown);
     }
     return () => {
@@ -46,7 +52,7 @@ const Timer = memo(({ timesUp, phoneChecked }) => {
   }, [minutes, seconds]);
 
   return (
-    <FlexBox position="absolute" right="10px" top="13.5px" width="unset">
+    <FlexBox position="absolute" right="16px" top="16px" width="unset">
       {minutes}:{seconds < 10 ? `0${seconds}` : seconds}
     </FlexBox>
   );
@@ -72,20 +78,109 @@ const Register = (props) => {
   });
 
   const [agreement, setAgreement] = useState(false);
-  const [clickedAuth, setClickedAuth] = useState(false);
   const [isPopup, setIsPopup] = useState("");
 
   // 핸드폰 인증번호 완료
-  const [phoneChecked, setPhoneChecked] = useState(false);
-  const [clickedPhone, setClickedPhone] = useState(false);
   const [phoneAuthed, setPhoneAuthed] = useState(false);
+  const [showModal, setShowModal] = useState(false);
+
+  // 핸드폰 번호체크
+  const getPhoneAuth = async () => {
+    const { phone } = state;
+
+    if (phone && phone.length === 11) {
+      try {
+        const response = await axios.post("/api/phone/auth", {
+          phone_num: phone,
+        });
+        openModal();
+        return response;
+      } catch (error) {
+        if (error?.response?.status === 409) {
+          alert("이미 등록된 핸드폰번호입니다.");
+        }
+        return error;
+      }
+    } else {
+      alert("옳바른 핸드폰 번호를 입력해주세요");
+    }
+  };
+
+  // 핸드폰 인증번호확인
+  const checkPhoneAuth = async () => {
+    const { phone, auth_phone } = state;
+
+    try {
+      const response = await axios.get(
+        `/api/phone/auth?phone_num=${phone}&auth_num=${auth_phone}`
+      );
+      console.log(response);
+      setPhoneAuthed(true);
+      return response;
+    } catch (error) {
+      alert("인증번호가 다릅니다. 확인 후 다시 시도해주세요.");
+      return error;
+    }
+  };
+
+  // 핸드폰 인증취소
+  const cancelPhone = () => {
+    setState((prev) => ({ ...prev, auth_phone: "" }));
+  };
+
+  //인증번호
+  const handleChangeAuthPhone = (e) => {
+    const regex = /^[0-9\b -]{0,5}$/;
+    const { id, value } = e.target;
+    if (regex.test(value)) {
+      setState((prevState) => ({
+        ...prevState,
+        [id]: value,
+      }));
+    }
+  };
+
+  // 모달 actions
+  const openModal = () => {
+    setShowModal(true);
+  };
+  const closeModal = () => {
+    setShowModal(false);
+    cancelPhone();
+  };
+
+  // modal style
+  const modalStyle = {
+    content: {
+      position: "absolute",
+      top: "50%",
+      left: "50%",
+      right: "50%",
+      bottom: "50%",
+      transform: "translate(-50%,-50%)",
+      backgroundColor: "#fff",
+      zIndex: "999",
+      width: "342px",
+      height: "300px",
+      display: "flex",
+      flexDirection: "column",
+      justifyContent: "space-between",
+    },
+    overlay: {
+      position: "fixed",
+      top: "0",
+      left: "0",
+      right: "0",
+      bottom: "0",
+      backgroundColor: "rgba(0,0,0,0.6)",
+      zIndex: "999",
+    },
+  };
 
   // timer done
   const timesUp = () => {
     alert("인증번호가 만료되었습니다.");
-    setState((prev) => ({ ...prev, auth_phone: "" }));
-    setClickedPhone(false);
-    return setClickedAuth(false);
+    return closeModal();
   };
 
   const popupOn = () => {
@@ -138,18 +233,6 @@ const Register = (props) => {
     }
   };
 
-  //인증번호
-  const handleChangeAuthPhone = (e) => {
-    const regex = /^[0-9\b -]{0,5}$/;
-    const { id, value } = e.target;
-    if (regex.test(value)) {
-      setState((prevState) => ({
-        ...prevState,
-        [id]: value,
-      }));
-    }
-  };
-
   const handleSubmitClick = (e) => {
     e.preventDefault();
 
@@ -179,14 +262,14 @@ const Register = (props) => {
       alert("비밀번호가 일치하지않습니다.");
     } else if (!phoneAuthed) {
       alert("핸드폰번호를 인증해주세요.");
-    } else if (checkEmail(state.email)) {
+    } else if (!checkEmail(state.email)) {
       alert("옳바른 이메일을 등록해주세요.");
     } else {
       register();
     }
   };
 
-  // 회원강비 등록
+  // 회원가입 등록
   const register = async () => {
     const {
       username,
@@ -224,60 +307,6 @@ const Register = (props) => {
     }
   };
 
-  // 핸드폰 번호체크
-  const getPhoneAuth = async () => {
-    const { phone } = state;
-
-    if (phone && phone.length === 11) {
-      setClickedPhone(true);
-      setClickedAuth(true);
-      try {
-        const response = await axios.post("/api/phone/auth", {
-          phone_num: phone,
-        });
-        console.log(response);
-        return response;
-      } catch (error) {
-        if (error?.response?.status === 409) {
-          alert("이미 등록된 핸드폰번호입니다.");
-          setClickedPhone(false);
-          setClickedAuth(false);
-        }
-        return error;
-      }
-    } else {
-      alert("옳바른 핸드폰 번호를 입력해주세요");
-      setClickedPhone(false);
-      setClickedAuth(false);
-    }
-  };
-
-  // 핸드폰 인증번호확인
-  const checkPhoneAuth = async () => {
-    const { phone, auth_phone } = state;
-
-    try {
-      const response = await axios.get(
-        `/api/phone/auth?phone_num=${phone}&auth_num=${auth_phone}`
-      );
-      console.log(response);
-      setPhoneChecked(true);
-      setPhoneAuthed(true);
-      return response;
-    } catch (error) {
-      alert("인증번호가 다릅니다. 확인 후 다시 시도해주세요.");
-      setClickedPhone(false);
-      setClickedAuth(false);
-      return error;
-    }
-  };
-
-  // 핸드폰 인증취소
-  const cancelPhone = () => {
-    setClickedPhone(false);
-    setClickedAuth(false);
-  };
-
   // 이미지업로드
   const onFileChange = async (e) => {
     const uploaded = await imageUploader.upload(e.target.files[0]);
@@ -304,6 +333,54 @@ const Register = (props) => {
         just="center"
         direction="column"
       >
+        <Modal
+          isOpen={showModal}
+          contentLabel="onRequestClose Example"
+          onRequestClose={closeModal}
+          style={modalStyle}
+          // overlayClassName={modalOveray}
+        >
+          <FlexBox direction="column">
+            <FlexBox position="relative" width="342px">
+              <Input
+                type="text"
+                id="auth_phone"
+                placeholder="인증번호"
+                value={state.auth_phone}
+                onChange={handleChangeAuthPhone}
+                margin="0 0 10px 0"
+              />
+              {<Timer timesUp={timesUp} phoneAuthed={phoneAuthed} />}
+            </FlexBox>
+            <FlexBox direction="column">
+              <StyledSpan font="12px" color="#838383" margin="0 0 10px 0">
+                * 3분 이내로 인증번호(6자리를) 입력해 주세요.
+              </StyledSpan>
+              <StyledSpan font="12px" color="#838383">
+                *인증번호가 전송되지 않을경우 "재전송" 버튼을 눌러주세요.
+              </StyledSpan>
+            </FlexBox>
+          </FlexBox>
+          <FlexBox direction="column">
+            <Button
+              type="button"
+              title="확인"
+              width="300px"
+              onClick={checkPhoneAuth}
+              margin="0 0 12px 0"
+            />
+            <Button
+              type="button"
+              title="취소"
+              width="300px"
+              onClick={closeModal}
+              margin="0"
+              background="unset"
+              border="1px solid #FF8400"
+              color="#FF8400"
+            />
+          </FlexBox>
+        </Modal>
         <StyledTitle align="center" margin="0 0 40px 0">
           회원가입
         </StyledTitle>
@@ -352,7 +429,7 @@ const Register = (props) => {
                 placeholder="핸드폰번호"
                 value={state.phone}
                 onChange={handleChangePhone}
-                disabled={clickedPhone ? true : false}
+                disabled={phoneAuthed ? true : false}
               />
               <Button
                 color="#3b86ff"
@@ -362,41 +439,12 @@ const Register = (props) => {
                 background="unset"
                 type="button"
                 width="unset"
-                title={clickedAuth ? "인증확인" : "인증하기"}
+                title="인증하기"
                 padding="unset"
                 font="14px"
-                onClick={clickedAuth ? checkPhoneAuth : getPhoneAuth}
+                onClick={getPhoneAuth}
               />
-              {clickedAuth && (
-                <Button
-                  color="tomato"
-                  position="absolute"
-                  right="75px"
-                  top="13.5px"
-                  background="unset"
-                  type="button"
-                  width="unset"
-                  title="취소하기"
-                  padding="unset"
-                  font="14px"
-                  onClick={cancelPhone}
-                />
-              )}
             </FlexBox>
-
-            {clickedAuth && (
-              <FlexBox position="relative">
-                <Input
-                  type="text"
-                  id="auth_phone"
-                  placeholder="인증번호"
-                  value={state.auth_phone}
-                  onChange={handleChangeAuthPhone}
-                  disabled={phoneChecked ? true : false}
-                />
-                {<Timer timesUp={timesUp} phoneChecked={phoneChecked} />}
-              </FlexBox>
-            )}
 
             <FlexBox position="relative">
               <Input

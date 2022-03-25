@@ -39,7 +39,9 @@ export const StyledSpan = styled.span`
   align-self: ${(props) => props.align || ""};
   font-size: ${(props) => props.font || ""};
   color: ${(props) => props.color || ""};
+  margin: ${(props) => props.margin || ""};
 `;
+
 export const MainContainer = styled.div`
   background-color: ${(props) =>
     props.background ? props.background : props.theme.colors.orange};
