@@ -38,7 +38,7 @@ function Header({ name, logout }) {
         height="48px"
         width="100px"
         just="space-between"
-        rad="8px"
+        rad="8px 8px 0 0"
         background="#fff"
         align="center"
         shadow="2px 4px 12px rgb(0 0 0 / 8%)"
@@ -52,6 +52,26 @@ function Header({ name, logout }) {
       >
         <LogoutIcon />
         <StyledBody>로그아웃</StyledBody>
+      </FlexBox>
+      <FlexBox
+        position="absolute"
+        top="128px"
+        height="48px"
+        width="100px"
+        just="flex-end"
+        rad="0 0 8px 8px"
+        background="#fff"
+        align="center"
+        shadow="2px 4px 12px rgb(0 0 0 / 8%)"
+        padding="0 20px"
+        cursor="pointer"
+        hoverBg="#f97316;"
+        hoverColor="#fff;"
+        overflow="hidden"
+        mHeight={box ? "48px" : "0"}
+        onClick={_logout}
+      >
+        <StyledBody>비밀번호 변경</StyledBody>
       </FlexBox>
     </FlexBox>
   );
