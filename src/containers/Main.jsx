@@ -60,6 +60,7 @@ const Main = inject(
       let access = localStorage.getItem("access");
       if (userId) {
         await listStore.editUser(userId, state);
+        alert("회원정보가 수정되었습니다.");
         return _callUserList(access);
       }
     };

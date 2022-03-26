@@ -2,7 +2,6 @@ import React, { useState, useEffect, memo } from "react";
 import {
   FlexBox,
   StyledTitle,
-  StyledLink,
   StyledBody,
   Ul,
   Li,
@@ -136,7 +135,7 @@ const MemberList = ({
 
 const Pagination = ({ total, limit, page, setPage }) => {
   const numPages = Math.ceil(total / limit);
-  console.log(total, limit, page, numPages);
+  // console.log(total, limit, page, numPages);
   return total ? (
     <FlexBox just="center" margin="32px -10px 0 -10px">
       <Button
