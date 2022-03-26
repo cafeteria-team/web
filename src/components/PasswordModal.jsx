@@ -139,6 +139,18 @@ const PasswordModal = (props) => {
   // 인증완료
   const mobileDone = () => {};
 
+  // 핸드폰 정규식
+  const handleChangePhone = (e) => {
+    const regex = /^[0-9\b -]{0,11}$/;
+    const { id, value } = e.target;
+    if (regex.test(value)) {
+      setState((prevState) => ({
+        ...prevState,
+        [id]: value,
+      }));
+    }
+  };
+
   // modal style
   const modalStyle = {
     content: {
@@ -168,70 +180,124 @@ const PasswordModal = (props) => {
   };
 
   return (
-    <Modal
-      isOpen={showModal}
-      contentLabel="phone check"
-      onRequestClose={closeModal}
-      style={modalStyle}
-    >
-      <FlexBox direction="column">
-        <FlexBox position="relative" width="342px" align="center">
-          <Input
-            type="text"
-            id="auth_phone"
-            placeholder="인증번호"
-            value={state.auth_phone}
-            onChange={handleChangeAuthPhone}
-            margin="0 20px 10px 0"
-            width="240px"
-          />
-          <Timer
-            timesUp={timesUp}
-            phoneAuthed={phoneAuthed}
-            resendCode={resendCode}
-          />
-          <Button
-            color="tomato"
-            background="unset"
-            type="button"
-            width="unset"
-            title="재전송"
-            padding="unset"
-            font="14px"
-            textAlign="right"
-            onClick={mobileAuthResend}
-            margin="0 0 10px 0"
-          />
+    <>
+      <Modal
+        isOpen={showModal}
+        contentLabel="phone check"
+        onRequestClose={closeModal}
+        style={modalStyle}
+      >
+        <FlexBox direction="column">
+          <FlexBox position="relative" width="342px" align="center">
+            <Input
+              type="text"
+              id="auth_phone"
+              placeholder="인증번호"
+              value={state.auth_phone}
+              onChange={handleChangeAuthPhone}
+              margin="0 20px 10px 0"
+              width="240px"
+            />
+            <Timer
+              timesUp={timesUp}
+              phoneAuthed={phoneAuthed}
+              resendCode={resendCode}
+            />
+            <Button
+              color="tomato"
+              background="unset"
+              type="button"
+              width="unset"
+              title="재전송"
+              padding="unset"
+              font="14px"
+              textAlign="right"
+              onClick={mobileAuthResend}
+              margin="0 0 10px 0"
+            />
+          </FlexBox>
+          <FlexBox direction="column">
+            <StyledSpan font="12px" color="#838383" margin="0 0 10px 0">
+              * 3분 이내로 인증번호(5자리를) 입력해 주세요.
+            </StyledSpan>
+            <StyledSpan font="12px" color="#838383">
+              *인증번호가 전송되지 않을경우 "재전송" 버튼을 눌러주세요.
+            </StyledSpan>
+          </FlexBox>
         </FlexBox>
         <FlexBox direction="column">
-          <StyledSpan font="12px" color="#838383" margin="0 0 10px 0">
-            * 3분 이내로 인증번호(5자리를) 입력해 주세요.
-          </StyledSpan>
-          <StyledSpan font="12px" color="#838383">
-            *인증번호가 전송되지 않을경우 "재전송" 버튼을 눌러주세요.
-          </StyledSpan>
+          <Button
+            type="button"
+            title="확인"
+            width="300px"
+            onClick={checkPhoneAuth}
+            margin="0 0 12px 0"
+          />
+          <Button
+            type="button"
+            title="취소"
+            width="300px"
+            onClick={cancelPhone}
+            margin="0"
+            background="unset"
+            border="1px solid #FF8400"
+            color="#FF8400"
+          />
         </FlexBox>
-      </FlexBox>
-      <FlexBox direction="column">
-        <Button
-          type="button"
-          title="확인"
-          width="300px"
-          onClick={checkPhoneAuth}
-          margin="0 0 12px 0"
-        />
-        <Button
-          type="button"
-          title="취소"
-          width="300px"
-          onClick={cancelPhone}
-          margin="0"
-          background="unset"
-          border="1px solid #FF8400"
-          color="#FF8400"
-        />
-      </FlexBox>
-    </Modal>
+      </Modal>
+
+      <Modal
+        isOpen={showModal}
+        contentLabel="phone check"
+        onRequestClose={closeModal}
+        style={modalStyle}
+      >
+        <FlexBox direction="column">
+          <FlexBox position="relative">
+            <Input
+              type="text"
+              id="phone"
+              placeholder="핸드폰번호"
+              value={state.phone}
+              onChange={handleChangePhone}
+              disabled={phoneAuthed ? true : false}
+            />
+            <Button
+              color={phoneAuthed ? "tomato" : "#3b86ff"}
+              position="absolute"
+              right="10px"
+              top="13.5px"
+              background="unset"
+              type="button"
+              width="unset"
+              title={phoneAuthed ? "인증완료" : "인증하기"}
+              padding="unset"
+              font="14px"
+              onClick={phoneAuthed ? mobileDone : getPhoneAuth}
+            />
+          </FlexBox>
+        </FlexBox>
+        <FlexBox direction="column">
+          <Button
+            type="button"
+            title="확인"
+            width="300px"
+            onClick={checkPhoneAuth}
+            margin="0 0 12px 0"
+          />
+          <Button
+            type="button"
+            title="취소"
+            width="300px"
+            onClick={cancelPhone}
+            margin="0"
+            background="unset"
+            border="1px solid #FF8400"
+            color="#FF8400"
+          />
+        </FlexBox>
+      </Modal>
+    </>
   );
 };
 
