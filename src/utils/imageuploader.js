@@ -21,15 +21,6 @@ class ImageUploader {
     } catch (error) {
       console.log(error.response);
     }
-
-    // const result = await fetch(
-    //   `https://api.cloudinary.com/v1_1/${APIKEY}/upload`,
-    //   {
-    //     method: "POST",
-    //     body: data,
-    //   }
-    // );
-    // return await response;
   }
 }
 

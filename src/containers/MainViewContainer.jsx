@@ -11,6 +11,7 @@ import {
   Request,
   Event,
   NotFound,
+  Password,
 } from "../views";
 
 const MainViewContainer = () => {
@@ -50,6 +51,8 @@ const MainViewContainer = () => {
             return <Setting />;
           case "website":
             return <Website />;
+          case "password":
+            return <Password />;
           default:
             return <NotFound />;
         }

@@ -16,6 +16,9 @@ function Header({ name, logout }) {
     logout();
     return navigate("/");
   };
+  const _onClickPassword = () => {
+    navigate("/main/password");
+  };
 
   return (
     <>
@@ -36,43 +39,44 @@ function Header({ name, logout }) {
         <FlexBox
           position="absolute"
           top="80px"
-          height="48px"
-          width="100px"
-          just="space-between"
-          rad="8px 8px 0 0"
-          background="#fff"
-          align="center"
-          shadow="2px 4px 12px rgb(0 0 0 / 8%)"
-          padding="0 20px"
-          cursor="pointer"
-          hoverBg="#f97316;"
-          hoverColor="#fff;"
+          height="96px"
+          mHeight={box ? "96px" : "0"}
           overflow="hidden"
-          mHeight={box ? "48px" : "0"}
-          onClick={_logout}
+          direction="column"
         >
-          <LogoutIcon />
-          <StyledBody>로그아웃</StyledBody>
-        </FlexBox>
-        <FlexBox
-          position="absolute"
-          top="128px"
-          height="48px"
-          width="100px"
-          just="flex-end"
-          rad="0 0 8px 8px"
-          background="#fff"
-          align="center"
-          shadow="2px 4px 12px rgb(0 0 0 / 8%)"
-          padding="0 20px"
-          cursor="pointer"
-          hoverBg="#f97316;"
-          hoverColor="#fff;"
-          overflow="hidden"
-          mHeight={box ? "48px" : "0"}
-          onClick={_logout}
-        >
-          <StyledBody>비밀번호 변경</StyledBody>
+          <FlexBox
+            height="48px"
+            width="100px"
+            just="space-between"
+            rad="8px 8px 0 0"
+            background="#fff"
+            align="center"
+            shadow="2px 4px 12px rgb(0 0 0 / 8%)"
+            padding="0 20px"
+            cursor="pointer"
+            hoverBg="#f97316;"
+            hoverColor="#fff;"
+            onClick={_logout}
+          >
+            <LogoutIcon />
+            <StyledBody>로그아웃</StyledBody>
+          </FlexBox>
+          <FlexBox
+            height="48px"
+            width="100px"
+            just="flex-end"
+            rad="0 0 8px 8px"
+            background="#fff"
+            align="center"
+            shadow="2px 4px 12px rgb(0 0 0 / 8%)"
+            padding="0 20px"
+            cursor="pointer"
+            hoverBg="#f97316;"
+            hoverColor="#fff;"
+            onClick={_onClickPassword}
+          >
+            <StyledBody>비밀번호 변경</StyledBody>
+          </FlexBox>
         </FlexBox>
       </FlexBox>
     </>

@@ -9,6 +9,7 @@ import Event from "./Event";
 import Request from "./Request";
 import Pagination from "./Pagination";
 import MemberEdit from "./MemberEdit";
+import Password from "./Password";
 
 export {
   Overview,
@@ -22,4 +23,5 @@ export {
   Event,
   Pagination,
   MemberEdit,
+  Password,
 };

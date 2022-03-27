@@ -39,10 +39,6 @@ const App = inject("authStore")(
                 />
               }
             >
-              {/* <Route path="/main" element={<Main />}>
-                <Route path=":name" element={<MainViewContainer />} />
-              </Route> */}
-
               <Route path="/main" element={<Main />}>
                 <Route path=":name" element={<MainViewContainer />}>
                   <Route path=":detail" element={<SubViewContainer />} />
