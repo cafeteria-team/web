@@ -132,6 +132,7 @@ const PasswordModal = (props) => {
   const openModal = () => {
     setShowModal(true);
   };
+
   const closeModal = () => {
     setShowModal(false);
   };
