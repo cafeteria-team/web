@@ -1,5 +1,10 @@
 import React, { useState, memo, useEffect } from "react";
-import { FlexBox, StyledBody, StyledSpan } from "../components/StyledElements";
+import {
+  FlexBox,
+  StyledBody,
+  StyledSpan,
+  StyledTitle,
+} from "../components/StyledElements";
 import Modal from "react-modal";
 import { Button, Input } from "../components";
 import axios from "../utils/axios";
@@ -137,8 +142,24 @@ const Password = (props) => {
     },
   };
   return (
-    <FlexBox>
-      <FlexBox direction="column">
+    <FlexBox width="100%" direction="column" padding="30px 70px">
+      <FlexBox
+        just="center"
+        direction="column"
+        align="center"
+        margin="0 0 32px 0"
+      >
+        <StyledTitle margin="80px 0 20px 0">비밀번호 재설정</StyledTitle>
+        <StyledBody>
+          안전한 사용을 위하여, 본인인증을 완료후 비밀번호 변경이 가능합니다.
+        </StyledBody>
+      </FlexBox>
+      <FlexBox
+        background="#fff"
+        direction="column"
+        align="center"
+        padding="20px"
+      >
         <FlexBox position="relative">
           <Input
             type="text"
@@ -162,25 +183,25 @@ const Password = (props) => {
             onClick={phoneAuthed ? mobileDone : getPhoneAuth}
           />
         </FlexBox>
-      </FlexBox>
-      <FlexBox direction="column">
-        <Button
-          type="button"
-          title="확인"
-          width="300px"
-          onClick={checkPhoneAuth}
-          margin="0 0 12px 0"
-        />
-        <Button
-          type="button"
-          title="취소"
-          width="300px"
-          onClick={cancelPhone}
-          margin="0"
-          background="unset"
-          border="1px solid #FF8400"
-          color="#FF8400"
-        />
+        <FlexBox direction="column">
+          <Button
+            type="button"
+            title="확인"
+            width="300px"
+            onClick={checkPhoneAuth}
+            margin="0 0 12px 0"
+          />
+          <Button
+            type="button"
+            title="취소"
+            width="300px"
+            onClick={cancelPhone}
+            margin="0"
+            background="unset"
+            border="1px solid #FF8400"
+            color="#FF8400"
+          />
+        </FlexBox>
       </FlexBox>
     </FlexBox>
   );
