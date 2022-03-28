@@ -5,6 +5,7 @@ import PrivacyInput from "./PrivacyInput";
 import SideMenu from "./SideMenu";
 import Header from "./Header";
 import PasswordModal from "./PasswordModal";
+import NewPassword from "./NewPassword";
 
 export {
   Button,
@@ -14,4 +15,5 @@ export {
   SideMenu,
   Header,
   PasswordModal,
+  NewPassword,
 };
