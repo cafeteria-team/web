@@ -1,7 +1,8 @@
 import React from "react";
+import { MyEditor } from "../components";
 
 const Manage = (props) => {
-  return <div>sss</div>;
+  return <MyEditor />;
 };
 
 export default Manage;
