@@ -1,14 +1,16 @@
-import React, { useState } from "react";
-import { Editor } from "react-draft-wysiwyg";
+import React, { useState, useEffect } from "react";
+import { Editor, convertToRaw } from "react-draft-wysiwyg";
 import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
 import styled from "styled-components";
 import { EditorState } from "draft-js";
+import draftToHtml from "draftjs-to-html";
+import { convertToHTML } from "draft-convert";
 
 const MyBlock = styled.div`
+  padding: 30px 70px;
+  width: 100%;
   .wrapper-class {
-    width: 50%;
-    margin: 0 auto;
-    margin-bottom: 4rem;
+    background: #fff;
   }
   .editor {
     height: 500px !important;
@@ -22,10 +24,22 @@ const MyEditor = () => {
   // useState로 상태관리하기 초기값은 EditorState.createEmpty()
   // EditorState의 비어있는 ContentState 기본 구성으로 새 개체를 반환 => 이렇게 안하면 상태 값을 나중에 변경할 수 없음.
   const [editorState, setEditorState] = useState(EditorState.createEmpty());
+  const [convertedContent, setConvertedContent] = useState("");
 
-  const onEditorStateChange = (editorState) => {
+  const handleEditorChange = (state) => {
     // editorState에 값 설정
-    setEditorState(editorState);
+    setEditorState(state);
+    convertContentToHTML(state);
+  };
+  const convertContentToHTML = (editorState) => {
+    let currentContentAsHTML = convertToHTML(editorState.getCurrentContent());
+    setConvertedContent(currentContentAsHTML);
+  };
+
+  useEffect(() => {}, [editorState]);
+
+  const send = () => {
+    console.log(convertedContent);
   };
 
   return (
@@ -39,6 +53,28 @@ const MyEditor = () => {
         toolbarClassName="toolbar-class"
         // 툴바 설정
         toolbar={{
+          // toolbar options
+          options: [
+            "inline",
+            "blockType",
+            "fontSize",
+            "list",
+            "textAlign",
+            "colorPicker",
+            "emoji",
+            // "history",
+          ],
+          inline: {
+            options: [
+              "bold",
+              "italic",
+              "underline",
+              "strikethrough",
+              // "monospace",
+              // "superscript",
+              // "subscript",
+            ],
+          },
           // inDropdown: 해당 항목과 관련된 항목을 드롭다운으로 나타낼것인지
           list: { inDropdown: true },
           textAlign: { inDropdown: true },
@@ -53,8 +89,9 @@ const MyEditor = () => {
         // 초기값 설정
         editorState={editorState}
         // 에디터의 값이 변경될 때마다 onEditorStateChange 호출
-        onEditorStateChange={onEditorStateChange}
+        onEditorStateChange={handleEditorChange}
       />
+      <button onClick={send}>ss</button>
     </MyBlock>
   );
 };
