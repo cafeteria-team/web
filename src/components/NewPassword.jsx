@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { FlexBox, StyledTitle, StyledBody } from "./StyledElements";
 import { Button, Input } from ".";
 
-const NewPassword = ({ cancelPassword }) => {
+const NewPassword = ({ cancelPassword, changePassword }) => {
   const [state, setState] = useState({
     password: "",
     confirm_password: "",
@@ -14,6 +14,14 @@ const NewPassword = ({ cancelPassword }) => {
       ...prevState,
       [id]: value,
     }));
+  };
+
+  const checkPassword = () => {
+    if (state.password !== "" && state.password === state.confirm_password) {
+      changePassword(state.password);
+    } else {
+      alert("비밀번호가 일치하지 않습니다.");
+    }
   };
 
   return (
@@ -53,6 +61,7 @@ const NewPassword = ({ cancelPassword }) => {
             title="변경"
             width="300px"
             margin="0 0 12px 0"
+            onClick={checkPassword}
           />
           <Button
             type="button"

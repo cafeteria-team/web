@@ -109,7 +109,6 @@ class AuthStore {
       );
       this.setUsername(username);
       this.onLoginSucess(response.data.refresh, response.data.access, username);
-
       return response;
     } catch (error) {
       console.log(error);

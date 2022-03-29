@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { FlexBox, StyledBody, StyledTitle } from "../components/StyledElements";
 import { Button, Input, PasswordModal, NewPassword } from "../components";
 import axios from "../utils/axios";
+import jwt_decode from "jwt-decode";
 
 const Password = (props) => {
   const [state, setState] = useState({
@@ -23,7 +24,6 @@ const Password = (props) => {
   const getPhoneAuth = async () => {
     const { phone } = state;
     openModal();
-
     // if (phone && phone.length === 11) {
     //   try {
     //     const response = await axios.post("/api/phone/auth", {
@@ -101,26 +101,41 @@ const Password = (props) => {
     setPhoneAuthed(false);
   };
 
-  //   //   비밀번호 재설정
-  //   const changePassword = async () => {
-  //     const { phone } = state;
+  //   비밀번호 재설정
+  const changePassword = async (password) => {
+    const { phone } = state;
 
-  //     try {
-  //       const response = await axios.get(`/user/${id}/password`);
-  //       setResendCode(false);
-  //       setPhoneAuthed(true);
-  //       closeModal();
-  //       return response;
-  //     } catch (error) {
-  //       alert("인증번호가 다릅니다. 확인 후 다시 시도해주세요.");
-  //       return error;
-  //     }
-  //   };
+    let access = localStorage.getItem("access");
+
+    let token = access;
+    let decoded = jwt_decode(token);
+
+    try {
+      const response = await axios.patch(
+        `/api/user/${decoded.user_id}/password`,
+        {
+          password,
+        }
+      );
+      setResendCode(false);
+      setPhoneAuthed(true);
+      closeModal();
+      alert("비밀번호 변경이 완료되었습니다.");
+      console.log(response);
+      return response;
+    } catch (error) {
+      console.log(error.response);
+      return error;
+    }
+  };
 
   return (
     <FlexBox width="100%" direction="column" padding="30px 70px">
       {phoneAuthed ? (
-        <NewPassword cancelPassword={cancelPassword} />
+        <NewPassword
+          cancelPassword={cancelPassword}
+          changePassword={changePassword}
+        />
       ) : (
         <FlexBox
           background="#fff"
