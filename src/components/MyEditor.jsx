@@ -18,6 +18,9 @@ const MyBlock = styled.div`
     padding: 5px !important;
     border-radius: 2px !important;
   }
+  .h1 {
+    font-size: 56px;
+  }
 `;
 
 const MyEditor = () => {
@@ -74,6 +77,12 @@ const MyEditor = () => {
               // "superscript",
               // "subscript",
             ],
+          },
+          blockType: {
+            inDropdown: true,
+            options: ["Normal", "H1", "H2", "H3", "H4", "H5", "H6"],
+            className: undefined,
+            component: undefined,
           },
           // inDropdown: 해당 항목과 관련된 항목을 드롭다운으로 나타낼것인지
           list: { inDropdown: true },

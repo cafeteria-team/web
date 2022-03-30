@@ -10,7 +10,7 @@ const Password = (props) => {
   });
 
   // 핸드폰 인증번호 완료
-  const [phoneAuthed, setPhoneAuthed] = useState(true);
+  const [phoneAuthed, setPhoneAuthed] = useState(false);
   const [showModal, setShowModal] = useState(false);
   const [resendCode, setResendCode] = useState(false);
 
@@ -24,23 +24,21 @@ const Password = (props) => {
   const getPhoneAuth = async () => {
     const { phone } = state;
     openModal();
-    // if (phone && phone.length === 11) {
-    //   try {
-    //     const response = await axios.post("/api/phone/auth", {
-    //       phone_num: phone,
-    //     });
-    //     openModal();
-    //     setResendCode(false);
-    //     return response;
-    //   } catch (error) {
-    //     if (error?.response?.status === 409) {
-    //       alert("이미 등록된 핸드폰번호입니다.");
-    //     }
-    //     return error;
-    //   }
-    // } else {
-    //   alert("옳바른 핸드폰 번호를 입력해주세요");
-    // }
+    if (phone && phone.length === 11) {
+      try {
+        const response = await axios.post("/api/phone/auth/password", {
+          phone_num: phone,
+        });
+        openModal();
+        setResendCode(false);
+        return response;
+      } catch (error) {
+        console.log(error.response);
+        return error;
+      }
+    } else {
+      alert("옳바른 핸드폰 번호를 입력해주세요");
+    }
   };
 
   // 핸드폰 인증번호확인
@@ -49,7 +47,7 @@ const Password = (props) => {
 
     try {
       const response = await axios.get(
-        `/api/phone/auth?phone_num=${phone}&auth_num=${auth}`
+        `/api/phone/auth?phone_num=${phone}&auth_num=${auth}&purpose=PASSWORD`
       );
       setResendCode(false);
       setPhoneAuthed(true);
