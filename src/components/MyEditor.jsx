@@ -45,6 +45,10 @@ const MyEditor = () => {
     console.log(convertedContent);
   };
 
+  const FONT_SIZE = {
+    fontSize: "30px",
+  };
+
   return (
     <MyBlock>
       <Editor
@@ -81,6 +85,20 @@ const MyEditor = () => {
           blockType: {
             inDropdown: true,
             options: ["Normal", "H1", "H2", "H3", "H4", "H5", "H6"],
+            displayNames: [
+              { label: "Normal", displayName: "Normal", style: "unstyled" },
+              { label: "H1", displayName: "Heading 1", style: FONT_SIZE },
+              { label: "H2", displayName: "Heading 2", style: "header-two" },
+              { label: "H3", displayName: "Heading 3", style: "header-three" },
+              { label: "H4", displayName: "Heading 4", style: "header-four" },
+              { label: "H5", displayName: "Heading 5", style: "header-five" },
+              { label: "H6", displayName: "Heading 6", style: "header-six" },
+              {
+                label: "Blockquote",
+                displayName: "Blockquote",
+                style: "blockquote",
+              },
+            ],
             className: undefined,
             component: undefined,
           },
