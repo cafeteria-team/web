@@ -27,6 +27,7 @@ class ListStore {
       this.setUserList(response.data.results);
       return response;
     } catch (error) {
+      alert("유저 정보를 불러올수없습니다.");
       console.log(error.response);
     }
   };
