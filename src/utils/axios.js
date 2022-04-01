@@ -4,8 +4,8 @@ import { getCookie, removeCookie } from "../utils/cookie";
 const PROXY = window.location.hostname === "localhost" ? "" : "/proxy";
 
 const instance = axios.create({
-  // baseURL: "https://www.good-cafeteria.cf",
-  baseURL: PROXY,
+  baseURL: "https://www.good-cafeteria.cf",
+  // baseURL: PROXY,
   //proxy 설정후 빈칸
   timeout: 1000,
 });

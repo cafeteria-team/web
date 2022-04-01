@@ -48,83 +48,110 @@ const menuData = [
     ),
   },
   {
+    // JSX를 반환하는 함수를 설정하면, 실행했을 때 동적으로 코드를 구현할 수 있습니다.
     header: (menuState, index) => (
-      <FlexBox
-        just="space-between"
-        align="center"
-        minHeight="54px"
-        padding="0 20px"
+      <NavLink
+        to="/main/member"
+        style={({ isActive }) =>
+          isActive
+            ? { borderLeft: "4px solid #fff", padding: "0 20px" }
+            : { padding: "0 20px" }
+        }
       >
-        <FlexBox align="center">
-          <PersonIcon sx={{ color: grey[50] }} />
-          <StyledBody
-            margin="0 0 0 10px"
-            color="#fff"
-            weight="bold"
-            display={menuState ? "none" : ""}
-          >
-            회원정보관리
-          </StyledBody>
+        <FlexBox just="space-between" align="center" minHeight="54px">
+          <FlexBox align="center">
+            <PersonIcon sx={{ color: grey[50] }} />
+            <StyledBody
+              margin="0 0 0 10px"
+              color="#fff"
+              weight="bold"
+              display={menuState ? "none" : ""}
+            >
+              회원정보관리
+            </StyledBody>
+          </FlexBox>
         </FlexBox>
-        <FlexBox>
-          <ExpandMoreIcon
-            sx={{ color: grey[50] }}
-            style={{ display: menuState ? "none" : "" }}
-          />
-        </FlexBox>
-      </FlexBox>
-    ),
-    panel: (menuState, index, menuActive, _onClick) => (
-      <FlexBox
-        direction="column"
-        height="74px"
-        mHeight={menuActive === index ? "74px" : "0px"}
-        just="space-between"
-        overflow="hidden"
-      >
-        <NavLink
-          to="/main/member"
-          style={({ isActive }) =>
-            isActive
-              ? { background: "#f97316", padding: "0 26px" }
-              : { padding: "0 26px" }
-          }
-          onClick={_onClick}
-        >
-          <StyledBody
-            color="#fff"
-            display="block"
-            height="34px"
-            padding="0 0 0 34px"
-            lineH="34px"
-            boxSizing="border-box"
-          >
-            일반회원
-          </StyledBody>
-        </NavLink>
-        <NavLink
-          to="/main/request"
-          style={({ isActive }) =>
-            isActive
-              ? { background: "#f97316", padding: "0 26px" }
-              : { padding: "0 26px" }
-          }
-          onClick={_onClick}
-        >
-          <StyledBody
-            color="#fff"
-            display="block"
-            height="34px"
-            padding="0 0 0 34px"
-            lineH="34px"
-            boxSizing="border-box"
-          >
-            가입요청
-          </StyledBody>
-        </NavLink>
-      </FlexBox>
+      </NavLink>
     ),
   },
+  // {
+  //   header: (menuState, index) => (
+  //     <FlexBox
+  //       just="space-between"
+  //       align="center"
+  //       minHeight="54px"
+  //       padding="0 20px"
+  //     >
+  //       <FlexBox align="center">
+  //         <PersonIcon sx={{ color: grey[50] }} />
+  //         <StyledBody
+  //           margin="0 0 0 10px"
+  //           color="#fff"
+  //           weight="bold"
+  //           display={menuState ? "none" : ""}
+  //         >
+  //           회원정보관리
+  //         </StyledBody>
+  //       </FlexBox>
+  //       <FlexBox>
+  //         <ExpandMoreIcon
+  //           sx={{ color: grey[50] }}
+  //           style={{ display: menuState ? "none" : "" }}
+  //         />
+  //       </FlexBox>
+  //     </FlexBox>
+  //   ),
+  //   panel: (menuState, index, menuActive, _onClick) => (
+  //     <FlexBox
+  //       direction="column"
+  //       height="74px"
+  //       mHeight={menuActive === index ? "74px" : "0px"}
+  //       just="space-between"
+  //       overflow="hidden"
+  //     >
+  //       <NavLink
+  //         to="/main/member"
+  //         style={({ isActive }) =>
+  //           isActive
+  //             ? { background: "#f97316", padding: "0 26px" }
+  //             : { padding: "0 26px" }
+  //         }
+  //         onClick={_onClick}
+  //       >
+  //         <StyledBody
+  //           color="#fff"
+  //           display="block"
+  //           height="34px"
+  //           padding="0 0 0 34px"
+  //           lineH="34px"
+  //           boxSizing="border-box"
+  //         >
+  //           일반회원
+  //         </StyledBody>
+  //       </NavLink>
+  //       <NavLink
+  //         to="/main/request"
+  //         style={({ isActive }) =>
+  //           isActive
+  //             ? { background: "#f97316", padding: "0 26px" }
+  //             : { padding: "0 26px" }
+  //         }
+  //         onClick={_onClick}
+  //       >
+  //         <StyledBody
+  //           color="#fff"
+  //           display="block"
+  //           height="34px"
+  //           padding="0 0 0 34px"
+  //           lineH="34px"
+  //           boxSizing="border-box"
+  //         >
+  //           가입요청
+  //         </StyledBody>
+  //       </NavLink>
+  //     </FlexBox>
+  //   ),
+  // },
   {
     header: (menuState, index) => (
       <NavLink

@@ -44,10 +44,10 @@ class AuthStore {
       try {
         const res = await axios.post(
           "/api/user/token/refresh/",
-          { refresh: data },
-          {
-            withCredentials: true,
-          }
+          { refresh: data }
+          // {
+          //   withCredentials: true,
+          // }
         );
 
         // refresh토큰저장
@@ -104,8 +104,8 @@ class AuthStore {
         {
           username,
           password,
-        },
-        { withCredentials: true }
+        }
+        // { withCredentials: true }
       );
       this.setUsername(username);
       this.onLoginSucess(response.data.refresh, response.data.access, username);
