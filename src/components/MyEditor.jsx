@@ -18,10 +18,21 @@ const MyBlock = styled.div`
     padding: 5px !important;
     border-radius: 2px !important;
   }
-  .h1 {
-    font-size: 56px;
-  }
 `;
+
+// const editorLabels = {
+//   // BlockType
+//   "components.controls.blocktype.h1": "Heading 1",
+//   "components.controls.blocktype.h2": "Heading 2",
+//   "components.controls.blocktype.h3": "Heading 3",
+//   "components.controls.blocktype.h4": "Heading 4",
+//   "components.controls.blocktype.h5": "Heading 5",
+//   "components.controls.blocktype.h6": "Heading 6",
+//   "components.controls.blocktype.blockquote": "Blockquote",
+//   "components.controls.blocktype.code": "Code",
+//   "components.controls.blocktype.blocktype": "Block Type",
+//   "components.controls.blocktype.normal": "Normal",
+// };
 
 const MyEditor = () => {
   // useState로 상태관리하기 초기값은 EditorState.createEmpty()
@@ -43,10 +54,6 @@ const MyEditor = () => {
 
   const send = () => {
     console.log(convertedContent);
-  };
-
-  const FONT_SIZE = {
-    fontSize: "30px",
   };
 
   return (
@@ -84,15 +91,15 @@ const MyEditor = () => {
           },
           blockType: {
             inDropdown: true,
-            options: ["Normal", "H1", "H2", "H3", "H4", "H5", "H6"],
+            options: ["Normal", "H1", "H2"],
             displayNames: [
               { label: "Normal", displayName: "Normal", style: "unstyled" },
-              { label: "H1", displayName: "Heading 1", style: FONT_SIZE },
+              { label: "H1", displayName: "Heading 1", style: "header-one" },
               { label: "H2", displayName: "Heading 2", style: "header-two" },
-              { label: "H3", displayName: "Heading 3", style: "header-three" },
-              { label: "H4", displayName: "Heading 4", style: "header-four" },
-              { label: "H5", displayName: "Heading 5", style: "header-five" },
-              { label: "H6", displayName: "Heading 6", style: "header-six" },
+              // { label: "H3", displayName: "Heading 3", style: "header-three" },
+              // { label: "H4", displayName: "Heading 4", style: "header-four" },
+              // { label: "H5", displayName: "Heading 5", style: "header-five" },
+              // { label: "H6", displayName: "Heading 6", style: "header-six" },
               {
                 label: "Blockquote",
                 displayName: "Blockquote",
@@ -112,6 +119,7 @@ const MyEditor = () => {
         // 한국어 설정
         localization={{
           locale: "ko",
+          // translations: editorLabels,
         }}
         // 초기값 설정
         editorState={editorState}
