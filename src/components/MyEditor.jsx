@@ -3,8 +3,9 @@ import { Editor, convertToRaw } from "react-draft-wysiwyg";
 import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
 import styled from "styled-components";
 import { EditorState } from "draft-js";
-import draftToHtml from "draftjs-to-html";
 import { convertToHTML } from "draft-convert";
+import { Button } from "../components";
+import { FlexBox } from "../components/StyledElements";
 
 const MyBlock = styled.div`
   padding: 30px 70px;
@@ -52,7 +53,7 @@ const MyEditor = () => {
 
   useEffect(() => {}, [editorState]);
 
-  const send = () => {
+  const sendText = () => {
     console.log(convertedContent);
   };
 
@@ -126,7 +127,15 @@ const MyEditor = () => {
         // 에디터의 값이 변경될 때마다 onEditorStateChange 호출
         onEditorStateChange={handleEditorChange}
       />
-      <button onClick={send}>ss</button>
+      <FlexBox width="100%" just="center">
+        <Button
+          type="button"
+          width="300px"
+          title="확인"
+          onClick={sendText}
+          margin="32px 0 0 0"
+        />
+      </FlexBox>
     </MyBlock>
   );
 };
