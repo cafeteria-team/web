@@ -43,6 +43,7 @@ function Header({ name, logout }) {
           mHeight={box ? "96px" : "0"}
           overflow="hidden"
           direction="column"
+          shadow="2px 4px 12px rgb(0 0 0 / 8%)"
         >
           <FlexBox
             height="48px"

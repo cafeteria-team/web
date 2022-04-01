@@ -3,8 +3,10 @@ import { FlexBox, StyledBody, StyledTitle } from "../components/StyledElements";
 import { Button, Input, PasswordModal, NewPassword } from "../components";
 import axios from "../utils/axios";
 import jwt_decode from "jwt-decode";
+import { useNavigate } from "react-router-dom";
 
 const Password = (props) => {
+  const navigate = useNavigate();
   const [state, setState] = useState({
     phone: "",
   });
@@ -119,7 +121,7 @@ const Password = (props) => {
       setPhoneAuthed(true);
       closeModal();
       alert("비밀번호 변경이 완료되었습니다.");
-      console.log(response);
+      navigate("/main/overview");
       return response;
     } catch (error) {
       console.log(error.response);

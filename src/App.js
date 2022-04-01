@@ -18,7 +18,7 @@ const App = inject("authStore")(
   observer(({ authStore }) => {
     const initializeUserInfo = async () => {
       await authStore.onSilentRefresh();
-      // console.log("app / access Token 값은 :", authStore.accessToken);
+      console.log("app / access Token 값은 :", authStore.accessToken);
     };
 
     useEffect(() => {

@@ -36,7 +36,6 @@ class AuthStore {
   onSilentRefresh = async () => {
     // console.log("onSilentRefresh 호출");
     const data = localStorage.getItem("refresh");
-    const access = localStorage.getItem("access");
     const username = getCookie("username");
 
     if (data) {
@@ -50,8 +49,9 @@ class AuthStore {
           // }
         );
 
-        // refresh토큰저장
-        localStorage.setItem("refresh", res.data.refresh);
+        // 토큰저장
+        // localStorage.setItem("refresh", res.data.refresh);
+        // localStorage.setItem("access", res.data.access);
 
         this.onLoginSucess(res.data.refresh, res.data.access, username);
         // console.log(res);
