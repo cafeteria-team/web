@@ -8,7 +8,6 @@ import { Button } from "../components";
 import { FlexBox } from "../components/StyledElements";
 
 const MyBlock = styled.div`
-  padding: 30px 70px;
   width: 100%;
   .wrapper-class {
     background: #fff;

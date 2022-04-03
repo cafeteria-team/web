@@ -7,6 +7,7 @@ import Header from "./Header";
 import PasswordModal from "./PasswordModal";
 import NewPassword from "./NewPassword";
 import MyEditor from "./MyEditor";
+import FacilityLists from "./FacilityLists";
 
 export {
   Button,
@@ -18,4 +19,5 @@ export {
   PasswordModal,
   NewPassword,
   MyEditor,
+  FacilityLists,
 };

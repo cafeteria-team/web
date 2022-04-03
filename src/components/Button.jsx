@@ -19,7 +19,9 @@ const StyledButton = styled.button`
   box-sizing: content-box;
   position: ${({ position }) => position || ""};
   right: ${({ right }) => right || ""};
+  left: ${({ left }) => left || ""};
   top: ${({ top }) => top || ""};
+  bottom: ${({ bottom }) => bottom || ""};
   text-align: ${({ textAlign }) => textAlign || ""};
 
   &:hover {
@@ -68,6 +70,8 @@ function Button({
   margin,
   border,
   textAlign,
+  left,
+  bottom,
 }) {
   return (
     <StyledButton
@@ -88,6 +92,8 @@ function Button({
       margin={margin}
       border={border}
       textAlign={textAlign}
+      left={left}
+      bottom={bottom}
     >
       {title}
     </StyledButton>

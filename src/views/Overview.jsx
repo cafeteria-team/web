@@ -18,7 +18,7 @@ const UserList = ({ userList }) => {
   const [limit, setLimit] = useState(10);
   const [page, setPage] = useState(1);
   const offset = (page - 1) * limit;
-  console.log("userList", userList);
+  console.log("Overview 호출");
 
   return (
     <FlexBox
