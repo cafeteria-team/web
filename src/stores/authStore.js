@@ -5,9 +5,22 @@ import { setCookie, getCookie, removeCookie } from "../utils/cookie";
 class User {
   username;
   authorization;
+
+  constructor(username, authorization) {
+    this.username = username;
+    this.authorization = authorization;
+  }
 }
 export class AuthStore {
-  constructor() {
+  // 다양한 store 관리하기위한 store
+  rootStore;
+
+  // 밑의 makeObservable의 선언으로 user,authorization은 observable로 변경
+  // user,authorization 변경이되면 AuthStore가 리스닝하고있는 모든 컴포넌트가 변경이된다.
+  username;
+  authorization;
+
+  constructor(root) {
     // decorator지원을 따로 할필요가없다
     makeObservable(
       this,
@@ -20,7 +33,6 @@ export class AuthStore {
         // observable 값들의 변경을 위한 액션
         setUsername: action,
         isAuthenticated: action,
-        setAccessToken: action,
         login: action,
         onLoginSucess: action,
         onSilentRefresh: action,
@@ -29,6 +41,11 @@ export class AuthStore {
     );
     // 토큰 기본시간
     this.JWT_EXPIRY_TIME = 3600 * 1000;
+
+    // rootStore를 받는다.
+    this.rootStore = root;
+
+    this.username = new User("", "");
   }
 
   // 업체명 얻기

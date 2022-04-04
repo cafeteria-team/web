@@ -13,6 +13,12 @@
 
 # API KEYs
 .env
+localhost-key.pem
+localhost.pem
+
+#netlify info
+netlify.toml
+
 
 # misc
 .DS_Store
