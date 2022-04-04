@@ -14,7 +14,7 @@ const Manage = inject("manageStore")(
       busi_num_img: "",
     });
 
-    const [facilities, setFacilities] = useState([]);
+    const [facilities, setFacilities] = useState([manageStore.facilitiesList]);
 
     const List = (
       <FlexBox align="center">
@@ -44,17 +44,18 @@ const Manage = inject("manageStore")(
     const getFacilities = useCallback(
       async (userId) => {
         const response = await manageStore.getFacilitiesList(userId);
+        manageStore.setFacilitiesList(response.data);
       },
       [manageStore]
     );
 
-    useEffect(() => {
-      let access = localStorage.getItem("access");
-      let token = access;
-      let decoded = jwt_decode(token);
+    // useEffect(() => {
+    //   let access = localStorage.getItem("access");
+    //   let token = access;
+    //   let decoded = jwt_decode(token);
 
-      getFacilities(decoded.user_id);
-    }, [getFacilities]);
+    //   getFacilities(decoded.user_id);
+    // }, [getFacilities]);
 
     return (
       <FlexBox

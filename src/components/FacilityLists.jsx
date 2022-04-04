@@ -1,9 +1,8 @@
 import React from "react";
 import { FlexBox, StyledTitle, StyledBody } from "../components/StyledElements";
 import { Input, Button } from "../components";
-import { observer } from "mobx-react";
 
-const FacilityLists = observer(({ name }) => {
+const FacilityLists = ({ name }) => {
   return (
     <FlexBox align="center">
       <FlexBox margin="0 10px 0 0" minW="100px">
@@ -18,6 +17,6 @@ const FacilityLists = observer(({ name }) => {
       />
     </FlexBox>
   );
-});
+};
 
 export default FacilityLists;
