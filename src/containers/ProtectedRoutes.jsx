@@ -1,13 +1,14 @@
 import React from "react";
 import { Navigate, Outlet } from "react-router-dom";
-import { inject, observer } from "mobx-react";
+import { observer } from "mobx-react";
 
-const ProtectedRoutes = inject("authStore")(
-  observer(({ authStore, authenticated }) => {
-    // console.log("protectedRoutes", authenticated);
-    const auth = authStore.authenticated;
-    return auth || authenticated ? <Outlet /> : <Navigate to="/" />;
-  })
-);
+import { useStores } from "../stores/Context";
 
+const ProtectedRoutes = observer(() => {
+  const { AuthStore } = useStores();
+
+  const auth = AuthStore.user;
+  console.log(auth);
+  return auth ? <Outlet /> : <Navigate to="/" />;
+});
 export default ProtectedRoutes;

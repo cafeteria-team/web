@@ -3,21 +3,17 @@ import ReactDOM from "react-dom";
 import "./index.css";
 import App from "./App";
 import reportWebVitals from "./reportWebVitals";
-import { Provider } from "mobx-react";
-import authStore from "./stores/authStore";
-import listStore from "./stores/listStore";
-import manageStore from "./stores/manageStore";
 import { CookiesProvider } from "react-cookie";
+import { StoreProvider } from "./stores/Context";
+import { RootStore } from "./stores/RootStore";
+
+const rootStore = new RootStore();
 
 ReactDOM.render(
   <CookiesProvider>
-    <Provider
-      authStore={authStore}
-      listStore={listStore}
-      manageStore={manageStore}
-    >
+    <StoreProvider value={rootStore}>
       <App />
-    </Provider>
+    </StoreProvider>
   </CookiesProvider>,
   document.getElementById("root")
 );
