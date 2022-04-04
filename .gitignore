@@ -13,10 +13,10 @@
 
 # API KEYs
 .env
-.pem
+*.pem
 
 #netlify info
-.toml
+*.toml
 
 
 # misc
