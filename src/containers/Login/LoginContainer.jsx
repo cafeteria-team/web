@@ -75,9 +75,11 @@ const Login = observer(({ auth }) => {
     // if (localStorage.getItem("refresh")) {
     //   navigate("/main/overview");
     // }
-    auth && navigate("/main/overview");
-  }, [auth, navigate]);
 
+    AuthStore.getUser.authorization && navigate("/main/overview");
+  });
+
+  console.log(AuthStore.getUser.authorization);
   const _login = async () => {
     const response = await AuthStore.login(state);
 

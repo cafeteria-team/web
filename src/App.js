@@ -23,7 +23,7 @@ const App = observer(() => {
 
   const initializeUserInfo = useCallback(async () => {
     await AuthStore.onSilentRefresh();
-    console.log(AuthStore.user.authorization);
+    console.log(AuthStore.getUser);
   }, [AuthStore]);
 
   useEffect(() => {
@@ -38,10 +38,7 @@ const App = observer(() => {
     <ThemeProvider theme={theme}>
       <BrowserRouter className="App">
         <Routes>
-          <Route
-            path="/"
-            element={<LoginContainer auth={AuthStore.user.authorization} />}
-          ></Route>
+          <Route path="/" element={<LoginContainer />}></Route>
           <Route path="/register" element={<RegisterContainer />}></Route>
           <Route path="/complete" element={<CompleteContainer />}></Route>
           <Route

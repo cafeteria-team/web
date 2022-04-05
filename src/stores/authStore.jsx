@@ -1,4 +1,4 @@
-import { observable, action, makeObservable, toJS } from "mobx";
+import { observable, action, computed, makeObservable, toJS } from "mobx";
 import axios from "../utils/axios";
 import { setCookie, getCookie, removeCookie } from "../utils/cookie";
 import Decode from "../utils/decode";
@@ -29,10 +29,14 @@ export class AuthStore {
       {
         // 업체명
         user: observable,
+        //   observervable로 관리하는 데이터들은, mobx가 정의한 observervable데이터로 랩핑이된다.
+        //   computed 를 사용하게 되면, user가 호출될때마다 toJS를 계속해서 호출될텐데, computed를사용시에
+        //   observervable데이터가 변경이 일어나지 않으면 최종으로 캐싱하고 있는 데이터를 리턴한다.
+        //   get메소드에서 observervable데이터에 대한 특정연산이 진행될때는 꼭 computed사용해야한다.
+        getUser: computed,
         // observable 값들의 변경을 위한 액션
-        // setUsername: action,
-        // isAuthenticated: action,
         login: action,
+        setUser: action,
         onLoginSucess: action,
         onSilentRefresh: action,
         logout: action,
@@ -47,6 +51,10 @@ export class AuthStore {
     this.user = new User("", false);
 
     this.decode = new Decode();
+  }
+
+  get getUser() {
+    return toJS(this.user);
   }
 
   // 업체명 설정
