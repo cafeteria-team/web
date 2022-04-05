@@ -87,8 +87,6 @@ export class AuthStore {
   }
 
   onLoginSucess = (access, refresh, username) => {
-    console.log("onLoginSucess 불러짐");
-
     // user상태 저장
     this.setUser(access, true);
 
@@ -113,8 +111,6 @@ export class AuthStore {
   };
 
   onSilentRefresh = async () => {
-    console.log("onSilentRefresh 불러짐");
-
     const data = localStorage.getItem("refresh");
     const username = getCookie("username");
 

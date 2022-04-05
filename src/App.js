@@ -23,26 +23,24 @@ const App = observer(() => {
 
   const initializeUserInfo = useCallback(async () => {
     await AuthStore.onSilentRefresh();
-    console.log(AuthStore.getUser);
   }, [AuthStore]);
 
   useEffect(() => {
     initializeUserInfo();
-
-    console.log("App useEffect 호출");
   }, [initializeUserInfo, AuthStore.user.authorization]);
-
-  console.log("App 호출");
 
   return (
     <ThemeProvider theme={theme}>
       <BrowserRouter className="App">
         <Routes>
-          <Route path="/" element={<LoginContainer />}></Route>
+          <Route
+            path="/"
+            element={<LoginContainer auth={AuthStore.user.authorization} />}
+          ></Route>
           <Route path="/register" element={<RegisterContainer />}></Route>
           <Route path="/complete" element={<CompleteContainer />}></Route>
           <Route
-            element={<ProtectedRoutes auth={AuthStore.user.authorization} />}
+            element={<ProtectedRoutes auth={localStorage.getItem("refresh")} />}
           >
             <Route path="/main" element={<Main />}>
               <Route path=":name" element={<MainViewContainer />}>

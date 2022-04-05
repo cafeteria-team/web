@@ -1,5 +1,5 @@
-import React, { useState, useEffect, useCallback, memo } from "react";
-import { Button, Input, LoginFrom } from "../../components";
+import React, { useState, useEffect, memo } from "react";
+import { Button, Input } from "../../components";
 import {
   StyledTitle,
   MainContainer,
@@ -72,14 +72,9 @@ const Login = observer(({ auth }) => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    // if (localStorage.getItem("refresh")) {
-    //   navigate("/main/overview");
-    // }
-
-    AuthStore.getUser.authorization && navigate("/main/overview");
+    auth && navigate("/main/overview");
   });
 
-  console.log(AuthStore.getUser.authorization);
   const _login = async () => {
     const response = await AuthStore.login(state);
 
@@ -90,9 +85,6 @@ const Login = observer(({ auth }) => {
     } else {
       return;
     }
-
-    // const response = await AuthStore.login(state);
-    // response ? isSucceeded() : alert("아이디 또는 비밀번호를 확인해주세요.");
   };
 
   // state
