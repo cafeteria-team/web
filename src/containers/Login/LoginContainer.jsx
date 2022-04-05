@@ -12,7 +12,7 @@ import { useNavigate } from "react-router-dom";
 import { observer } from "mobx-react";
 import { useStores } from "../../stores/Context";
 
-const Background = memo((props) => {
+const Background = memo(() => {
   return (
     <FlexBox
       bgImage="url('/img/mainbg.jpg')"
@@ -47,7 +47,7 @@ const LoginForm = ({ handleChange, username, password, _onClick }) => {
   );
 };
 
-const RegisterWrap = memo((props) => {
+const RegisterWrap = memo(() => {
   return (
     <FlexBox direction="column" align="center">
       <FlexBox margin="0 0 20px 0">
@@ -66,29 +66,31 @@ const RegisterWrap = memo((props) => {
   );
 });
 
-const Login = observer(() => {
+const Login = observer(({ auth }) => {
   const { AuthStore } = useStores();
 
   const navigate = useNavigate();
 
-  // useEffect(() => {
-  //   if (localStorage.getItem("refresh")) {
-  //     navigate("/main/overview");
-  //   }
-  // }, []);
+  useEffect(() => {
+    // if (localStorage.getItem("refresh")) {
+    //   navigate("/main/overview");
+    // }
+    auth && navigate("/main/overview");
+  }, [auth, navigate]);
 
   const _login = async () => {
-    AuthStore.login(state).then(({ data }) =>
-      isSucceeded(data.access, data.refresh, state.username)
-    );
+    const response = await AuthStore.login(state);
+
+    if (response) {
+      let { data } = response;
+      AuthStore.onLoginSucess(data.access, data.refresh, state.username);
+      return navigate("/main/overview");
+    } else {
+      return;
+    }
 
     // const response = await AuthStore.login(state);
     // response ? isSucceeded() : alert("아이디 또는 비밀번호를 확인해주세요.");
-  };
-
-  const isSucceeded = (access, refresh, name) => {
-    AuthStore.onLoginSucess(access, refresh, name);
-    return navigate("/main/overview");
   };
 
   // state

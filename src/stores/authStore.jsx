@@ -49,30 +49,15 @@ export class AuthStore {
     this.decode = new Decode();
   }
 
-  // // 업체명 얻기
-  // get getUserName() {
-  //   return toJS(this._username);
-  // }
-
-  // // 인증상태
-  // get authenticated() {
-  //   return toJS(this._authorization);
-  // }
-
   // 업체명 설정
   setUser = (access, state) => {
     if (access) {
-      const userId = this.decode.getUserId(access);
+      const userId = this.decode.getUserId(access).user_id;
       this.user = new User(userId, state);
     } else {
       this.user = new User("", state);
     }
   };
-
-  // // 인증상태
-  // isAuthenticated = (body) => {
-  //   this._authorization = body;
-  // };
 
   // 로그인 시도
   async login(profile) {
@@ -88,12 +73,14 @@ export class AuthStore {
       );
       return response;
     } catch (error) {
-      console.log(error.response);
+      alert("아이디 또는 비밀번호를 확인해주세요.");
       return false;
     }
   }
 
   onLoginSucess = (access, refresh, username) => {
+    console.log("onLoginSucess 불러짐");
+
     // user상태 저장
     this.setUser(access, true);
 
@@ -118,28 +105,34 @@ export class AuthStore {
   };
 
   onSilentRefresh = async () => {
-    // console.log("onSilentRefresh 호출");
+    console.log("onSilentRefresh 불러짐");
+
     const data = localStorage.getItem("refresh");
     const username = getCookie("username");
 
-    try {
-      const res = await axios.post(
-        "/api/user/token/refresh/",
-        { refresh: data }
-        // {
-        //   withCredentials: true,
-        // }
-      );
-      this.onLoginSucess(res.data.access, res.data.refresh, username);
-      return res;
-    } catch (error) {
-      console.log(error.response);
+    if (data) {
+      try {
+        const res = await axios.post(
+          "/api/user/token/refresh/",
+          { refresh: data }
+          // {
+          //   withCredentials: true,
+          // }
+        );
+        this.onLoginSucess(res.data.access, res.data.refresh, username);
+        return res;
+      } catch (error) {
+        console.log(error.response);
+        return;
+      }
+    } else {
+      return;
     }
   };
 
   logout = () => {
     this.setUser("", false);
-    removeCookie("username");
+    removeCookie("username", { path: "/" });
     localStorage.clear();
   };
 }
