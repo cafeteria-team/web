@@ -2,9 +2,7 @@ import React from "react";
 import { useParams } from "react-router";
 import { useOutletContext } from "react-router-dom";
 import {
-  Overview,
   Manage,
-  Member,
   Notice,
   Setting,
   Website,
@@ -13,6 +11,7 @@ import {
   NotFound,
   Password,
 } from "../../views";
+import { Overview, Member } from "../index";
 
 const MainViewContainer = () => {
   const params = useParams();
@@ -27,7 +26,7 @@ const MainViewContainer = () => {
       {(() => {
         switch (menuLists) {
           case "overview":
-            return <Overview userList={contextData.userList} />;
+            return <Overview />;
           case "manage":
             return <Manage />;
           case "member":

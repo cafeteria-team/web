@@ -5,15 +5,15 @@ import {
   StyledBody,
   Ul,
   Li,
-} from "../components/StyledElements";
-import { Button, Input } from "../components";
+} from "../../components/StyledElements";
+import { Button, Input } from "../../components";
 import Toggle from "react-toggle";
 import moment from "moment";
 import { useNavigate, Outlet } from "react-router-dom";
 import { useParams } from "react-router";
 import "react-toggle/style.css";
 import { observer } from "mobx-react";
-import { useStores } from "../stores/Context";
+import { useStores } from "../../stores/Context";
 
 const SearchBar = ({ handleChange, search }) => {
   return (
