@@ -72,6 +72,8 @@ const MemberList = ({
   selectUser,
   changeToggled,
 }) => {
+  console.log("member호출");
+
   return (
     <Ul width="100%" direction="column">
       {results ? (
@@ -206,10 +208,6 @@ const Member = observer(
     const [state, setState] = useState({
       search: "",
     });
-    const [detail, setDetail] = useState(false);
-
-    // toggle
-    const [toggled, setToggled] = useState(null);
 
     // for pagination
     const [limit, setLimit] = useState(10);

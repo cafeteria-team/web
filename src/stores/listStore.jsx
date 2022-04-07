@@ -6,15 +6,10 @@ export class ListStore {
   // 유저리스트
   userList = [];
 
-  // 선택된 유저
-  selectedUser = "";
-
   constructor(root) {
     makeObservable(this, {
       userList: observable,
-      selectedUser: observable,
       getUserList: computed,
-      getSelectedUser: computed,
       callUserList: action,
       getEditUser: action,
       editUser: action,
@@ -28,19 +23,9 @@ export class ListStore {
     return toJS(this.userList);
   }
 
-  // 선택된 유저 정보 불러오기
-  get getSelectedUser() {
-    return toJS(this.selectedUser);
-  }
-
   // 유저 정보 설정
   setUserList = (data) => {
     this.userList = data;
-  };
-
-  // 선택된 유저 정보 설정
-  setSelecterdUser = (data) => {
-    this.selectedUser = data;
   };
 
   // 유저 정보 API 불러오기

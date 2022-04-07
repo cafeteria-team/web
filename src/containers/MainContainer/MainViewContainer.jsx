@@ -20,6 +20,8 @@ const MainViewContainer = () => {
 
   const contextData = useOutletContext();
 
+  console.log("mainView 호출");
+
   return (
     <>
       {(() => {

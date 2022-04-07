@@ -85,6 +85,10 @@ const Main = observer(() => {
     setUserName(getCookie("username"));
   }, [AuthStore.user.accessT, _callUserList, getEditUser]);
 
+  // AuthStore.user.accessT, _callUserList, getEditUser
+
+  console.log("main호출");
+
   return (
     <FlexBox width="100%" height="100%" background="#ededed">
       <SideMenu></SideMenu>

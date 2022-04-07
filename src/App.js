@@ -27,7 +27,9 @@ const App = observer(() => {
 
   useEffect(() => {
     initializeUserInfo();
-  }, [initializeUserInfo, AuthStore.user.authorization]);
+  }, [initializeUserInfo]);
+
+  console.log("app호출");
 
   return (
     <ThemeProvider theme={theme}>
