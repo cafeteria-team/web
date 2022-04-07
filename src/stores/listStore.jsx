@@ -1,114 +1,20 @@
 import { observable, action, makeObservable, toJS, computed } from "mobx";
 import axios from "../utils/axios";
-
-// class ListStore {
-//   constructor() {
-//     makeObservable(this);
-//   }
-
-//   //유저리스트
-//   @observable
-//   _userList = [];
-
-//   get getUserList() {
-//     return toJS(this._userList);
-//   }
-
-//   // call userList
-//   @action
-//   callUserList = async (accessToken) => {
-//     try {
-//       const response = await axios.get(`/api/user`, {
-//         headers: {
-//           Authorization: `Bearer ${accessToken}`,
-//         },
-//       });
-//       console.log(response);
-//       this.setUserList(response.data.results);
-//       return response;
-//     } catch (error) {
-//       alert("토큰값이 만료되었습니다. 새로고침 해주세요.");
-//       console.log(error.response);
-//     }
-//   };
-
-//   // set userList
-//   @action
-//   setUserList = (body) => {
-//     this._userList = body;
-//   };
-
-//   // delete userList
-//   @action
-//   deleteUser = async (userId) => {
-//     try {
-//       const response = await axios.delete(`/api/user/${userId}`);
-//       console.log(response);
-//       return response;
-//     } catch (error) {
-//       console.log(error.response);
-//     }
-//   };
-
-//   // get selected edituserList
-//   @action
-//   getEditUser = async (userId, accessToken) => {
-//     try {
-//       const response = await axios.get(`/api/user/${userId}`, {
-//         // headers: {
-//         //   Authorization: `Bearer ${accessToken}`,
-//         // },
-//       });
-//       return response;
-//     } catch (error) {
-//       console.log(error.response);
-//     }
-//   };
-//   //edit userList
-//   @action
-//   editUser = async (userId, data) => {
-//     try {
-//       const { email, name, busi_num, busi_num_img } = data;
-//       const response = await axios.patch(`/api/user/${userId}`, {
-//         email,
-//         store: {
-//           name,
-//           busi_num,
-//           busi_num_img,
-//         },
-//       });
-//       console.log(response);
-//       return response;
-//     } catch (error) {
-//       console.log(error.response);
-//     }
-//   };
-
-//   @action
-//   approveUser = async (userId, data) => {
-//     try {
-//       const response = await axios.patch("/api/user/" + userId + "/approve", {
-//         is_active: data,
-//       });
-//       console.log(response);
-//       return response;
-//     } catch (error) {
-//       console.log(error.response);
-//     }
-//   };
-// }
-// export default new ListStore();
-
 export class ListStore {
   rootStore;
 
   // 유저리스트
   userList = [];
 
+  // 선택된 유저
+  selectedUser = "";
+
   constructor(root) {
     makeObservable(this, {
       userList: observable,
+      selectedUser: observable,
       getUserList: computed,
+      getSelectedUser: computed,
       callUserList: action,
       getEditUser: action,
       editUser: action,
@@ -122,20 +28,30 @@ export class ListStore {
     return toJS(this.userList);
   }
 
+  // 선택된 유저 정보 불러오기
+  get getSelectedUser() {
+    return toJS(this.selectedUser);
+  }
+
   // 유저 정보 설정
   setUserList = (data) => {
     this.userList = data;
+  };
+
+  // 선택된 유저 정보 설정
+  setSelecterdUser = (data) => {
+    this.selectedUser = data;
   };
 
   // 유저 정보 API 불러오기
   callUserList = async (accessToken) => {
     try {
       const response = await axios.get(`/api/user`, {
-        headers: {
-          Authorization: `Bearer ${accessToken}`,
-        },
+        // headers: {
+        //   Authorization: `Bearer ${accessToken}`,
+        // },
       });
-      this.setUserList(response.data.results);
+      this.setUserList(response.data);
       return response;
     } catch (error) {
       alert("토큰값이 만료되었습니다. 새로고침 해주세요.");

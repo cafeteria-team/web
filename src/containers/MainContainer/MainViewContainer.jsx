@@ -12,7 +12,7 @@ import {
   Event,
   NotFound,
   Password,
-} from "../views";
+} from "../../views";
 
 const MainViewContainer = () => {
   const params = useParams();
@@ -20,7 +20,6 @@ const MainViewContainer = () => {
 
   const contextData = useOutletContext();
 
-  console.log("container 값호출", contextData.userList);
   return (
     <>
       {(() => {

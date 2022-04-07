@@ -26,7 +26,6 @@ const SubViewContainer = (props) => {
             return <NotFound />;
         }
       })()}
-      ;
     </>
   );
 };

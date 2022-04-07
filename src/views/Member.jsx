@@ -12,6 +12,8 @@ import moment from "moment";
 import { useNavigate, Outlet } from "react-router-dom";
 import { useParams } from "react-router";
 import "react-toggle/style.css";
+import { observer } from "mobx-react";
+import { useStores } from "../stores/Context";
 
 const SearchBar = ({ handleChange, search }) => {
   return (
@@ -67,7 +69,7 @@ const MemberList = ({
   limit,
   deleteUser,
   editUser,
-  move,
+  selectUser,
   changeToggled,
 }) => {
   return (
@@ -112,7 +114,7 @@ const MemberList = ({
                     padding="4px"
                     width="40px"
                     background="#06c"
-                    onClick={() => move(id)}
+                    onClick={() => selectUser(id)}
                   />
                   <Button
                     title="탈퇴"
@@ -181,107 +183,112 @@ const Pagination = ({ total, limit, page, setPage }) => {
   );
 };
 
-const Member = ({
-  userList,
-  onSearchList,
-  deleteUser,
-  getEditUser,
-  selectedUser,
-  editUser,
-  approveUser,
-}) => {
-  console.log("여기는 member 렌더링됨", selectedUser);
-  let total = userList?.length;
+const Member = observer(
+  ({
+    userList,
+    onSearchList,
+    deleteUser,
+    getEditUser,
+    selectedUser,
+    editUser,
+    approveUser,
+  }) => {
+    const { ListStore } = useStores();
 
-  const params = useParams();
+    console.log("여기는 member 렌더링됨", selectedUser);
+    let total = userList?.length;
 
-  const navigate = useNavigate();
+    const params = useParams();
 
-  // state
-  const [state, setState] = useState({
-    search: "",
-  });
-  const [detail, setDetail] = useState(false);
+    const navigate = useNavigate();
 
-  // toggle
-  const [toggled, setToggled] = useState(null);
+    // state
+    const [state, setState] = useState({
+      search: "",
+    });
+    const [detail, setDetail] = useState(false);
 
-  // for pagination
-  const [limit, setLimit] = useState(10);
-  const [page, setPage] = useState(1);
-  const offset = (page - 1) * limit;
-  const [id, setId] = useState("");
+    // toggle
+    const [toggled, setToggled] = useState(null);
 
-  // change toggle status
-  const changeToggled = (id, toggle) => {
-    toggle = toggle ? false : true;
-    approveUser(id, toggle);
-  };
+    // for pagination
+    const [limit, setLimit] = useState(10);
+    const [page, setPage] = useState(1);
+    const offset = (page - 1) * limit;
+    const [id, setId] = useState("");
 
-  const handleChange = (e) => {
-    const { id, value } = e.target;
-    setState((prevState) => ({
-      ...prevState,
-      [id]: value,
-    }));
-    onSearchList(e.target.value);
-  };
+    // change toggle status
+    const changeToggled = (id, toggle) => {
+      toggle = toggle ? false : true;
+      approveUser(id, toggle);
+    };
 
-  useEffect(() => {}, [userList]);
+    const handleChange = (e) => {
+      const { id, value } = e.target;
+      setState((prevState) => ({
+        ...prevState,
+        [id]: value,
+      }));
+      onSearchList(e.target.value);
+    };
 
-  const move = async (userId) => {
-    const _userId = localStorage.setItem("userId", userId);
-    setId(_userId);
-    await getEditUser();
-    navigate(`${userId}`);
-  };
+    useEffect(() => {}, [userList]);
 
-  return (
-    <FlexBox padding="30px 70px" direction="column" width="100%">
-      <StyledTitle margin="0 0 30px 0">일반회원</StyledTitle>
+    const selectUser = async (userId) => {
+      localStorage.setItem("userId", userId);
+      let _userId = localStorage.getItem("userId");
+      setId(_userId);
 
-      <FlexBox
-        width="100%"
-        background="#fff"
-        padding="20px"
-        boxSizing="border-box"
-        direction="column"
-      >
-        <FlexBox just="space-between" align="center">
-          <StyledBody margin="0 0 20px 0">
-            회원관리 {params.detail && "- 기본정보"}
-          </StyledBody>
-          {!params.detail && (
-            <SearchBar search={state.search} handleChange={handleChange} />
+      await getEditUser(_userId);
+      navigate(`${_userId}`);
+    };
+
+    return (
+      <FlexBox padding="30px 70px" direction="column" width="100%">
+        <StyledTitle margin="0 0 30px 0">일반회원</StyledTitle>
+
+        <FlexBox
+          width="100%"
+          background="#fff"
+          padding="20px"
+          boxSizing="border-box"
+          direction="column"
+        >
+          <FlexBox just="space-between" align="center">
+            <StyledBody margin="0 0 20px 0">
+              회원관리 {params.detail && "- 기본정보"}
+            </StyledBody>
+            {!params.detail && (
+              <SearchBar search={state.search} handleChange={handleChange} />
+            )}
+          </FlexBox>
+
+          {params.detail ? (
+            <Outlet context={{ selectedUser, id, editUser }} />
+          ) : (
+            <FlexBox direction="column">
+              <MemberListTitle />
+              <MemberList
+                results={userList}
+                limit={limit}
+                offset={offset}
+                deleteUser={deleteUser}
+                getEditUser={getEditUser}
+                selectUser={selectUser}
+                changeToggled={changeToggled}
+              />
+              <Pagination
+                total={total}
+                limit={limit}
+                page={page}
+                setPage={setPage}
+              />
+            </FlexBox>
           )}
         </FlexBox>
-
-        {params.detail ? (
-          <Outlet context={{ selectedUser, id, editUser }} />
-        ) : (
-          <FlexBox direction="column">
-            <MemberListTitle />
-            <MemberList
-              results={userList}
-              limit={limit}
-              offset={offset}
-              deleteUser={deleteUser}
-              getEditUser={getEditUser}
-              move={move}
-              changeToggled={changeToggled}
-            />
-
-            <Pagination
-              total={total}
-              limit={limit}
-              page={page}
-              setPage={setPage}
-            />
-          </FlexBox>
-        )}
       </FlexBox>
-    </FlexBox>
-  );
-};
+    );
+  }
+);
 
 export default Member;

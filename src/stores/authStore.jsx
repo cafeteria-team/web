@@ -6,10 +6,12 @@ import Decode from "../utils/decode";
 class User {
   userId;
   authorization;
+  accessT;
 
-  constructor(userId, authorization) {
+  constructor(userId, authorization, access) {
     this.userId = userId;
     this.authorization = authorization;
+    this.accessT = access;
   }
 }
 
@@ -48,7 +50,7 @@ export class AuthStore {
     // rootStore를 받는다.
     this.rootStore = root;
 
-    this.user = new User("", false);
+    this.user = new User("", false, "");
 
     this.decode = new Decode();
   }
@@ -61,9 +63,9 @@ export class AuthStore {
   setUser = (access, state) => {
     if (access) {
       const userId = this.decode.getUserId(access).user_id;
-      this.user = new User(userId, state);
+      this.user = new User(userId, state, access);
     } else {
-      this.user = new User("", state);
+      this.user = new User("", state, "");
     }
   };
 
