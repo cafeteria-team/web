@@ -1,5 +1,5 @@
-import { observable, action, makeObservable } from "mobx";
-import axios from "../utils/axios";
+import { observable, makeObservable } from "mobx";
+// import axios from "../utils/axios";
 
 // class ManageStore {
 //   constructor() {
@@ -66,5 +66,11 @@ import axios from "../utils/axios";
 // export default new ManageStore();
 
 export class ManageStore {
-  constructor() {}
+  manage = "";
+  constructor() {
+    makeObservable(this, {
+      manage: observable,
+    });
+    this.manage = 1;
+  }
 }

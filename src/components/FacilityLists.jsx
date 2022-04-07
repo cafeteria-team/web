@@ -1,6 +1,6 @@
 import React from "react";
-import { FlexBox, StyledTitle, StyledBody } from "../components/StyledElements";
-import { Input, Button } from "../components";
+import { FlexBox } from "../components/StyledElements";
+import { Input } from "../components";
 
 const FacilityLists = ({ name }) => {
   return (

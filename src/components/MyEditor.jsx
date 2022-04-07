@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Editor, convertToRaw } from "react-draft-wysiwyg";
+import { Editor } from "react-draft-wysiwyg";
 import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
 import styled from "styled-components";
 import { EditorState } from "draft-js";

@@ -103,7 +103,7 @@ const Password = (props) => {
 
   //   비밀번호 재설정
   const changePassword = async (password) => {
-    const { phone } = state;
+    // const { phone } = state;
 
     let access = localStorage.getItem("access");
 

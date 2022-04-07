@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useCallback, useRef } from "react";
+import React, { useEffect, useState, useCallback } from "react";
 import { SideMenu, Header } from "../../components";
 import { FlexBox } from "../../components/StyledElements";
 import { observer } from "mobx-react";
@@ -20,6 +20,7 @@ const Main = observer(() => {
     async (access) => {
       await ListStore.callUserList(access);
       setUserList(ListStore.userList);
+      console.log("리스트함수실행");
     },
     [ListStore]
   );
@@ -57,6 +58,7 @@ const Main = observer(() => {
 
   // 유저수정
   const editUser = async (id, state) => {
+    console.log("수정실행");
     let userId = localStorage.getItem("userId");
     let access = localStorage.getItem("access");
     if (userId) {
@@ -79,11 +81,11 @@ const Main = observer(() => {
     // 유저정보 불러오기
     _callUserList(AuthStore.user.accessT);
 
-    // 유저정보 수정
-    getEditUser();
+    // 선택된유저정보불러오기
+    // getEditUser();
 
     setUserName(getCookie("username"));
-  }, [AuthStore.user.accessT, _callUserList, getEditUser]);
+  }, [AuthStore.user.accessT, _callUserList]);
 
   // AuthStore.user.accessT, _callUserList, getEditUser
 
@@ -97,7 +99,7 @@ const Main = observer(() => {
         <FlexBox>
           <Outlet
             context={{
-              userList,
+              // userList,
               onSearchList,
               deleteUser,
               getEditUser,

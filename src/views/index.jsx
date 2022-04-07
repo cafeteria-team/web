@@ -1,4 +1,4 @@
-import Overview from "./Overview";
+import Overview from "../containers/Overview/Overview";
 import NotFound from "./NotFound";
 import Manage from "./Manage";
 import Member from "./Member";
@@ -10,6 +10,8 @@ import Request from "./Request";
 import Pagination from "./Pagination";
 import MemberEdit from "./MemberEdit";
 import Password from "./Password";
+import UserList from "./UserList";
+import StoreProductList from "./StoreProductList";
 
 export {
   Overview,
@@ -24,4 +26,6 @@ export {
   Pagination,
   MemberEdit,
   Password,
+  UserList,
+  StoreProductList,
 };

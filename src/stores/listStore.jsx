@@ -10,6 +10,7 @@ export class ListStore {
     makeObservable(this, {
       userList: observable,
       getUserList: computed,
+      setUserList: action,
       callUserList: action,
       getEditUser: action,
       editUser: action,

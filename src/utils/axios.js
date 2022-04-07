@@ -1,7 +1,7 @@
 import axios from "axios";
-import { getCookie, removeCookie } from "../utils/cookie";
+import { removeCookie } from "../utils/cookie";
 
-const PROXY = window.location.hostname === "localhost" ? "" : "/proxy";
+// const PROXY = window.location.hostname === "localhost" ? "" : "/proxy";
 
 const instance = axios.create({
   baseURL: "https://www.good-cafeteria.cf",
