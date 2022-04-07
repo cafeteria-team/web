@@ -6,7 +6,7 @@ import {
   Ul,
   Li,
 } from "../../components/StyledElements";
-import { Button, Input } from "../../components";
+import { Button, Input, SearchBar } from "../../components";
 import Toggle from "react-toggle";
 import moment from "moment";
 import { useNavigate, Outlet } from "react-router-dom";
@@ -14,22 +14,6 @@ import { useParams } from "react-router";
 import "react-toggle/style.css";
 import { observer } from "mobx-react";
 import { useStores } from "../../stores/Context";
-
-const SearchBar = ({ handleChange, search }) => {
-  return (
-    <FlexBox align="center">
-      <StyledBody margin="0 10px 20px 0">검색</StyledBody>
-      <Input
-        onChange={handleChange}
-        id="search"
-        type="text"
-        value={search}
-        width="140px"
-        padding="10px 20px"
-      />
-    </FlexBox>
-  );
-};
 
 const MemberListTitle = memo(() => {
   return (
