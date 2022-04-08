@@ -1,4 +1,4 @@
-import React, { useState, useEffect, memo } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import {
   FlexBox,
   StyledTitle,
@@ -6,7 +6,7 @@ import {
   Ul,
   Li,
 } from "../../components/StyledElements";
-import { Button, Input, SearchBar } from "../../components";
+import { Button, SearchBar, Pagination } from "../../components";
 import Toggle from "react-toggle";
 import moment from "moment";
 import { useNavigate, Outlet } from "react-router-dom";
@@ -14,38 +14,7 @@ import { useParams } from "react-router";
 import "react-toggle/style.css";
 import { observer } from "mobx-react";
 import { useStores } from "../../stores/Context";
-
-const MemberListTitle = memo(() => {
-  return (
-    <Ul
-      width="100%"
-      background="#FF8400"
-      padding="14px"
-      boxSizing="border-box"
-      just="space-around"
-      color="#fff"
-    >
-      <Li just="center" width="16.6666666667%">
-        번호
-      </Li>
-      <Li just="center" width="16.6666666667%">
-        가입일시
-      </Li>
-      <Li just="center" width="16.6666666667%">
-        아이디
-      </Li>
-      <Li just="center" width="16.6666666667%">
-        구분
-      </Li>
-      <Li just="center" width="16.6666666667%">
-        업체명
-      </Li>
-      <Li just="center" width="16.6666666667%">
-        관리
-      </Li>
-    </Ul>
-  );
-});
+import { MemberListTitle } from "../../views";
 
 const MemberList = ({
   results,
@@ -121,57 +90,9 @@ const MemberList = ({
   );
 };
 
-const Pagination = ({ total, limit, page, setPage }) => {
-  const numPages = Math.ceil(total / limit);
-  // console.log(total, limit, page, numPages);
-  return total ? (
-    <FlexBox just="center" margin="32px -10px 0 -10px">
-      <Button
-        onClick={() => {
-          setPage(page - 1);
-        }}
-        disabled={page === 1}
-        color="white"
-        padding="6px"
-        width="20px"
-        title="&lt;"
-        margin="0 2px"
-      />
-      {/* fill() 메서드는 배열의 시작 인덱스부터 끝 인덱스의 이전까지 정적인 값 하나로 채운다. */}
-      {Array(numPages)
-        .fill()
-        .map((_, i) => (
-          <Button
-            key={i + 1}
-            onClick={() => setPage(i + 1)}
-            ariaCurrent={page === i + 1 ? "page" : null}
-            title={i + 1}
-            color="white"
-            padding="6px"
-            width="20px"
-            margin="0 2px"
-            hover={true}
-            background={page === i + 1 ? "#FF8400" : "#808080"}
-          />
-        ))}
-      <Button
-        onClick={() => setPage(page + 1)}
-        disabled={page === numPages}
-        color="white"
-        padding="6px"
-        width="20px"
-        title=" &gt;"
-        margin="0 2px"
-      />
-    </FlexBox>
-  ) : (
-    <></>
-  );
-};
-
 const Member = observer(
   ({
-    userList,
+    // userList,
     onSearchList,
     deleteUser,
     getEditUser,
@@ -179,10 +100,10 @@ const Member = observer(
     editUser,
     approveUser,
   }) => {
-    const { ListStore } = useStores();
+    const { AuthStore, ListStore } = useStores();
 
-    console.log("여기는 member 렌더링됨", selectedUser);
-    let total = userList?.length;
+    // console.log("여기는 member 렌더링됨", selectedUser);
+    // let total = userList?.length;
 
     const params = useParams();
 
@@ -193,11 +114,15 @@ const Member = observer(
       search: "",
     });
 
+    // 유저정보 저장
+    const [userList, setUserList] = useState(null);
+
     // for pagination
     const [limit, setLimit] = useState(10);
     const [page, setPage] = useState(1);
     const offset = (page - 1) * limit;
     const [id, setId] = useState("");
+    const [total, setTotal] = useState("");
 
     // change toggle status
     const changeToggled = (id, toggle) => {
@@ -214,7 +139,26 @@ const Member = observer(
       onSearchList(e.target.value);
     };
 
-    useEffect(() => {}, [userList]);
+    // useEffect(() => {}, [userList]);
+
+    // 유저 리스트 불러오기
+    const _callUserList = useCallback(
+      async (access) => {
+        await ListStore.callUserList(access);
+        setUserList(ListStore.userList);
+        setTotal(ListStore.userList.length);
+        console.log("리스트함수실행");
+      },
+      [ListStore]
+    );
+
+    useEffect(() => {
+      // 유저정보 불러오기
+      _callUserList(AuthStore.user.accessT);
+
+      // 선택된유저정보불러오기
+      // getEditUser();
+    }, [AuthStore.user.accessT, _callUserList]);
 
     const selectUser = async (userId) => {
       localStorage.setItem("userId", userId);

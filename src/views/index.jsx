@@ -12,6 +12,7 @@ import MemberEdit from "./MemberEdit";
 import Password from "./Password";
 import UserList from "./UserList";
 import StoreProductList from "./StoreProductList";
+import MemberListTitle from "./MemberListTitle";
 
 export {
   Overview,
@@ -28,4 +29,5 @@ export {
   Password,
   UserList,
   StoreProductList,
+  MemberListTitle,
 };

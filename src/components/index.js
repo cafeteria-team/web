@@ -9,6 +9,7 @@ import NewPassword from "./NewPassword";
 import MyEditor from "./MyEditor";
 import FacilityLists from "./FacilityLists";
 import SearchBar from "./SearchBar";
+import Pagination from "./Pagination";
 
 export {
   Button,
@@ -22,4 +23,5 @@ export {
   MyEditor,
   FacilityLists,
   SearchBar,
+  Pagination,
 };
