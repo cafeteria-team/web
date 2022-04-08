@@ -94,7 +94,6 @@ export class ListStore {
       const response = await axios.patch("/api/user/" + userId + "/approve", {
         is_active: data,
       });
-      console.log(response);
       return response;
     } catch (error) {
       console.log(error.response);

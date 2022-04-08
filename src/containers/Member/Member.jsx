@@ -97,13 +97,10 @@ const Member = observer(
     deleteUser,
     getEditUser,
     selectedUser,
-    editUser,
-    approveUser,
+    // editUser,
+    // approveUser,
   }) => {
     const { AuthStore, ListStore } = useStores();
-
-    // console.log("여기는 member 렌더링됨", selectedUser);
-    // let total = userList?.length;
 
     const params = useParams();
 
@@ -139,8 +136,6 @@ const Member = observer(
       onSearchList(e.target.value);
     };
 
-    // useEffect(() => {}, [userList]);
-
     // 유저 리스트 불러오기
     const _callUserList = useCallback(
       async (access) => {
@@ -151,6 +146,26 @@ const Member = observer(
       },
       [ListStore]
     );
+
+    // 유저수정 완료
+    const editUser = async (id, state) => {
+      console.log("수정실행");
+      let userId = localStorage.getItem("userId");
+      let access = localStorage.getItem("access");
+      if (userId) {
+        await ListStore.editUser(userId, state);
+        alert("회원정보가 수정되었습니다.");
+        return _callUserList(access);
+      }
+    };
+
+    // 유저 권한수정
+    const approveUser = async (userId, data) => {
+      if (userId) {
+        await ListStore.approveUser(userId, data);
+        return _callUserList(AuthStore.user.accessT);
+      }
+    };
 
     useEffect(() => {
       // 유저정보 불러오기
