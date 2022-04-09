@@ -21,7 +21,6 @@ const MemberList = ({
   offset,
   limit,
   deleteUser,
-  editUser,
   selectUser,
   changeToggled,
 }) => {
@@ -90,146 +89,172 @@ const MemberList = ({
   );
 };
 
-const Member = observer(
-  ({
-    // userList,
-    onSearchList,
-    deleteUser,
-    getEditUser,
-    selectedUser,
-    // editUser,
-    // approveUser,
-  }) => {
-    const { AuthStore, ListStore } = useStores();
+const Member = observer(() => {
+  const { AuthStore, ListStore } = useStores();
 
-    const params = useParams();
+  const params = useParams();
 
-    const navigate = useNavigate();
+  const navigate = useNavigate();
 
-    // state
-    const [state, setState] = useState({
-      search: "",
-    });
+  // state
+  const [state, setState] = useState({
+    search: "",
+  });
 
-    // 유저정보 저장
-    const [userList, setUserList] = useState(null);
+  // 유저정보 저장
+  const [userList, setUserList] = useState(null);
 
-    // for pagination
-    const [limit, setLimit] = useState(10);
-    const [page, setPage] = useState(1);
-    const offset = (page - 1) * limit;
-    const [id, setId] = useState("");
-    const [total, setTotal] = useState("");
+  // for pagination
+  const [limit, setLimit] = useState(10);
+  const [page, setPage] = useState(1);
+  const offset = (page - 1) * limit;
 
-    // change toggle status
-    const changeToggled = (id, toggle) => {
-      toggle = toggle ? false : true;
-      approveUser(id, toggle);
-    };
+  const [id, setId] = useState("");
+  const [total, setTotal] = useState("");
 
-    const handleChange = (e) => {
-      const { id, value } = e.target;
-      setState((prevState) => ({
-        ...prevState,
-        [id]: value,
-      }));
-      onSearchList(e.target.value);
-    };
+  // 유저선택
+  const [selectedUser, setSelectedUser] = useState(null);
 
-    // 유저 리스트 불러오기
-    const _callUserList = useCallback(
-      async (access) => {
-        await ListStore.callUserList(access);
-        setUserList(ListStore.userList);
-        setTotal(ListStore.userList.length);
-        console.log("리스트함수실행");
-      },
-      [ListStore]
-    );
+  // change toggle status
+  const changeToggled = (id, toggle) => {
+    toggle = toggle ? false : true;
+    approveUser(id, toggle);
+  };
 
-    // 유저수정 완료
-    const editUser = async (id, state) => {
-      console.log("수정실행");
-      let userId = localStorage.getItem("userId");
-      let access = localStorage.getItem("access");
-      if (userId) {
-        await ListStore.editUser(userId, state);
-        alert("회원정보가 수정되었습니다.");
-        return _callUserList(access);
-      }
-    };
+  const handleChange = (e) => {
+    const { id, value } = e.target;
+    setState((prevState) => ({
+      ...prevState,
+      [id]: value,
+    }));
+    onSearchList(e.target.value);
+  };
 
-    // 유저 권한수정
-    const approveUser = async (userId, data) => {
-      if (userId) {
-        await ListStore.approveUser(userId, data);
-        return _callUserList(AuthStore.user.accessT);
-      }
-    };
+  // 유저 리스트 불러오기
+  const _callUserList = useCallback(
+    async (access) => {
+      await ListStore.callUserList(access);
+      setUserList(ListStore.userList);
+      setTotal(ListStore.userList.length);
+      console.log("리스트함수실행");
+    },
+    [ListStore]
+  );
 
-    useEffect(() => {
-      // 유저정보 불러오기
-      _callUserList(AuthStore.user.accessT);
+  // 유저수정 완료
+  const editUser = async (id, state) => {
+    console.log("수정실행");
+    let userId = localStorage.getItem("userId");
+    let access = localStorage.getItem("access");
+    if (userId) {
+      await ListStore.editUser(userId, state);
+      alert("회원정보가 수정되었습니다.");
+      return _callUserList(access);
+    }
+  };
 
-      // 선택된유저정보불러오기
-      // getEditUser();
-    }, [AuthStore.user.accessT, _callUserList]);
+  // 유저 권한수정
+  const approveUser = async (userId, data) => {
+    if (userId) {
+      await ListStore.approveUser(userId, data);
+      return _callUserList(AuthStore.user.accessT);
+    }
+  };
 
-    const selectUser = async (userId) => {
-      localStorage.setItem("userId", userId);
-      let _userId = localStorage.getItem("userId");
-      setId(_userId);
+  // 선택된 유저 불러오기
+  const getEditUser = useCallback(async () => {
+    let userId = localStorage.getItem("userId");
+    if (userId) {
+      const response = await ListStore.getEditUser(
+        userId,
+        AuthStore.user.accessT
+      );
+      setSelectedUser(response?.data);
+    }
+  }, [AuthStore.user.accessT, ListStore]);
 
-      await getEditUser(_userId);
-      navigate(`${_userId}`);
-    };
+  // 유저선택
+  const selectUser = async (userId) => {
+    localStorage.setItem("userId", userId);
+    let _userId = localStorage.getItem("userId");
+    setId(_userId);
 
-    return (
-      <FlexBox padding="30px 70px" direction="column" width="100%">
-        <StyledTitle margin="0 0 30px 0">일반회원</StyledTitle>
+    await getEditUser();
+    navigate(`${_userId}`);
+  };
 
-        <FlexBox
-          width="100%"
-          background="#fff"
-          padding="20px"
-          boxSizing="border-box"
-          direction="column"
-        >
-          <FlexBox just="space-between" align="center">
-            <StyledBody margin="0 0 20px 0">
-              회원관리 {params.detail && "- 기본정보"}
-            </StyledBody>
-            {!params.detail && (
-              <SearchBar search={state.search} handleChange={handleChange} />
-            )}
-          </FlexBox>
+  // 유저검색
+  const onSearchList = (title) => {
+    let lists = userList;
+    if (title !== "") {
+      lists = lists?.filter((item) => {
+        return item?.username?.toLowerCase().search(title.toLowerCase()) !== -1;
+      });
+      setUserList(lists);
+    } else {
+      _callUserList(AuthStore.accessToken);
+    }
+  };
 
-          {params.detail ? (
-            <Outlet context={{ selectedUser, id, editUser }} />
-          ) : (
-            <FlexBox direction="column">
-              <MemberListTitle />
-              <MemberList
-                results={userList}
-                limit={limit}
-                offset={offset}
-                deleteUser={deleteUser}
-                getEditUser={getEditUser}
-                selectUser={selectUser}
-                changeToggled={changeToggled}
-              />
-              <Pagination
-                total={total}
-                limit={limit}
-                page={page}
-                setPage={setPage}
-              />
-            </FlexBox>
+  // 유저삭제
+  const deleteUser = async (userId) => {
+    await ListStore.deleteUser(userId);
+    _callUserList(AuthStore.user.accessT);
+  };
+
+  useEffect(() => {
+    // 유저정보 불러오기
+    _callUserList(AuthStore.user.accessT);
+
+    // 선택된유저정보불러오기
+    getEditUser();
+  }, [AuthStore.user.accessT, _callUserList, getEditUser]);
+
+  return (
+    <FlexBox padding="30px 70px" direction="column" width="100%">
+      <StyledTitle margin="0 0 30px 0">일반회원</StyledTitle>
+
+      <FlexBox
+        width="100%"
+        background="#fff"
+        padding="20px"
+        boxSizing="border-box"
+        direction="column"
+      >
+        <FlexBox just="space-between" align="center">
+          <StyledBody margin="0 0 20px 0">
+            회원관리 {params.detail && "- 기본정보"}
+          </StyledBody>
+          {!params.detail && (
+            <SearchBar search={state.search} handleChange={handleChange} />
           )}
         </FlexBox>
+
+        {params.detail ? (
+          <Outlet context={{ selectedUser, id, editUser }} />
+        ) : (
+          <FlexBox direction="column">
+            <MemberListTitle />
+            <MemberList
+              results={userList}
+              limit={limit}
+              offset={offset}
+              deleteUser={deleteUser}
+              getEditUser={getEditUser}
+              selectUser={selectUser}
+              changeToggled={changeToggled}
+            />
+            <Pagination
+              total={total}
+              limit={limit}
+              page={page}
+              setPage={setPage}
+            />
+          </FlexBox>
+        )}
       </FlexBox>
-    );
-  }
-);
+    </FlexBox>
+  );
+});
 
 export default Member;

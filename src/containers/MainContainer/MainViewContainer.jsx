@@ -1,6 +1,6 @@
 import React from "react";
 import { useParams } from "react-router";
-import { useOutletContext } from "react-router-dom";
+
 import {
   Manage,
   Notice,
@@ -17,8 +17,6 @@ const MainViewContainer = () => {
   const params = useParams();
   const menuLists = params.name;
 
-  const contextData = useOutletContext();
-
   console.log("mainView 호출");
 
   return (
@@ -30,17 +28,7 @@ const MainViewContainer = () => {
           case "manage":
             return <Manage />;
           case "member":
-            return (
-              <Member
-                userList={contextData.userList}
-                onSearchList={contextData.onSearchList}
-                deleteUser={contextData.deleteUser}
-                getEditUser={contextData.getEditUser}
-                editUser={contextData.editUser}
-                selectedUser={contextData.selectedUser}
-                approveUser={contextData.approveUser}
-              />
-            );
+            return <Member />;
           case "request":
             return <Request />;
           case "event":
