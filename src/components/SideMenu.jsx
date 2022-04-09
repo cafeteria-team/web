@@ -153,29 +153,81 @@ const menuData = [
   //   ),
   // },
   {
-    header: (menuState, index) => (
-      <NavLink
-        to="/main/manage"
-        style={({ isActive }) =>
-          isActive
-            ? { borderLeft: "4px solid #fff", padding: "0 20px" }
-            : { padding: "0 20px" }
-        }
+    header: (menuState) => (
+      <FlexBox
+        just="space-between"
+        align="center"
+        minHeight="54px"
+        padding="0 20px"
       >
-        <FlexBox just="space-between" align="center" minHeight="54px">
-          <FlexBox align="center">
-            <StoreIcon sx={{ color: grey[50] }} />
-            <StyledBody
-              margin="0 0 0 10px"
-              color="#fff"
-              weight="bold"
-              display={menuState ? "none" : ""}
-            >
-              업체관리
-            </StyledBody>
-          </FlexBox>
+        <FlexBox align="center">
+          <StoreIcon sx={{ color: grey[50] }} />
+          <StyledBody
+            margin="0 0 0 10px"
+            color="#fff"
+            weight="bold"
+            display={menuState ? "none" : ""}
+          >
+            업체관리
+          </StyledBody>
         </FlexBox>
-      </NavLink>
+        <FlexBox>
+          <ExpandMoreIcon
+            sx={{ color: grey[50] }}
+            style={{ display: menuState ? "none" : "" }}
+          />
+        </FlexBox>
+      </FlexBox>
+    ),
+    panel: (menuState, index, menuActive, _onClick) => (
+      <FlexBox
+        direction="column"
+        height="74px"
+        mHeight={menuActive === index ? "74px" : "0px"}
+        just="space-between"
+        overflow="hidden"
+      >
+        <NavLink
+          to="/main/event"
+          style={({ isActive }) =>
+            isActive
+              ? { background: "#f97316", padding: "0 26px" }
+              : { padding: "0 26px" }
+          }
+          onClick={_onClick}
+        >
+          <StyledBody
+            color="#fff"
+            display="block"
+            height="34px"
+            padding="0 0 0 34px"
+            lineH="34px"
+            boxSizing="border-box"
+          >
+            업체 카테고리 관리
+          </StyledBody>
+        </NavLink>
+        <NavLink
+          to="/main/manage"
+          style={({ isActive }) =>
+            isActive
+              ? { background: "#f97316", padding: "0 26px" }
+              : { padding: "0 26px" }
+          }
+          onClick={_onClick}
+        >
+          <StyledBody
+            color="#fff"
+            display="block"
+            height="34px"
+            padding="0 0 0 34px"
+            lineH="34px"
+            boxSizing="border-box"
+          >
+            업체관리
+          </StyledBody>
+        </NavLink>
+      </FlexBox>
     ),
   },
   {
@@ -335,9 +387,9 @@ const SideMenu = (props) => {
       background="#FF8400"
       width="100%"
       maxW={menuState ? "64px" : "260px"}
-      height="100%"
+      position="relative"
     >
-      <StyledTitle color="#fff">
+      <StyledTitle color="#fff" position="sticky" top="0px">
         <FlexBox
           just={menuState ? "center" : "space-between"}
           align="center"

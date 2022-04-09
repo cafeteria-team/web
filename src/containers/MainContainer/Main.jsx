@@ -19,11 +19,11 @@ const Main = observer(() => {
   console.log("main호출");
 
   return (
-    <FlexBox width="100%" height="100%" background="#ededed">
+    <FlexBox width="100%" height="100%" minHeight="100vh" background="#ededed">
       <SideMenu></SideMenu>
-      <FlexBox direction="column" width="100%">
+      <FlexBox direction="column" width="100%" height="100%">
         <Header name={userName} logout={AuthStore.logout} />
-        <FlexBox>
+        <FlexBox height="100%">
           <Outlet />
         </FlexBox>
       </FlexBox>

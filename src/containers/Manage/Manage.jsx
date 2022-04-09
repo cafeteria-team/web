@@ -1,7 +1,10 @@
 import React, { useState, useEffect, useCallback } from "react";
-import { MyEditor } from "../components";
-import { FlexBox, StyledTitle, StyledBody } from "../components/StyledElements";
-import { Input, Button, FacilityLists } from "../components";
+import {
+  FlexBox,
+  StyledTitle,
+  StyledBody,
+} from "../../components/StyledElements";
+import { Input, Button, FacilityLists, MyEditor } from "../../components";
 import { observer } from "mobx-react";
 import jwt_decode from "jwt-decode";
 
@@ -13,7 +16,7 @@ const Manage = observer(({ ManageStore }) => {
     busi_num_img: "",
   });
 
-  const [facilities, setFacilities] = useState([ManageStore.facilitiesList]);
+  // const [facilities, setFacilities] = useState([ManageStore.facilitiesList]);
 
   const List = (
     <FlexBox align="center">

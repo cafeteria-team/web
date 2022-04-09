@@ -1,7 +1,5 @@
 import Overview from "../containers/Overview/Overview";
 import NotFound from "./NotFound";
-import Manage from "./Manage";
-import Member from "../containers/Member/Member";
 import Notice from "./Notice";
 import Setting from "./Setting";
 import Website from "./Website";
@@ -17,8 +15,6 @@ import MemberListTitle from "./MemberListTitle";
 export {
   Overview,
   NotFound,
-  Manage,
-  Member,
   Notice,
   Setting,
   Website,

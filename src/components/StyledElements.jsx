@@ -10,7 +10,9 @@ const Title = styled.h1`
   color: ${({ props }) => props.color || ""};
   padding: ${({ props }) => props.pad || ""};
   display: ${({ props }) => props.display || ""};
+  position: ${({ props }) => props.position || ""};
   flex-shrink: 0;
+  top: ${({ props }) => props.top || ""};
 `;
 
 export const StyledTitle = memo((props) => {
@@ -100,6 +102,8 @@ export const StyledLink = styled(Link)`
 export const SideUl = styled.ul`
   display: flex;
   flex-direction: column;
+  position: sticky;
+  top: 80px;
 `;
 
 export const SideLi = styled.li`

@@ -2,7 +2,6 @@ import React from "react";
 import { useParams } from "react-router";
 
 import {
-  Manage,
   Notice,
   Setting,
   Website,
@@ -11,7 +10,7 @@ import {
   NotFound,
   Password,
 } from "../../views";
-import { Overview, Member } from "../index";
+import { Overview, Member, Manage } from "../index";
 
 const MainViewContainer = () => {
   const params = useParams();

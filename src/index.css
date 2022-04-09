@@ -5,7 +5,7 @@ body {
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  height: 100%;
+  /* height: 100%; */
   color: #292912;
 }
 
@@ -13,13 +13,13 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
     monospace;
 }
-#root {
+/* #root {
   height: 100%;
 }
 
 html {
   height: 100%;
-}
+} */
 
 /* h1,
 h2,
