@@ -10,7 +10,7 @@ import {
   NotFound,
   Password,
 } from "../../views";
-import { Overview, Member, Manage } from "../index";
+import { Overview, Member, Manage, ManageAdmin } from "../index";
 
 const MainViewContainer = () => {
   const params = useParams();
@@ -30,8 +30,8 @@ const MainViewContainer = () => {
             return <Member />;
           case "request":
             return <Request />;
-          case "event":
-            return <Event />;
+          case "manageAdmin":
+            return <ManageAdmin />;
           case "notice":
             return <Notice />;
           case "setting":

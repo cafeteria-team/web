@@ -4,6 +4,7 @@ import styled from "styled-components";
 
 const StyledButton = styled.button`
   width: ${({ width }) => width || "100%"};
+  height: ${({ height }) => height || ""};
   font-weight: ${({ weight }) => weight || "normal"};
   padding: ${({ padding }) => padding || "14px 20px"};
   border-radius: 4px;
@@ -72,6 +73,7 @@ function Button({
   textAlign,
   left,
   bottom,
+  height,
 }) {
   return (
     <StyledButton
@@ -94,6 +96,7 @@ function Button({
       textAlign={textAlign}
       left={left}
       bottom={bottom}
+      height={height}
     >
       {title}
     </StyledButton>

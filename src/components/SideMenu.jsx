@@ -188,7 +188,7 @@ const menuData = [
         overflow="hidden"
       >
         <NavLink
-          to="/main/event"
+          to="/main/manageAdmin"
           style={({ isActive }) =>
             isActive
               ? { background: "#f97316", padding: "0 26px" }

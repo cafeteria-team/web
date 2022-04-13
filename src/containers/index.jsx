@@ -7,6 +7,7 @@ import SubViewContainer from "./SubViewContainer";
 import Overview from "./Overview/Overview";
 import Member from "./Member/Member";
 import Manage from "./Manage/Manage";
+import ManageAdmin from "./Manage/ManageAdmin";
 
 export {
   RegisterContainer,
@@ -16,6 +17,7 @@ export {
   MainViewContainer,
   SubViewContainer,
   Overview,
+  ManageAdmin,
   Member,
   Manage,
 };
