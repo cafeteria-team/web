@@ -40,9 +40,13 @@ const ManageAdmin = () => {
 
   const [facilityList, setFacilityList] = useState([]);
   const [state, setState] = useState({
-    category: "",
     name: "",
   });
+  const [editState, setEditState] = useState({
+    name: "",
+  });
+
+  const [isClicked, setIsClicked] = useState("");
 
   const selectRef = useRef();
 
@@ -72,19 +76,44 @@ const ManageAdmin = () => {
     getFacilityList();
   };
 
-  const addList = async () => {
-    const selectValue = selectRef.current.getValue();
-    setState((prev) => ({
-      ...prev,
-      category: selectValue[0].value,
-    }));
-    await ManageStore.addFacilityList(state);
+  const selctedList = (index) => {
+    setIsClicked(index);
+  };
+
+  const editList = async (id, category) => {
+    await ManageStore.editFacilityList(id, category, editState.name);
     getFacilityList();
+    setIsClicked(false);
+    setEditState({
+      name: "",
+    });
+  };
+
+  const addList = async () => {
+    if (selectRef.current.props.value && state.name !== "") {
+      const category = selectRef.current.props.value.value;
+      await ManageStore.addFacilityList(category, state.name);
+      getFacilityList();
+      setState({
+        name: "",
+      });
+      selectRef.current.clearValue();
+    } else {
+      alert("카테고리 또는 편의시설명을 입력해주세요");
+    }
   };
 
   const handleChange = (e) => {
     const { id, value } = e.target;
     setState((prev) => ({
+      ...prev,
+      [id]: value,
+    }));
+  };
+
+  const editOnChange = (e) => {
+    const { id, value } = e.target;
+    setEditState((prev) => ({
       ...prev,
       [id]: value,
     }));
@@ -110,7 +139,6 @@ const ManageAdmin = () => {
             <Select
               styles={customStyles}
               classNamePrefix="select"
-              // defaultValue={colourOptions[0]}
               isClearable={true}
               name="color"
               options={colourOptions}
@@ -138,18 +166,41 @@ const ManageAdmin = () => {
         <ListTitle />
         <Ul direction="column">
           {facilityList ? (
-            facilityList.map(({ category, name, id }) => (
-              <Li key={id} border="1px solid #fdcc97" padding="14px">
+            facilityList.map(({ category, name, id }, index) => (
+              <Li
+                key={id}
+                border="1px solid #fdcc97"
+                padding="14px"
+                align="center"
+              >
                 <FlexBox width="25%" just="center" height="16px" align="center">
                   {id}
                 </FlexBox>
                 <FlexBox width="25%" just="center" height="16px" align="center">
                   {category}
                 </FlexBox>
+                <Input
+                  width="25%"
+                  margin="0"
+                  placeholder={name}
+                  value={isClicked === index ? editState.name : name}
+                  id="name"
+                  disabled={isClicked === index ? false : true}
+                  onChange={editOnChange}
+                />
                 <FlexBox width="25%" just="center" height="16px" align="center">
-                  {name}
-                </FlexBox>
-                <FlexBox width="25%" just="center" height="16px" align="center">
+                  <Button
+                    title={isClicked === index ? "변경" : "수정"}
+                    margin="0 10px 0 0"
+                    padding="4px"
+                    width="40px"
+                    background="#06c"
+                    onClick={
+                      isClicked === index
+                        ? (e) => editList(id, category)
+                        : (e) => selctedList(index)
+                    }
+                  />
                   <Button
                     title="삭제"
                     margin="0"

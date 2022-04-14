@@ -11,6 +11,8 @@ export class ManageStore {
       getFacilityList: computed,
       setFacilityList: action,
       callFacilityList: action,
+      editFacilityList: action,
+      addFacilityList: action,
     });
   }
 
@@ -41,21 +43,37 @@ export class ManageStore {
   deleteFacilityList = async (id) => {
     try {
       const response = await axios.delete(`/api/facility/${id}`);
+      alert("편의시설이 삭제되었습니다.");
       return response;
     } catch (error) {
-      console.log(error.response);
+      console.log(error, error.response);
+      return false;
+    }
+  };
+
+  // 편의시설 수정
+  editFacilityList = async (id, category, name) => {
+    try {
+      const response = await axios.patch(`/api/facility/${id}`, {
+        category,
+        name,
+      });
+      alert("편의시설이 변경되었습니다.");
+      return response;
+    } catch (error) {
+      alert("편의시설이 이미 등록되있거나 잘못된 입력입니다.");
       return false;
     }
   };
 
   //편의시설 추가
-  addFacilityList = async (data) => {
-    const { category, name } = data;
+  addFacilityList = async (category, name) => {
     try {
       const response = await axios.post(`/api/facility`, {
         category,
         name,
       });
+      alert("편의시설이 추가되었습니다.");
       return response;
     } catch (error) {
       console.log(error.response);
