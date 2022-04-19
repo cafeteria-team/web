@@ -63,7 +63,6 @@ const ManageAdmin = () => {
   const colourOptions = [
     { value: "CAFE", label: "CAFE" },
     { value: "COFFEE", label: "COFFEE" },
-    { value: "DESSERT", label: "DESSERT" },
   ];
 
   const getFacilityList = useCallback(async () => {

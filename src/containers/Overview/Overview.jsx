@@ -8,16 +8,13 @@ const Overview = observer(() => {
   const { AuthStore, ListStore } = useStores();
 
   // 유저 리스트 불러오기
-  const _callUserList = useCallback(
-    async (access) => {
-      await ListStore.callUserList(access);
-    },
-    [ListStore]
-  );
+  const _callUserList = useCallback(async () => {
+    await ListStore.callUserList();
+  }, [ListStore]);
 
   useEffect(() => {
     // 유저정보 불러오기
-    _callUserList(AuthStore.user.accessT);
+    _callUserList();
   }, [AuthStore.user.accessT, _callUserList]);
 
   return (

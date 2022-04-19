@@ -5,6 +5,9 @@ export class ManageStore {
   // 편의시설 리스트
   facilityList = [];
 
+  // 유저 편의시설
+  userFacilityList = [];
+
   constructor() {
     makeObservable(this, {
       facilityList: observable,
@@ -21,18 +24,34 @@ export class ManageStore {
     return toJS(this.facilityList);
   }
 
+  // 편의시설 리스트 불러오기
+  get getUserFacilityList() {
+    return toJS(this.userFacilityList);
+  }
+
   // 편의시설 리스트 설정
   setFacilityList = (data) => {
     this.facilityList = data;
   };
 
+  setUserFacilityList = (data) => {
+    this.userFacilityList = data;
+  };
+
   // 편의시설 불러오기 api
-  callFacilityList = async () => {
+  callFacilityList = async (user) => {
     try {
-      const response = await axios.get(`/api/facility
-      `);
-      this.setFacilityList(response.data);
-      return response;
+      if (user) {
+        const response = await axios.get(`/api/facility/join/
+        ${user}`);
+        this.setUserFacilityList(response.data);
+        return response;
+      } else {
+        const response = await axios.get(`/api/facility
+        `);
+        this.setFacilityList(response.data);
+        return response;
+      }
     } catch (error) {
       console.log(error);
       return false;

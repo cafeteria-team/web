@@ -30,17 +30,13 @@ export class ListStore {
   };
 
   // 유저 정보 API 불러오기
-  callUserList = async (accessToken) => {
+  callUserList = async () => {
     try {
-      const response = await axios.get(`/api/user`, {
-        // headers: {
-        //   Authorization: `Bearer ${accessToken}`,
-        // },
-      });
+      const response = await axios.get(`/api/user`);
       this.setUserList(response.data);
       return response;
     } catch (error) {
-      console.log(error.response);
+      console.log(error, error.response);
       alert("토큰값이 만료되었습니다. 새로고침 해주세요.");
       return false;
     }

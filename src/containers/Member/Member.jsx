@@ -143,7 +143,7 @@ const Member = observer(() => {
 
   // 유저수정 완료
   const editUser = async (id, state) => {
-    console.log("수정실행");
+    // console.log("수정실행");
     let userId = localStorage.getItem("userId");
     let access = localStorage.getItem("access");
     if (userId) {
@@ -200,14 +200,19 @@ const Member = observer(() => {
   const deleteUser = async (userId) => {
     await ListStore.deleteUser(userId);
     _callUserList(AuthStore.user.accessT);
+    alert("유저가 삭제되었습니다.");
   };
 
   useEffect(() => {
     // 유저정보 불러오기
-    _callUserList(AuthStore.user.accessT);
+    _callUserList();
 
     // 선택된유저정보불러오기
     getEditUser();
+
+    return () => {
+      setUserList("");
+    };
   }, [AuthStore.user.accessT, _callUserList, getEditUser]);
 
   return (
