@@ -50,7 +50,7 @@ export const MainContainer = styled.div`
   background-image: ${(props) => props.bgImage || ""};
   background-repeat: no-repeat;
   background-size: cover;
-  height: 100%;
+  height: 100vh;
   display: flex;
   justify-content: center;
   align-items: center;

@@ -12,7 +12,9 @@ export class ManageStore {
     makeObservable(this, {
       facilityList: observable,
       getFacilityList: computed,
+      getUserFacilityList: computed,
       setFacilityList: action,
+      setUserFacilityList: action,
       callFacilityList: action,
       editFacilityList: action,
       addFacilityList: action,
@@ -86,14 +88,23 @@ export class ManageStore {
   };
 
   //편의시설 추가
-  addFacilityList = async (category, name) => {
+  addFacilityList = async (category, name, user) => {
     try {
-      const response = await axios.post(`/api/facility`, {
-        category,
-        name,
-      });
-      alert("편의시설이 추가되었습니다.");
-      return response;
+      if (user) {
+        const response = await axios.post(`/api/facility`, {
+          category,
+          name,
+        });
+        alert("편의시설이 추가되었습니다.");
+        return response;
+      } else {
+        const response = await axios.post(`/api/facility`, {
+          category,
+          name,
+        });
+        alert("편의시설이 추가되었습니다.");
+        return response;
+      }
     } catch (error) {
       console.log(error.response);
       return false;

@@ -70,10 +70,10 @@ export class AuthStore {
   };
 
   // 로그인 시도
-  async login(profile) {
+  login(profile) {
     const { username, password } = profile;
     try {
-      const response = await axios.post(
+      const response = axios.post(
         "/api/user/login",
         {
           username,

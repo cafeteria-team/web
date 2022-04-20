@@ -46,6 +46,7 @@ const Manage = () => {
   const { ManageStore } = useStores();
 
   const [facilityList, setFacilityList] = useState([]);
+  const [adminFacility, setAdminFacility] = useState([]);
   const [state, setState] = useState({
     name: "",
   });
@@ -73,10 +74,34 @@ const Manage = () => {
     { value: "COFFEE", label: "COFFEE" },
   ];
 
+  const [options, setOptions] = useState([
+    {
+      name: "",
+    },
+  ]);
+
+  console.log(options);
+
+  // console.log({ ...adminFacility });
+
   const getFacilityList = useCallback(async () => {
+    await ManageStore.callFacilityList();
     await ManageStore.callFacilityList(user);
     setFacilityList(ManageStore.getUserFacilityList);
+    setAdminFacility(ManageStore.getFacilityList);
+
+    map();
   }, [ManageStore]);
+
+  const map = () => {
+    ManageStore.getFacilityList.map((item) => {
+      const { name } = item;
+      setOptions((prev) => ({
+        ...prev,
+        name,
+      }));
+    });
+  };
 
   const deleteList = async (id) => {
     await ManageStore.deleteFacilityList(id);

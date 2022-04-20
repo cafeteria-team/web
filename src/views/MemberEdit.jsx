@@ -106,13 +106,17 @@ const InputData = [
           />
         </FlexBox>
         <div style={imageStyle.wrap}>
-          <div style={imageStyle.div}>
-            <img
-              src={state.busi_num_img}
-              alt="business_img"
-              style={imageStyle.image}
-            />
-          </div>
+          {state.busi_num_img === "" ? (
+            <div style={imageStyle.div}>
+              <img
+                src={state.busi_num_img}
+                alt="business_img"
+                style={imageStyle.image}
+              />
+            </div>
+          ) : (
+            <div>등록된 이미지가 없습니다.</div>
+          )}
         </div>
       </>
     ),
@@ -171,6 +175,8 @@ const MemberEdit = ({ selectedUser, id, editUser }) => {
       }));
     }
   };
+
+  console.log(state.busi_num_img);
 
   return (
     <>
