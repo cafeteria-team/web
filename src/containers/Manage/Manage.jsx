@@ -74,11 +74,7 @@ const Manage = () => {
     { value: "COFFEE", label: "COFFEE" },
   ];
 
-  const [options, setOptions] = useState([
-    {
-      name: "",
-    },
-  ]);
+  const [options, setOptions] = useState([]);
 
   console.log(options);
 
@@ -89,17 +85,28 @@ const Manage = () => {
     await ManageStore.callFacilityList(user);
     setFacilityList(ManageStore.getUserFacilityList);
     setAdminFacility(ManageStore.getFacilityList);
-
-    map();
+    setLists();
   }, [ManageStore]);
 
-  const map = () => {
+  const setLists = () => {
+    // let option = {
+    //   value: "",
+    //   label: "",
+    // };
+
+    const value = "value";
+    const label = "label";
+
     ManageStore.getFacilityList.map((item) => {
       const { name } = item;
-      setOptions((prev) => ({
+
+      setOptions((prev) => [
         ...prev,
-        name,
-      }));
+        {
+          [value]: name,
+          [label]: name,
+        },
+      ]);
     });
   };
 
