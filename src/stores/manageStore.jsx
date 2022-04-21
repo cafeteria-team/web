@@ -16,8 +16,10 @@ export class ManageStore {
       setFacilityList: action,
       setUserFacilityList: action,
       callFacilityList: action,
+      callUserFacilityList: action,
       editFacilityList: action,
       addFacilityList: action,
+      addUserFacilityList: action,
     });
   }
 
@@ -41,19 +43,24 @@ export class ManageStore {
   };
 
   // 편의시설 불러오기 api
-  callFacilityList = async (user) => {
+  callFacilityList = async () => {
     try {
-      if (user) {
-        const response = await axios.get(`/api/facility/join/
-        ${user}`);
-        this.setUserFacilityList(response.data);
-        return response;
-      } else {
-        const response = await axios.get(`/api/facility
+      const response = await axios.get(`/api/facility
         `);
-        this.setFacilityList(response.data);
-        return response;
-      }
+      this.setFacilityList(response.data);
+      return response;
+    } catch (error) {
+      console.log(error);
+      return false;
+    }
+  };
+
+  // 유저 편의시설 불러오기 api
+  callUserFacilityList = async (user) => {
+    try {
+      const response = await axios.get(`/api/facility/join/${user}`);
+      this.setUserFacilityList(response.data.store_facility);
+      return response;
     } catch (error) {
       console.log(error);
       return false;
@@ -88,25 +95,36 @@ export class ManageStore {
   };
 
   //편의시설 추가
-  addFacilityList = async (category, name, user) => {
+  addFacilityList = async (category, name) => {
     try {
-      if (user) {
-        const response = await axios.post(`/api/facility`, {
-          category,
-          name,
-        });
-        alert("편의시설이 추가되었습니다.");
-        return response;
-      } else {
-        const response = await axios.post(`/api/facility`, {
-          category,
-          name,
-        });
-        alert("편의시설이 추가되었습니다.");
-        return response;
-      }
+      const response = await axios.post(`/api/facility`, {
+        category,
+        name,
+      });
+      alert("편의시설이 추가되었습니다.");
+      return response;
     } catch (error) {
+      if (error.response.status === 409) {
+        return alert("이미등록된 편의시설입니다.");
+      }
       console.log(error.response);
+      return false;
+    }
+  };
+
+  // 사용자 편의시설 추가
+  addUserFacilityList = async (id, user) => {
+    try {
+      const response = await axios.post(`/api/facility/join/${user}`, {
+        facility: id,
+      });
+      alert("편의시설이 추가되었습니다.");
+      return response;
+    } catch (error) {
+      if (error.response.status === 409) {
+        return alert("이미등록된 편의시설입니다.");
+      }
+      // console.log(error.response);
       return false;
     }
   };

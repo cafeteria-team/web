@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, memo } from "react";
 import { Editor } from "react-draft-wysiwyg";
 import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
 import styled from "styled-components";
@@ -139,4 +139,4 @@ const MyEditor = () => {
   );
 };
 
-export default MyEditor;
+export default memo(MyEditor);
