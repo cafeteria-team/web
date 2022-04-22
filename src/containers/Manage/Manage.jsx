@@ -11,6 +11,7 @@ import { Input, Button, MyEditor } from "../../components";
 import { useStores } from "../../stores/Context";
 import Select from "react-select";
 import Decode from "../../utils/decode";
+import Menu from "./Menu";
 
 //리스트 제목
 const ListTitle = memo(() => {
@@ -166,6 +167,7 @@ const Manage = () => {
     <FlexBox width="100%" height="100%" direction="column" padding="30px 70px">
       <StyledTitle margin="0 0 30px 0">업체관리</StyledTitle>
       <FlexBox padding="0 0 30px 0" direction="column" width="100%">
+        <Menu />
         <FlexBox
           width="100%"
           background="#fff"

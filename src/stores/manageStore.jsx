@@ -8,12 +8,17 @@ export class ManageStore {
   // 유저 편의시설
   userFacilityList = [];
 
+  // 메뉴
+  menu = [];
+
   constructor() {
     makeObservable(this, {
       facilityList: observable,
       userFacilityList: observable,
+      menu: observable,
       getFacilityList: computed,
       getUserFacilityList: computed,
+      getMenu: computed,
       setFacilityList: action,
       setUserFacilityList: action,
       callFacilityList: action,
@@ -21,6 +26,10 @@ export class ManageStore {
       editFacilityList: action,
       addFacilityList: action,
       addUserFacilityList: action,
+      setMenu: action,
+      addMenu: action,
+      deleteMenu: action,
+      editMenu: action,
     });
   }
 
@@ -34,6 +43,11 @@ export class ManageStore {
     return toJS(this.userFacilityList);
   }
 
+  // 메뉴 불러오기
+  get getMenu() {
+    return toJS(this.menu);
+  }
+
   // 편의시설 리스트 설정
   setFacilityList = (data) => {
     this.facilityList = data;
@@ -41,6 +55,10 @@ export class ManageStore {
 
   setUserFacilityList = (data) => {
     this.userFacilityList = data;
+  };
+
+  setMenu = (data) => {
+    this.menu = data;
   };
 
   // 편의시설 불러오기 api
@@ -94,8 +112,37 @@ export class ManageStore {
     }
   };
 
+  //메뉴삭제
+  deleteMenu = async (storeId, id) => {
+    try {
+      const response = await axios.delete(
+        `/api/facility/join/${storeId}/${id}`
+      );
+      alert("편의시설이 삭제되었습니다.");
+      return response;
+    } catch (error) {
+      console.log(error, error.response);
+      return false;
+    }
+  };
+
   // 편의시설 수정
   editFacilityList = async (id, category, name) => {
+    try {
+      const response = await axios.patch(`/api/facility/${id}`, {
+        category,
+        name,
+      });
+      alert("편의시설이 변경되었습니다.");
+      return response;
+    } catch (error) {
+      alert("편의시설이 이미 등록되있거나 잘못된 입력입니다.");
+      return false;
+    }
+  };
+
+  //메뉴 수정
+  editMenu = async (id, category, name) => {
     try {
       const response = await axios.patch(`/api/facility/${id}`, {
         category,
@@ -141,6 +188,19 @@ export class ManageStore {
       }
       // console.log(error.response);
       return false;
+    }
+  };
+
+  //메뉴추가
+  addMenu = async (menu, time, id) => {
+    try {
+      const response = await axios.post(`/api/menu/${id}`, {
+        menu,
+        provide_at: time,
+      });
+      return response;
+    } catch (error) {
+      return console.log(error.response);
     }
   };
 }
