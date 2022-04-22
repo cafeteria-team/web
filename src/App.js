@@ -29,8 +29,6 @@ const App = observer(() => {
     initializeUserInfo();
   }, [initializeUserInfo]);
 
-  console.log("app호출");
-
   return (
     <ThemeProvider theme={theme}>
       <BrowserRouter className="App">

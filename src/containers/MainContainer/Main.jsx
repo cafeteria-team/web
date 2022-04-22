@@ -16,8 +16,6 @@ const Main = observer(() => {
     setUserName(getCookie("username"));
   }, []);
 
-  console.log("main호출");
-
   return (
     <FlexBox width="100%" height="100%" minHeight="100vh" background="#ededed">
       <SideMenu></SideMenu>

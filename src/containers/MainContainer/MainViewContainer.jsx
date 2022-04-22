@@ -16,8 +16,6 @@ const MainViewContainer = () => {
   const params = useParams();
   const menuLists = params.name;
 
-  console.log("mainView 호출");
-
   return (
     <>
       {(() => {

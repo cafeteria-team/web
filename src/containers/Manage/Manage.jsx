@@ -10,6 +10,7 @@ import {
 import { Input, Button, MyEditor } from "../../components";
 import { useStores } from "../../stores/Context";
 import Select from "react-select";
+import Decode from "../../utils/decode";
 
 //리스트 제목
 const ListTitle = memo(() => {
@@ -22,10 +23,10 @@ const ListTitle = memo(() => {
       just="space-around"
       color="#fff"
     >
-      <Li just="center" width="50%">
+      <Li just="center" width="80%">
         목록
       </Li>
-      <Li just="flex-end" width="50%" padding="0 40px 0 0">
+      <Li just="center" width="20%">
         관리
       </Li>
     </Ul>
@@ -43,6 +44,30 @@ const customStyles = {
   }),
 };
 
+const MenuList = function MenuList(props) {
+  const children = props.children;
+
+  if (!children.length) {
+    return <div className="myClassListName">{children}</div>;
+  }
+
+  return (
+    <div className="myClassListName">
+      {children.length &&
+        children.map((key, i) => {
+          delete key.props.innerProps.onMouseMove; //FIX LAG!!
+          delete key.props.innerProps.onMouseOver; //FIX LAG!!
+
+          return (
+            <div className="myClassItemName" key={i}>
+              {key}
+            </div>
+          );
+        })}
+    </div>
+  );
+};
+
 const Manage = () => {
   // 스토어등록
   const { AuthStore, ManageStore } = useStores();
@@ -52,49 +77,33 @@ const Manage = () => {
     name: "",
   });
 
-  // 편의시설 수정클릭시
-  const [isClicked, setIsClicked] = useState("");
-
   // 셀렉트박스
   const selectRef = useRef();
 
   // 셀렉트 박스 옵션
   const [options, setOptions] = useState([]);
 
-  // 편의시설목록 -> 셀렉트박스 목록을위한
-  // 유저편의시설목록 -> 사용자가 선택한 리스트 보기위한
-  const getFacilityList = async () => {
-    await ManageStore.callFacilityList();
-  };
+  // 카테고리설정
+  useEffect(() => {
+    const getCategory = async () => {
+      const result = await ManageStore.callFacilityList();
+      setOptions("");
+      setCategory(result);
+    };
 
-  const getUserFacilityList = async () => {
-    await ManageStore.callUserFacilityList(AuthStore.getUser.userId);
-    setOptions([]);
-    setLists();
-  };
+    getCategory().catch(console.error);
+  }, [ManageStore]);
 
-  // const getFacilityList = useCallback(async () => {
-  //   await ManageStore.callFacilityList();
-  //   setAdminFacility(ManageStore.getFacilityList);
-  // }, [ManageStore]);
-
-  // const getUserFacilityList = useCallback(async () => {
-  //   await ManageStore.callUserFacilityList(AuthStore.getUser.userId);
-
-  //   setFacilityList(ManageStore.getUserFacilityList);
-  //   setOptions([]);
-  //   setLists();
-  // }, [ManageStore]);
-
-  const setLists = useCallback(() => {
+  const setCategory = (props) => {
     const value = "value";
     const label = "label";
     const _id = "id";
+    const { data } = props;
 
-    ManageStore.getFacilityList.map((item) => {
+    data.map((item) => {
       const { name, id } = item;
 
-      setOptions((prev) => [
+      return setOptions((prev) => [
         ...prev,
         {
           [value]: name,
@@ -103,24 +112,26 @@ const Manage = () => {
         },
       ]);
     });
-  }, [ManageStore.getFacilityList]);
+  };
+
+  const [lists, setLists] = useState("");
+
+  const getFacilityList = useCallback(async () => {
+    const decode = new Decode();
+    const access = localStorage.getItem("access");
+    const data = await decode.getUserId(access);
+    const results = await ManageStore.callUserFacilityList(data.user_id);
+    setLists(results.data.store_facility);
+  }, [ManageStore]);
+
+  // 유저 편의시설설정
+  useEffect(() => {
+    getFacilityList();
+  }, [getFacilityList]);
 
   const deleteList = async (id) => {
-    await ManageStore.deleteFacilityList(id);
+    await ManageStore.deleteUserFacilityList(AuthStore.getUser.userId, id);
     getFacilityList();
-  };
-
-  const selctedList = (index) => {
-    setIsClicked(index);
-  };
-
-  const editList = async (id, category) => {
-    await ManageStore.editFacilityList(id, category, editState.name);
-    getFacilityList();
-    setIsClicked(false);
-    setEditState({
-      name: "",
-    });
   };
 
   const addList = async () => {
@@ -129,7 +140,7 @@ const Manage = () => {
     if (selectRef.current.props.value) {
       await ManageStore.addUserFacilityList(id, AuthStore.getUser.userId);
       selectRef.current.clearValue();
-      getUserFacilityList();
+      getFacilityList();
     } else {
       alert("편의시설 및 서비스를 선택해주세요.");
     }
@@ -150,11 +161,6 @@ const Manage = () => {
       [id]: value,
     }));
   };
-
-  useEffect(() => {
-    getFacilityList();
-    getUserFacilityList();
-  }, [AuthStore.getUser.userId]);
 
   return (
     <FlexBox width="100%" height="100%" direction="column" padding="30px 70px">
@@ -178,6 +184,9 @@ const Manage = () => {
                   name="color"
                   options={options ? options : "카테고리 불러오는중입니다."}
                   ref={selectRef}
+                  components={{
+                    MenuList,
+                  }}
                 />
                 <Button
                   title="추가"
@@ -196,55 +205,39 @@ const Manage = () => {
           </FlexBox>
           <ListTitle />
           <Ul direction="column">
-            {ManageStore.getUserFacilityList &&
-            ManageStore.getUserFacilityList.length !== 0 ? (
-              ManageStore.getUserFacilityList.map(
-                ({ facility, name, id }, index) => (
-                  <Li
-                    key={id}
-                    border="1px solid #fdcc97"
-                    padding="14px"
+            {lists && lists.length !== 0 ? (
+              lists.map(({ facility, name, id }, index) => (
+                <Li
+                  key={id}
+                  border="1px solid #fdcc97"
+                  padding="14px"
+                  align="center"
+                >
+                  <FlexBox
+                    width="80%"
+                    just="center"
+                    height="16px"
                     align="center"
                   >
-                    <Input
-                      width="50%"
+                    {facility.name}
+                  </FlexBox>
+                  <FlexBox
+                    width="20%"
+                    just="center"
+                    height="16px"
+                    align="center"
+                  >
+                    <Button
+                      title="삭제"
                       margin="0"
-                      placeholder={facility.name}
-                      value={isClicked === index ? editState.name : name}
-                      id="name"
-                      disabled={isClicked === index ? false : true}
-                      onChange={editOnChange}
+                      padding="4px"
+                      width="40px"
+                      background="tomato"
+                      onClick={() => deleteList(id)}
                     />
-                    <FlexBox
-                      width="50%"
-                      just="flex-end"
-                      height="16px"
-                      align="center"
-                    >
-                      <Button
-                        title={isClicked === index ? "변경" : "수정"}
-                        margin="0 10px 0 0"
-                        padding="4px"
-                        width="40px"
-                        background="#06c"
-                        onClick={
-                          isClicked === index
-                            ? (e) => editList(id)
-                            : (e) => selctedList(index)
-                        }
-                      />
-                      <Button
-                        title="삭제"
-                        margin="0"
-                        padding="4px"
-                        width="40px"
-                        background="tomato"
-                        onClick={() => deleteList(id)}
-                      />
-                    </FlexBox>
-                  </Li>
-                )
-              )
+                  </FlexBox>
+                </Li>
+              ))
             ) : (
               <FlexBox
                 width="100%"

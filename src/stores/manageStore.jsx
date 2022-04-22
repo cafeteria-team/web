@@ -11,6 +11,7 @@ export class ManageStore {
   constructor() {
     makeObservable(this, {
       facilityList: observable,
+      userFacilityList: observable,
       getFacilityList: computed,
       getUserFacilityList: computed,
       setFacilityList: action,
@@ -71,6 +72,20 @@ export class ManageStore {
   deleteFacilityList = async (id) => {
     try {
       const response = await axios.delete(`/api/facility/${id}`);
+      alert("편의시설이 삭제되었습니다.");
+      return response;
+    } catch (error) {
+      console.log(error, error.response);
+      return false;
+    }
+  };
+
+  // 사용자 편의시설 삭제
+  deleteUserFacilityList = async (storeId, id) => {
+    try {
+      const response = await axios.delete(
+        `/api/facility/join/${storeId}/${id}`
+      );
       alert("편의시설이 삭제되었습니다.");
       return response;
     } catch (error) {
