@@ -1,13 +1,14 @@
 import React, { memo } from "react";
-import styled from "styled-components";
+import styled, { css } from "styled-components";
 import { Link } from "react-router-dom";
+import FilteredPropsInputField from "./FilteredPropsInputField";
 
 const Title = styled.h1`
-  font-size: ${({ theme }) => theme.fontSizes[5]};
-  font-weight: ${({ theme }) => theme.fontWeights[8]};
+  font-size: ${({ props, theme }) => props.font || theme.fontSizes[5]};
+  font-weight: ${({ theme }) => theme.fontWeights[6]};
   text-align: ${({ props }) => (props.align === "center" ? "center" : "left")};
   margin: ${({ props }) => props.margin};
-  color: ${({ props }) => props.color || ""};
+  color: ${({ props }) => props.color || "#212B36"};
   padding: ${({ props }) => props.pad || ""};
   display: ${({ props }) => props.display || ""};
   position: ${({ props }) => props.position || ""};
@@ -96,7 +97,7 @@ export const FlexBox = styled.div`
 `;
 
 export const StyledLink = styled(Link)`
-  color: ${(props) => props.color || props.theme.colors.blue};
+  color: ${(props) => props.color || props.theme.colors.orange};
 `;
 
 export const SideUl = styled.ul`
@@ -187,4 +188,84 @@ export const Li = styled.li`
     background: ${(props) => props.hoverBg || ""};
     color: ${(props) => props.hoverColor || ""};
   }
+`;
+
+export const StyledFiled = styled(FilteredPropsInputField)`
+  background-color: white;
+  border: 1px solid rgba(145, 158, 171, 0.32);
+  border-radius: 8px;
+  font-size: 1rem;
+  line-height: 1.5rem;
+  font-style: normal;
+  font-weight: 400;
+  width: 100%;
+  max-width: 480px;
+  margin-top: 0.5rem;
+  padding: 19.25px 20px;
+  transition: border 0.3s ease-in-out;
+  box-sizing: border-box;
+  &::placeholder {
+    color: #637381;
+  }
+
+  &:focus,
+  &:active {
+    border: 2px solid #ff9030;
+    outline: none;
+  }
+
+  /* Autocomplete styles in Chrome*/
+  &:-webkit-autofill,
+  &:-webkit-autofill:hover,
+  &:-webkit-autofill:focus {
+    background-color: white;
+    border: 1px solid lightgrey;
+    box-shadow: 0 0 0px 1000px #fff inset;
+    -webkit-box-shadow: 0 0 0px 1000px #fff inset;
+    transition: background-color 5000s ease-in-out 0s;
+    -webkit-text-fill-color: black;
+  }
+
+  ${({ valid }) =>
+    valid &&
+    css`
+      border: 1px solid rgb(0, 156, 38);
+
+      &:focus,
+      &:active {
+        border: 1px solid rgb(0, 156, 38);
+        box-shadow: rgb(106, 237, 97) 0px 0px 2px 1px,
+          rgb(177, 247, 160) 0px 0px 0px 3px;
+        outline: none;
+      }
+
+      /* Autocomplete styles in Chrome*/
+      &:-webkit-autofill,
+      &:-webkit-autofill:hover,
+      &:-webkit-autofill:focus {
+        border: 1px solid rgb(0, 156, 38);
+      }
+    `}
+
+  ${({ error }) =>
+    error &&
+    css`
+      border: 2px solid rgb(255, 72, 66);
+      outline: none;
+
+      &:focus,
+      &:active {
+        box-shadow: rgb(244, 129, 116) 0px 0px 2px 1px,
+          rgb(251, 178, 174) 0px 0px 0px 3px;
+        border: 2px solid rgb(255, 72, 66);
+        outline: none;
+      }
+
+      /* Autocomplete styles in Chrome*/
+      &:-webkit-autofill,
+      &:-webkit-autofill:hover,
+      &:-webkit-autofill:focus {
+        border: 2px solid rgb(255, 72, 66);
+      }
+    `}
 `;

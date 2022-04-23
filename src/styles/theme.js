@@ -27,10 +27,10 @@ const theme = {
     black: "#000",
     white: "#fff",
     transparent: "transparent",
-    blue: "#06c",
+    blue: "#2065D1",
     gray: "#aaa",
     red: "#eb5757",
-    orange: "#FF8400",
+    orange: "#ff9030",
   },
 
   shadow: "2px 4px 12px rgb(0 0 0 / 8%)",

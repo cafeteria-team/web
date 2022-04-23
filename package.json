@@ -16,10 +16,12 @@
     "draft-convert": "^2.1.12",
     "draft-js": "^0.11.7",
     "draftjs-to-html": "^0.9.1",
+    "formik": "^2.2.9",
     "history": "5",
     "jwt-decode": "^3.1.2",
     "moment": "^2.29.3",
     "netlify-cli": "9.6.2",
+    "radium": "^0.26.2",
     "react": "^17.0.2",
     "react-cookie": "4.1.1",
     "react-daum-postcode": "^3.0.1",
@@ -36,7 +38,8 @@
     "styled-system": "5.1.5",
     "typescript": "4.5.5",
     "web-vitals": "^1.0.1",
-    "yarn": "^1.22.17"
+    "yarn": "^1.22.17",
+    "yup": "^0.32.11"
   },
   "scripts": {
     "start": "HTTPS=true SSL_CRT_FILE=localhost.pem SSL_KEY_FILE=localhost-key.pem react-app-rewired start",
