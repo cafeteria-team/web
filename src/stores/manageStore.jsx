@@ -26,6 +26,7 @@ export class ManageStore {
       editFacilityList: action,
       addFacilityList: action,
       addUserFacilityList: action,
+      callMenu: action,
       setMenu: action,
       addMenu: action,
       deleteMenu: action,
@@ -195,10 +196,20 @@ export class ManageStore {
   addMenu = async (menu, time, id) => {
     try {
       const response = await axios.post(`/api/menu/${id}`, {
-        menu,
+        menus: menu,
         provide_at: time,
       });
-      return response;
+
+      return response.data;
+    } catch (error) {
+      return console.log(error.response);
+    }
+  };
+  //메뉴불러오기
+  callMenu = async (id) => {
+    try {
+      const response = await axios.get(`/api/menu/${id}`);
+      return response.data;
     } catch (error) {
       return console.log(error.response);
     }

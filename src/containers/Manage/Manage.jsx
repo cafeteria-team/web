@@ -101,18 +101,13 @@ const Manage = () => {
     const _id = "id";
     const { data } = props;
 
-    data.map((item) => {
-      const { name, id } = item;
+    const result = data.map((item) => ({
+      [value]: item.name,
+      [label]: item.name,
+      [_id]: item.id,
+    }));
 
-      return setOptions((prev) => [
-        ...prev,
-        {
-          [value]: name,
-          [label]: name,
-          [_id]: id,
-        },
-      ]);
-    });
+    setOptions(result);
   };
 
   const [lists, setLists] = useState("");
@@ -122,7 +117,8 @@ const Manage = () => {
     const access = localStorage.getItem("access");
     const data = await decode.getUserId(access);
     const results = await ManageStore.callUserFacilityList(data.user_id);
-    setLists(results.data.store_facility);
+
+    setLists(results?.data?.store_facility);
   }, [ManageStore]);
 
   // 유저 편의시설설정
