@@ -1,4 +1,4 @@
-import React, { useState, memo, useEffect } from "react";
+import React, { useState, memo, useEffect, useRef } from "react";
 import axios from "../utils/axios";
 import Post from "../utils/Post";
 import ImageUploader from "../utils/imageuploader";
@@ -19,7 +19,7 @@ import Modal from "react-modal";
 
 // formik
 import * as Yup from "yup";
-import { Formik, Form, ErrorMessage } from "formik";
+import { Formik, Form, ErrorMessage, useFormik } from "formik";
 import Img from "../assets/register_img.png";
 
 // view
@@ -100,26 +100,30 @@ const Register = (props) => {
   const [showModal, setShowModal] = useState(false);
   const [resendCode, setResendCode] = useState(false);
 
-  // 핸드폰 번호체크
-  const getPhoneAuth = async () => {
-    const { phone } = state;
+  // 핸드폰번호 체크
 
-    if (phone && phone.length === 11) {
+  const mobileRegex = /^01([0|1|6|7|8|9])-?([0-9]{3,4})-?([0-9]{4})$/;
+  const busiNumRegex = /^[0-9\b -]{0,10}$/;
+
+  // 핸드폰 번호체크
+  const getPhoneAuth = async (number, error) => {
+    if (!error) {
       try {
         const response = await axios.post("/api/phone/auth", {
-          phone_num: phone,
+          phone_num: number,
         });
         openModal();
         setResendCode(false);
         return response;
       } catch (error) {
+        console.log(error.response);
         if (error?.response?.status === 409) {
           alert("이미 등록된 핸드폰번호입니다.");
         }
         return error;
       }
     } else {
-      alert("옳바른 핸드폰 번호를 입력해주세요");
+      return;
     }
   };
 
@@ -270,28 +274,16 @@ const Register = (props) => {
     return emailRegex.test(email);
   };
 
-  // 핸드폰 정규식
-  const handleChangePhone = (e) => {
-    const regex = /^[0-9\b -]{0,11}$/;
-    const { id, value } = e.target;
-    if (regex.test(value)) {
-      setState((prevState) => ({
-        ...prevState,
-        [id]: value,
-      }));
-    }
-  };
-
-  const handleChangeBusiness = (e) => {
-    const regex = /^[0-9\b -]{0,10}$/;
-    const { id, value } = e.target;
-    if (regex.test(value)) {
-      setState((prevState) => ({
-        ...prevState,
-        [id]: value,
-      }));
-    }
-  };
+  // const handleChangeBusiness = (e) => {
+  //   const regex = /^[0-9\b -]{0,10}$/;
+  //   const { id, value } = e.target;
+  //   if (regex.test(value)) {
+  //     setState((prevState) => ({
+  //       ...prevState,
+  //       [id]: value,
+  //     }));
+  //   }
+  // };
 
   const handleSubmitClick = (e) => {
     e.preventDefault();
@@ -625,6 +617,11 @@ const Register = (props) => {
         </div>
       )} */}
 
+      {isPopup && (
+        <div className="postContainer">
+          <Post setAddress={setState}></Post>
+        </div>
+      )}
       <Modal
         isOpen={privacyModal}
         contentLabel="phone check"
@@ -697,7 +694,6 @@ const Register = (props) => {
           />
         </FlexBox>
       </Modal>
-
       <FlexBox position="absolute" top="56px" right="40px">
         <StyledBody>
           이미 가입하셨나요? <StyledLink to="/register">로그인</StyledLink>
@@ -751,52 +747,34 @@ const Register = (props) => {
               detail_addr: "",
               busi_num: "",
               busi_num_img: "",
-              auth_phone: "",
             }}
-            validate={(values) => {
-              const errors = {};
-              if (!values.username) {
-                errors.username = "아이디를 입력해주세요.";
-              }
-              if (!values.password) {
-                errors.password = "비밀번호를 입력해주세요.";
-              }
-              if (!values.confirm_password) {
-                errors.confirm_password = "비밀번호를 입력해주세요.";
-              }
-              if (!values.email) {
-                errors.email = "이메일을 입력해주세요.";
-              }
-              if (!values.phone) {
-                errors.phone = "핸드폰번호 입력해주세요.";
-              }
-              if (!values.name) {
-                errors.name = "업체명을 입력해주세요.";
-              }
-              if (!values.addr) {
-                errors.addr = "주소를 입력해주세요.";
-              }
-              if (!values.zip_code) {
-                errors.zip_code = "비밀번호를 입력해주세요.";
-              }
-              if (!values.busi_num) {
-                errors.busi_num = "사업자번호를 입력해주세요.";
-              }
-              if (!values.busi_num_img) {
-                errors.busi_num_img = "사업자등록증을 등록해주세요.";
-              }
-              if (!values.auth_phone) {
-                errors.auth_phone = "비밀번호를 입력해주세요.";
-              }
-
-              return errors;
-            }}
+            validationSchema={Yup.object({
+              username: Yup.string().required("아이디를 입력해주세요."),
+              password: Yup.string().required("비밀번호를 입력해주세요."),
+              confirm_password:
+                Yup.string().required("비밀번호를 입력해주세요."),
+              email: Yup.string()
+                .email("이메일형식이 잘못되었습니다.")
+                .required("이메일을 입력해주세요."),
+              phone: Yup.string()
+                .matches(mobileRegex, "옳바른 핸드폰번호를 입력해주세요")
+                .required("핸드폰번호를 입력해주세요."),
+              name: Yup.string().required("업체명을 입력해주세요."),
+              addr: Yup.string().required("업체주소를 입력해주세요."),
+              zip_code: Yup.number().required("우편번호를 입력해주세요"),
+              busi_num: Yup.string()
+                .min(10, "옳바른 사업자번호를 입력해주세요")
+                .matches(busiNumRegex, "옳바른 사업자번호를 입력해주세요")
+                .required("사업자번호를 입력해주세요."),
+              busi_num_img:
+                Yup.string().required("사업자등록증을 등록해주세요."),
+            })}
             onSubmit={(values, { setSubmitting }) => {
+              console.log(values);
               setSubmitting(false);
-              // _login(values);
             }}
           >
-            {({ isSubmitting, touched, errors }) => (
+            {(formik, setSubmitting) => (
               <Form
                 style={{
                   display: "flex",
@@ -805,19 +783,27 @@ const Register = (props) => {
                   width: "100%",
                   marginTop: "50px",
                 }}
+                onSubmit={formik.handleSubmit}
               >
                 <FlexBox width="100%">
                   <FlexBox direction="column" width="50%" margin="-24px 0 0">
                     <FirstLists
-                      touched={touched}
-                      errors={errors}
+                      touched={formik.touched}
+                      errors={formik.errors}
                       phoneAuthed={phoneAuthed}
                       mobileDone={mobileDone}
                       getPhoneAuth={getPhoneAuth}
+                      field={formik}
                     />
                   </FlexBox>
                   <FlexBox direction="column" width="50%" margin="-24px 0 0">
-                    <SecondLists touched={touched} errors={errors} />
+                    <SecondLists
+                      touched={formik.touched}
+                      errors={formik.errors}
+                      field={formik}
+                      popupOn={popupOn}
+                      state={state}
+                    />
                   </FlexBox>
                 </FlexBox>
                 <FlexBox width="100%" just="flex-end">
@@ -845,7 +831,7 @@ const Register = (props) => {
                     </FlexBox>
                     <button
                       type="submit"
-                      disabled={isSubmitting}
+                      disabled={setSubmitting}
                       style={{
                         width: "100%",
                         maxWidth: "480px",
@@ -880,229 +866,184 @@ const FirstLists = ({
   phoneAuthed,
   mobileDone,
   getPhoneAuth,
+  field,
 }) => {
+  const errorStyle = {
+    color: "#FF4842",
+    fontSize: "12px",
+    marginTop: "6px",
+    textAlign: "right",
+    width: "484px",
+  };
+
   return (
     <>
       <StyledFiled
         type="username"
-        name="username"
         placeholder="아이디"
         error={touched.username && errors.username}
         margin="24px 0 0"
+        {...field.getFieldProps("username")}
       />
-      <ErrorMessage
-        name="username"
-        component="div"
-        style={{
-          color: "#FF4842",
-          fontSize: "12px",
-          marginTop: "6px",
-          textAlign: "right",
-          width: "484px",
-        }}
-      />
+      {touched.username && errors.username ? (
+        <div style={errorStyle}>{errors.username}</div>
+      ) : null}
       <StyledFiled
         type="password"
-        name="password"
         placeholder="비밀번호"
         error={touched.password && errors.password}
         margin="24px 0 0"
+        {...field.getFieldProps("password")}
       />
-      <ErrorMessage
-        name="password"
-        component="div"
-        style={{
-          color: "#FF4842",
-          fontSize: "12px",
-          marginTop: "6px",
-          textAlign: "right",
-          width: "484px",
-        }}
-      />
+      {touched.password && errors.password ? (
+        <div style={errorStyle}>{errors.password}</div>
+      ) : null}
       <StyledFiled
         type="confirm_password"
-        name="confirm_password"
         placeholder="비밀번호 확인"
         error={touched.confirm_password && errors.confirm_password}
         margin="24px 0 0"
+        {...field.getFieldProps("confirm_password")}
       />
-      <ErrorMessage
-        name="confirm_password"
-        component="div"
-        style={{
-          color: "#FF4842",
-          fontSize: "12px",
-          marginTop: "6px",
-          textAlign: "right",
-          width: "484px",
-        }}
-      />
+      {touched.confirm_password && errors.confirm_password ? (
+        <div style={errorStyle}>{errors.confirm_password}</div>
+      ) : null}
       <StyledFiled
         type="email"
-        name="email"
         placeholder="이메일"
         error={touched.email && errors.email}
         margin="24px 0 0"
+        {...field.getFieldProps("email")}
       />
-      <ErrorMessage
-        name="email"
-        component="div"
-        style={{
-          color: "#FF4842",
-          fontSize: "12px",
-          marginTop: "6px",
-          textAlign: "right",
-          width: "484px",
-        }}
-      />
+      {touched.email && errors.email ? (
+        <div style={errorStyle}>{errors.email}</div>
+      ) : null}
       <FlexBox position="relative" direction="column">
         <StyledFiled
           type="phone"
-          name="phone"
           placeholder="핸드폰번호"
           error={touched.phone && errors.phone}
           margin="24px 0 0"
+          {...field.getFieldProps("phone")}
         />
-        <ErrorMessage
-          name="phone"
-          component="div"
-          style={{
-            color: "#FF4842",
-            fontSize: "12px",
-            marginTop: "6px",
-            textAlign: "right",
-            width: "484px",
-          }}
-        />
+        {touched.phone && errors.phone ? (
+          <div style={errorStyle}>{errors.phone}</div>
+        ) : null}
         <Button
           color={phoneAuthed ? "tomato" : "#3b86ff"}
           position="absolute"
           right="80px"
-          top="50px"
+          top="49px"
           background="unset"
           type="button"
           width="unset"
           title={phoneAuthed ? "인증완료" : "인증하기"}
           padding="unset"
           font="14px"
-          onClick={phoneAuthed ? mobileDone : getPhoneAuth}
+          onClick={
+            phoneAuthed
+              ? mobileDone
+              : () => getPhoneAuth(field.values.phone, errors.phone)
+          }
         />
       </FlexBox>
     </>
   );
 };
 
-const SecondLists = ({ touched, errors }) => {
+const SecondLists = ({ touched, errors, field, popupOn, state }) => {
+  const errorStyle = {
+    color: "#FF4842",
+    fontSize: "12px",
+    marginTop: "6px",
+    textAlign: "right",
+    width: "484px",
+  };
+
   return (
     <>
       <StyledFiled
         type="name"
-        name="name"
         placeholder="업체명"
         error={touched.name && errors.name}
         margin="24px 0 0"
+        {...field.getFieldProps("name")}
       />
-      <ErrorMessage
-        name="name"
-        component="div"
-        style={{
-          color: "#FF4842",
-          fontSize: "12px",
-          marginTop: "6px",
-          textAlign: "right",
-          width: "484px",
-        }}
-      />
+      {touched.name && errors.name ? (
+        <div style={errorStyle}>{errors.name}</div>
+      ) : null}
+      <FlexBox position="relative" direction="column">
+        <StyledFiled
+          type="zip_code"
+          placeholder="우편번호"
+          error={touched.zip_code && errors.zip_code}
+          margin="24px 0 0"
+          {...field.getFieldProps("zip_code")}
+          disabled
+          value={state.zip_code}
+        />
+        {touched.zip_code && errors.zip_code ? (
+          <div style={errorStyle}>{errors.zip_code}</div>
+        ) : null}
+        <Button
+          color="#3b86ff"
+          position="absolute"
+          right="80px"
+          top="49px"
+          background="unset"
+          type="button"
+          width="unset"
+          title="주소검색"
+          padding="unset"
+          font="14px"
+          onClick={popupOn}
+        />
+      </FlexBox>
       <StyledFiled
         type="addr"
-        name="addr"
         placeholder="업체주소"
         error={touched.addr && errors.addr}
         margin="24px 0 0"
+        {...field.getFieldProps("addr")}
+        disabled
+        value={state.addr}
       />
-      <ErrorMessage
-        name="addr"
-        component="div"
-        style={{
-          color: "#FF4842",
-          fontSize: "12px",
-          marginTop: "6px",
-          textAlign: "right",
-          width: "484px",
-        }}
-      />
-      <StyledFiled
-        type="zip_code"
-        name="zip_code"
-        placeholder="우편번호"
-        error={touched.zip_code && errors.zip_code}
-        margin="24px 0 0"
-      />
-      <ErrorMessage
-        name="zip_code"
-        component="div"
-        style={{
-          color: "#FF4842",
-          fontSize: "12px",
-          marginTop: "6px",
-          textAlign: "right",
-          width: "484px",
-        }}
-      />
+      {touched.addr && errors.addr ? (
+        <div style={errorStyle}>{errors.addr}</div>
+      ) : null}
+
       <StyledFiled
         type="detail_addr"
         name="detail_addr"
         placeholder="상세주소"
         error={touched.detail_addr && errors.detail_addr}
         margin="24px 0 0"
+        {...field.getFieldProps("detail_addr")}
       />
-      <ErrorMessage
-        name="detail_addr"
-        component="div"
-        style={{
-          color: "#FF4842",
-          fontSize: "12px",
-          marginTop: "6px",
-          textAlign: "right",
-          width: "484px",
-        }}
-      />
+      {touched.detail_addr && errors.detail_addr ? (
+        <div style={errorStyle}>{errors.detail_addr}</div>
+      ) : null}
+
       <StyledFiled
         type="busi_num"
-        name="busi_num"
         placeholder="사업자번호"
         error={touched.busi_num && errors.busi_num}
         margin="24px 0 0"
+        {...field.getFieldProps("busi_num")}
       />
-      <ErrorMessage
-        name="busi_num"
-        component="div"
-        style={{
-          color: "#FF4842",
-          fontSize: "12px",
-          marginTop: "6px",
-          textAlign: "right",
-          width: "484px",
-        }}
-      />
+      {touched.busi_num && errors.busi_num ? (
+        <div style={errorStyle}>{errors.busi_num}</div>
+      ) : null}
       <StyledFiled
         type="busi_num_img"
-        name="busi_num_img"
         placeholder="사업자등록증"
         error={touched.busi_num_img && errors.busi_num_img}
         margin="24px 0 0"
+        {...field.getFieldProps("busi_num_img")}
       />
-      <ErrorMessage
-        name="busi_num_img"
-        component="div"
-        style={{
-          color: "#FF4842",
-          fontSize: "12px",
-          marginTop: "6px",
-          textAlign: "right",
-          width: "484px",
-        }}
-      />
+      {touched.busi_num_img && errors.busi_num_img ? (
+        <div style={errorStyle}>{errors.busi_num_img}</div>
+      ) : null}
     </>
   );
 };
