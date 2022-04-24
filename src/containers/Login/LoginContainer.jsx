@@ -1,12 +1,10 @@
-import React, { useState, useEffect, memo } from "react";
+import React, { useEffect } from "react";
 
 //components
-import { Button, Input } from "../../components";
 import {
   StyledTitle,
   MainContainer,
   StyledBody,
-  // Form,
   FlexBox,
   StyledLink,
   StyledFiled,
@@ -14,67 +12,12 @@ import {
 
 //router & serivce
 import { useNavigate } from "react-router-dom";
-import { observer } from "mobx-react";
 import { useStores } from "../../stores/Context";
 
 // formik
 import * as Yup from "yup";
-import { Formik, Form, Field, ErrorMessage } from "formik";
+import { Formik, Form, ErrorMessage } from "formik";
 import Img from "../../assets/login_img.png";
-
-const Background = memo(() => {
-  return (
-    <FlexBox
-      bgImage="url('/img/mainbg.jpg')"
-      width="100%"
-      height="100%"
-      flex="1 1 50%"
-    />
-  );
-});
-
-const LoginForm = ({ handleChange, username, password, _onClick }) => {
-  return (
-    <Form method="POST" direction="column">
-      <Input
-        type="email"
-        id="username"
-        placeholder="아이디"
-        value={username}
-        onChange={handleChange}
-      />
-
-      <Input
-        type="password"
-        id="password"
-        value={password}
-        onChange={handleChange}
-        placeholder="비밀번호"
-      />
-
-      <Button type="button" onClick={_onClick} title="로그인" width="300px" />
-    </Form>
-  );
-};
-
-const RegisterWrap = memo(() => {
-  return (
-    <FlexBox direction="column" align="center">
-      <FlexBox margin="0 0 20px 0">
-        <StyledBody>
-          계정을 잊으셨나요? <StyledLink to="/register">ID찾기</StyledLink>
-          또는 <StyledLink to="/register">비밀번호찾기</StyledLink>
-        </StyledBody>
-      </FlexBox>
-      <FlexBox>
-        <StyledBody>
-          아직 회원이 아니신가요?{" "}
-          <StyledLink to="/register">회원가입.</StyledLink>
-        </StyledBody>
-      </FlexBox>
-    </FlexBox>
-  );
-});
 
 const Login = () => {
   const { AuthStore } = useStores();
@@ -82,83 +25,23 @@ const Login = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    // auth && navigate("/main/overview");
+    AuthStore.user.authorization && navigate("/main/overview");
   });
 
-  const _login = async () => {
-    const response = await AuthStore.login(state);
-
-    if (response) {
-      let { data } = response;
-      AuthStore.onLoginSucess(data.access, data.refresh, state.username);
+  const _login = async (profile) => {
+    await AuthStore.login(profile).then((res) => {
+      let { data } = res;
+      AuthStore.onLoginSucess(data.access, data.refresh, profile.username);
       return navigate("/main/overview");
-    } else {
-      return;
-    }
-  };
-
-  // state
-  const [state, setState] = useState({
-    username: "",
-    password: "",
-  });
-
-  const handleChange = (e) => {
-    const { id, value } = e.target;
-    setState((prevState) => ({
-      ...prevState,
-      [id]: value,
-    }));
-  };
-
-  const InputStyle = {
-    width: "300px",
-    padding: "19.25px 20px",
-    border: "1px solid rgba(145, 158, 171, 0.32)",
-    borderRadius: "8px",
-    transition: "border 0.3s ease-in-out",
-    ":focus": {
-      border: "px solid rgba(145, 158, 171, 0.32)",
-    },
-    ":hover": {
-      background: "red",
-    },
-    "::placeholder": {
-      color: "#212B36",
-      fontSize: "300px",
-    },
+    });
   };
 
   return (
-    // <MainContainer background="unset">
-    //   <Background />
-    //   <FlexBox
-    //     width="600px"
-    //     height="600px"
-    //     background="#fff"
-    //     align="center"
-    //     just="center"
-    //     flex="1 1 50%"
-    //     direction="column"
-    //   >
-    //     <StyledTitle align="center" margin="0 0 40px 0">
-    //       Login
-    //     </StyledTitle>
-    //     <LoginForm
-    //       handleChange={handleChange}
-    //       username={state.username}
-    //       password={state.password}
-    //       _onClick={_login}
-    //     />
-    //     <RegisterWrap />
-    //   </FlexBox>
-    // </MainContainer>
     <MainContainer background="#F9FAFB">
-      {/* <h1>Any place in your app!</h1> */}
       <FlexBox position="absolute" top="56px" right="40px">
         <StyledBody>
           아직 회원이 아니신가요?{" "}
-          <StyledLink to="/register">회원가입.</StyledLink>
+          <StyledLink to="/register">회원가입</StyledLink>
         </StyledBody>
       </FlexBox>
       <FlexBox
@@ -210,10 +93,8 @@ const Login = () => {
               return errors;
             }}
             onSubmit={(values, { setSubmitting }) => {
-              setTimeout(() => {
-                alert(JSON.stringify(values, null, 2));
-                setSubmitting(false);
-              }, 400);
+              setSubmitting(false);
+              _login(values);
             }}
           >
             {({ isSubmitting, touched, errors }) => (
@@ -286,6 +167,7 @@ const Login = () => {
                     background: "#ff9030",
                     color: "#fff",
                     fontSize: "1rem",
+                    cursor: "pointer",
                   }}
                 >
                   로그인

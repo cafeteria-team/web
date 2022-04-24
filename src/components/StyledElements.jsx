@@ -98,6 +98,9 @@ export const FlexBox = styled.div`
 
 export const StyledLink = styled(Link)`
   color: ${(props) => props.color || props.theme.colors.orange};
+  text-decoration: underline !important;
+  text-underline-position: under;
+  text-decoration-color: #fdc89a !important;
 `;
 
 export const SideUl = styled.ul`
@@ -201,6 +204,7 @@ export const StyledFiled = styled(FilteredPropsInputField)`
   width: 100%;
   max-width: 480px;
   margin-top: 0.5rem;
+  margin: ${(props) => props.margin || ""};
   padding: 19.25px 20px;
   transition: border 0.3s ease-in-out;
   box-sizing: border-box;

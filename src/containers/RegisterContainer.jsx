@@ -4,17 +4,23 @@ import Post from "../utils/Post";
 import ImageUploader from "../utils/imageuploader";
 import { useNavigate } from "react-router-dom";
 
+// components
 import { Button, Input, ImageInput, PrivacyInput } from "../components";
 import {
   StyledTitle,
   MainContainer,
   StyledBody,
-  Form,
   FlexBox,
   StyledLink,
   StyledSpan,
+  StyledFiled,
 } from "../components/StyledElements";
 import Modal from "react-modal";
+
+// formik
+import * as Yup from "yup";
+import { Formik, Form, ErrorMessage } from "formik";
+import Img from "../assets/register_img.png";
 
 // 모달
 Modal.setAppElement("#root");
@@ -89,6 +95,23 @@ const Register = (props) => {
   const [showModal, setShowModal] = useState(false);
   const [resendCode, setResendCode] = useState(false);
 
+  const FirstInputLists = [
+    "username",
+    "password",
+    "confirm_password",
+    "email",
+    "phone",
+    "auth_phone",
+  ];
+  const SecondInputLists = [
+    "name",
+    "addr",
+    "zip_code",
+    "detail_addr",
+    "busin_num",
+    "busi_num_img",
+  ];
+
   // 핸드폰 번호체크
   const getPhoneAuth = async () => {
     const { phone } = state;
@@ -158,6 +181,7 @@ const Register = (props) => {
   const openModal = () => {
     setShowModal(true);
   };
+
   const closeModal = () => {
     setShowModal(false);
   };
@@ -339,238 +363,380 @@ const Register = (props) => {
   };
 
   return (
-    <MainContainer bgImage="url('/img/mainbg.jpg')">
-      {isPopup && (
-        <div className="postContainer">
-          <Post setAddress={setState}></Post>
-        </div>
-      )}
+    // <MainContainer bgImage="url('/img/mainbg.jpg')">
+    //   {isPopup && (
+    //     <div className="postContainer">
+    //       <Post setAddress={setState}></Post>
+    //     </div>
+    //   )}
+    //   <FlexBox
+    //     width="90%"
+    //     height="90%"
+    //     background="#fff"
+    //     rad="8px"
+    //     shadow="2px 4px 12px rgb(0 0 0 / 8%)"
+    //     align="center"
+    //     just="center"
+    //     direction="column"
+    //   >
+    //     <Modal
+    //       isOpen={showModal}
+    //       contentLabel="phone check"
+    //       onRequestClose={closeModal}
+    //       style={modalStyle}
+    //     >
+    //       <FlexBox direction="column">
+    //         <FlexBox position="relative" width="342px" align="center">
+    //           <Input
+    //             type="text"
+    //             id="auth_phone"
+    //             placeholder="인증번호"
+    //             value={state.auth_phone}
+    //             onChange={handleChangeAuthPhone}
+    //             margin="0 20px 10px 0"
+    //             width="240px"
+    //           />
+    //           <Timer
+    //             timesUp={timesUp}
+    //             phoneAuthed={phoneAuthed}
+    //             resendCode={resendCode}
+    //           />
+    //           <Button
+    //             color="tomato"
+    //             background="unset"
+    //             type="button"
+    //             width="unset"
+    //             title="재전송"
+    //             padding="unset"
+    //             font="14px"
+    //             textAlign="right"
+    //             onClick={mobileAuthResend}
+    //             margin="0 0 10px 0"
+    //           />
+    //         </FlexBox>
+    //         <FlexBox direction="column">
+    //           <StyledSpan font="12px" color="#838383" margin="0 0 10px 0">
+    //             * 3분 이내로 인증번호(5자리를) 입력해 주세요.
+    //           </StyledSpan>
+    //           <StyledSpan font="12px" color="#838383">
+    //             *인증번호가 전송되지 않을경우 "재전송" 버튼을 눌러주세요.
+    //           </StyledSpan>
+    //         </FlexBox>
+    //       </FlexBox>
+    //       <FlexBox direction="column">
+    //         <Button
+    //           type="button"
+    //           title="확인"
+    //           width="300px"
+    //           onClick={checkPhoneAuth}
+    //           margin="0 0 12px 0"
+    //         />
+    //         <Button
+    //           type="button"
+    //           title="취소"
+    //           width="300px"
+    //           onClick={cancelPhone}
+    //           margin="0"
+    //           background="unset"
+    //           border="1px solid #FF8400"
+    //           color="#FF8400"
+    //         />
+    //       </FlexBox>
+    //     </Modal>
+    //     <StyledTitle align="center" margin="0 0 40px 0">
+    //       회원가입
+    //     </StyledTitle>
+    //     <Form method="POST">
+    //       <FlexBox direction="column" margin="0 20px 0 0">
+    //         <Input
+    //           type="text"
+    //           id="username"
+    //           placeholder="아이디"
+    //           value={state.username}
+    //           onChange={handleChange}
+    //         />
+    //         <Input
+    //           type="email"
+    //           id="email"
+    //           placeholder="이메일"
+    //           value={state.email}
+    //           onChange={handleChange}
+    //         />
+    //         <Input
+    //           type="password"
+    //           id="password"
+    //           value={state.password}
+    //           placeholder="비밀번호"
+    //           onChange={handleChange}
+    //         />
+    //         <Input
+    //           type="password"
+    //           id="confirm_password"
+    //           value={state.confirm_password}
+    //           placeholder="비밀번호 재입력"
+    //           onChange={handleChange}
+    //         />
+    //         <Input
+    //           type="text"
+    //           id="name"
+    //           placeholder="업체명"
+    //           onChange={handleChange}
+    //           value={state.name}
+    //         />
+
+    //         <FlexBox position="relative">
+    //           <Input
+    //             type="text"
+    //             id="phone"
+    //             placeholder="핸드폰번호"
+    //             value={state.phone}
+    //             onChange={handleChangePhone}
+    //             disabled={phoneAuthed ? true : false}
+    //           />
+    //           <Button
+    //             color={phoneAuthed ? "tomato" : "#3b86ff"}
+    //             position="absolute"
+    //             right="10px"
+    //             top="13.5px"
+    //             background="unset"
+    //             type="button"
+    //             width="unset"
+    //             title={phoneAuthed ? "인증완료" : "인증하기"}
+    //             padding="unset"
+    //             font="14px"
+    //             onClick={phoneAuthed ? mobileDone : getPhoneAuth}
+    //           />
+    //         </FlexBox>
+
+    //         <FlexBox position="relative">
+    //           <Input
+    //             type="text"
+    //             placeholder="사업자번호"
+    //             value={state.busi_num}
+    //             id="busi_num"
+    //             onChange={handleChangeBusiness}
+    //           />
+    //           <ImageInput
+    //             onChange={onFileChange}
+    //             id="contained-button-file"
+    //             accept="image/*"
+    //           />
+    //         </FlexBox>
+    //         <StyledSpan font="12px" color="#838383" align="flex-end">
+    //           *사업자 번호와 사업자등록증을 등록해야합니다.
+    //         </StyledSpan>
+    //       </FlexBox>
+
+    //       <FlexBox direction="column" height="100%">
+    //         <FlexBox position="relative">
+    //           <Input
+    //             type="text"
+    //             id="zip_code"
+    //             placeholder="우편번호"
+    //             value={state.zip_code}
+    //             onChange={handleChange}
+    //             disabled="disabled"
+    //           />
+    //           <Button
+    //             color="#3b86ff"
+    //             position="absolute"
+    //             right="10px"
+    //             top="13.5px"
+    //             background="unset"
+    //             type="button"
+    //             width="unset"
+    //             title="주소검색"
+    //             padding="unset"
+    //             font="14px"
+    //             onClick={popupOn}
+    //           />
+    //         </FlexBox>
+    //         <Input
+    //           type="text"
+    //           id="addr"
+    //           placeholder="업체주소"
+    //           value={state.addr}
+    //           onChange={handleChange}
+    //           disabled="disabled"
+    //         />
+
+    //         <Input
+    //           type="text"
+    //           id="detail_addr"
+    //           placeholder="상세주소"
+    //           value={state.detail_addr}
+    //           onChange={handleChange}
+    //         />
+
+    //         <FlexBox>
+    //           <FlexBox width="342px" margin="0 0 40px 0">
+    //             <PrivacyInput
+    //               type="checkbox"
+    //               id="term"
+    //               checked={agreement}
+    //               onChange={agreeTerms}
+    //               htmlFor="term"
+    //             />
+    //           </FlexBox>
+    //         </FlexBox>
+
+    //         <Button
+    //           type="button"
+    //           title="회원가입"
+    //           width="300px"
+    //           onClick={handleSubmitClick}
+    //         />
+
+    //         <FlexBox>
+    //           <StyledBody margin="0 10px 0 0">이미 가입하셨나요?</StyledBody>
+    //           <StyledLink exact={"true"} to="/">
+    //             로그인
+    //           </StyledLink>
+    //         </FlexBox>
+    //       </FlexBox>
+    //     </Form>
+    //   </FlexBox>
+    // </MainContainer>
+    <MainContainer background="#F9FAFB">
+      <FlexBox position="absolute" top="56px" right="40px">
+        <StyledBody>
+          이미 가입하셨나요? <StyledLink to="/register">로그인</StyledLink>
+        </StyledBody>
+      </FlexBox>
       <FlexBox
-        width="90%"
-        height="90%"
+        maxW="464px"
+        width="100%"
         background="#fff"
+        height="calc(100% - 32px)"
+        margin="16px"
         rad="8px"
-        shadow="2px 4px 12px rgb(0 0 0 / 8%)"
-        align="center"
-        just="center"
         direction="column"
+        just="center"
+        shadow="0px 3px 1px -2px rgb(145 158 171 / 20%), 0px 2px 2px 0px rgb(145 158 171 / 14%), 0px 1px 5px 0px rgb(145 158 171 / 12%)"
       >
-        <Modal
-          isOpen={showModal}
-          contentLabel="phone check"
-          onRequestClose={closeModal}
-          style={modalStyle}
-        >
-          <FlexBox direction="column">
-            <FlexBox position="relative" width="342px" align="center">
-              <Input
-                type="text"
-                id="auth_phone"
-                placeholder="인증번호"
-                value={state.auth_phone}
-                onChange={handleChangeAuthPhone}
-                margin="0 20px 10px 0"
-                width="240px"
-              />
-              <Timer
-                timesUp={timesUp}
-                phoneAuthed={phoneAuthed}
-                resendCode={resendCode}
-              />
-              <Button
-                color="tomato"
-                background="unset"
-                type="button"
-                width="unset"
-                title="재전송"
-                padding="unset"
-                font="14px"
-                textAlign="right"
-                onClick={mobileAuthResend}
-                margin="0 0 10px 0"
-              />
-            </FlexBox>
-            <FlexBox direction="column">
-              <StyledSpan font="12px" color="#838383" margin="0 0 10px 0">
-                * 3분 이내로 인증번호(5자리를) 입력해 주세요.
-              </StyledSpan>
-              <StyledSpan font="12px" color="#838383">
-                *인증번호가 전송되지 않을경우 "재전송" 버튼을 눌러주세요.
-              </StyledSpan>
-            </FlexBox>
-          </FlexBox>
-          <FlexBox direction="column">
-            <Button
-              type="button"
-              title="확인"
-              width="300px"
-              onClick={checkPhoneAuth}
-              margin="0 0 12px 0"
-            />
-            <Button
-              type="button"
-              title="취소"
-              width="300px"
-              onClick={cancelPhone}
-              margin="0"
-              background="unset"
-              border="1px solid #FF8400"
-              color="#FF8400"
-            />
-          </FlexBox>
-        </Modal>
-        <StyledTitle align="center" margin="0 0 40px 0">
-          회원가입
+        <StyledTitle margin="70px 0 30px 50px" font="30px">
+          Welcome to 좋구내
         </StyledTitle>
-        <Form method="POST">
-          <FlexBox direction="column" margin="0 20px 0 0">
-            <Input
-              type="text"
-              id="username"
-              placeholder="아이디"
-              value={state.username}
-              onChange={handleChange}
-            />
-            <Input
-              type="email"
-              id="email"
-              placeholder="이메일"
-              value={state.email}
-              onChange={handleChange}
-            />
-            <Input
-              type="password"
-              id="password"
-              value={state.password}
-              placeholder="비밀번호"
-              onChange={handleChange}
-            />
-            <Input
-              type="password"
-              id="confirm_password"
-              value={state.confirm_password}
-              placeholder="비밀번호 재입력"
-              onChange={handleChange}
-            />
-            <Input
-              type="text"
-              id="name"
-              placeholder="업체명"
-              onChange={handleChange}
-              value={state.name}
-            />
-
-            <FlexBox position="relative">
-              <Input
-                type="text"
-                id="phone"
-                placeholder="핸드폰번호"
-                value={state.phone}
-                onChange={handleChangePhone}
-                disabled={phoneAuthed ? true : false}
-              />
-              <Button
-                color={phoneAuthed ? "tomato" : "#3b86ff"}
-                position="absolute"
-                right="10px"
-                top="13.5px"
-                background="unset"
-                type="button"
-                width="unset"
-                title={phoneAuthed ? "인증완료" : "인증하기"}
-                padding="unset"
-                font="14px"
-                onClick={phoneAuthed ? mobileDone : getPhoneAuth}
-              />
-            </FlexBox>
-
-            <FlexBox position="relative">
-              <Input
-                type="text"
-                placeholder="사업자번호"
-                value={state.busi_num}
-                id="busi_num"
-                onChange={handleChangeBusiness}
-              />
-              <ImageInput
-                onChange={onFileChange}
-                id="contained-button-file"
-                accept="image/*"
-              />
-            </FlexBox>
-            <StyledSpan font="12px" color="#838383" align="flex-end">
-              *사업자 번호와 사업자등록증을 등록해야합니다.
-            </StyledSpan>
+        <img
+          src={Img}
+          alt="login_img"
+          style={{ width: "100%", height: "fit-content" }}
+        />
+      </FlexBox>
+      <FlexBox direction="column" width="100%" align="center">
+        <FlexBox
+          direction="column"
+          width="100%"
+          align="center"
+          padding="0 60px"
+          boxSizing="border-box"
+        >
+          <FlexBox direction="column" width="100%">
+            <StyledTitle>Register your account</StyledTitle>
+            <StyledBody color="#637381" margin="16px 0 0 0">
+              Enter your details below.
+            </StyledBody>
           </FlexBox>
 
-          <FlexBox direction="column" height="100%">
-            <FlexBox position="relative">
-              <Input
-                type="text"
-                id="zip_code"
-                placeholder="우편번호"
-                value={state.zip_code}
-                onChange={handleChange}
-                disabled="disabled"
-              />
-              <Button
-                color="#3b86ff"
-                position="absolute"
-                right="10px"
-                top="13.5px"
-                background="unset"
-                type="button"
-                width="unset"
-                title="주소검색"
-                padding="unset"
-                font="14px"
-                onClick={popupOn}
-              />
-            </FlexBox>
-            <Input
-              type="text"
-              id="addr"
-              placeholder="업체주소"
-              value={state.addr}
-              onChange={handleChange}
-              disabled="disabled"
-            />
-
-            <Input
-              type="text"
-              id="detail_addr"
-              placeholder="상세주소"
-              value={state.detail_addr}
-              onChange={handleChange}
-            />
-
-            <FlexBox>
-              <FlexBox width="342px" margin="0 0 40px 0">
-                <PrivacyInput
-                  type="checkbox"
-                  id="term"
-                  checked={agreement}
-                  onChange={agreeTerms}
-                  htmlFor="term"
-                />
-              </FlexBox>
-            </FlexBox>
-
-            <Button
-              type="button"
-              title="회원가입"
-              width="300px"
-              onClick={handleSubmitClick}
-            />
-
-            <FlexBox>
-              <StyledBody margin="0 10px 0 0">이미 가입하셨나요?</StyledBody>
-              <StyledLink exact={"true"} to="/">
-                로그인
-              </StyledLink>
-            </FlexBox>
-          </FlexBox>
-        </Form>
+          <Formik
+            initialValues={{ username: "", password: "" }}
+            validate={(values) => {
+              const errors = {};
+              if (!values.username) {
+                errors.username = "아이디를 입력해주세요.";
+              }
+              if (!values.password) {
+                errors.password = "비밀번호를 입력해주세요.";
+              }
+              return errors;
+            }}
+            onSubmit={(values, { setSubmitting }) => {
+              setSubmitting(false);
+              // _login(values);
+            }}
+          >
+            {({ isSubmitting, touched, errors }) => (
+              <Form
+                style={{
+                  display: "flex",
+                  flexDirection: "column",
+                  alignItems: "center",
+                  width: "100%",
+                  marginTop: "50px",
+                }}
+              >
+                <FlexBox width="100%">
+                  <FlexBox direction="column" width="50%" margin="0 0 -24px">
+                    {FirstInputLists.map((item) => (
+                      <>
+                        <StyledFiled
+                          type={item}
+                          name={item}
+                          placeholder={item}
+                          error={touched.item && errors.item}
+                          margin="0 0 24px"
+                        />
+                        <ErrorMessage
+                          name={item}
+                          component="div"
+                          style={{
+                            color: "#FF4842",
+                            fontSize: "12px",
+                            marginTop: "6px",
+                            textAlign: "right",
+                            width: "100%",
+                          }}
+                        />
+                      </>
+                    ))}
+                  </FlexBox>
+                  <FlexBox direction="column" width="50%" margin="0 0 -24px">
+                    {SecondInputLists.map((item) => (
+                      <>
+                        <StyledFiled
+                          type={item}
+                          name={item}
+                          placeholder={item}
+                          error={touched.item && errors.item}
+                          margin="0 0 24px"
+                        />
+                        <ErrorMessage
+                          name={item}
+                          component="div"
+                          style={{
+                            color: "#FF4842",
+                            fontSize: "12px",
+                            marginTop: "6px",
+                            textAlign: "right",
+                            width: "100%",
+                          }}
+                        />
+                      </>
+                    ))}
+                  </FlexBox>
+                </FlexBox>
+                <button
+                  type="submit"
+                  disabled={isSubmitting}
+                  style={{
+                    width: "100%",
+                    maxWidth: "480px",
+                    padding: "19.25px 20px",
+                    border: "unset",
+                    borderRadius: "8px",
+                    boxShadow: "rgb(249 217 189) 0px 8px 16px 0px",
+                    background: "#ff9030",
+                    color: "#fff",
+                    fontSize: "1rem",
+                    cursor: "pointer",
+                  }}
+                >
+                  로그인
+                </button>
+              </Form>
+            )}
+          </Formik>
+        </FlexBox>
       </FlexBox>
     </MainContainer>
   );

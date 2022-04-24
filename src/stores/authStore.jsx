@@ -92,6 +92,8 @@ export class AuthStore {
     // user상태 저장
     this.setUser(access, true);
 
+    console.log(username);
+
     // accessToken 저장
     localStorage.setItem("access", access);
 
