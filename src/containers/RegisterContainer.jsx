@@ -633,6 +633,71 @@ const Register = (props) => {
       >
         <Tos />
       </Modal>
+      <Modal
+        isOpen={showModal}
+        contentLabel="phone check"
+        onRequestClose={closeModal}
+        style={modalStyle}
+      >
+        <FlexBox direction="column">
+          <FlexBox position="relative" width="342px" align="center">
+            <Input
+              type="text"
+              id="auth_phone"
+              placeholder="인증번호"
+              value={state.auth_phone}
+              onChange={handleChangeAuthPhone}
+              margin="0 20px 10px 0"
+              width="240px"
+            />
+            <Timer
+              timesUp={timesUp}
+              phoneAuthed={phoneAuthed}
+              resendCode={resendCode}
+            />
+            <Button
+              color="tomato"
+              background="unset"
+              type="button"
+              width="unset"
+              title="재전송"
+              padding="unset"
+              font="14px"
+              textAlign="right"
+              onClick={mobileAuthResend}
+              margin="0 0 10px 0"
+            />
+          </FlexBox>
+          <FlexBox direction="column">
+            <StyledSpan font="12px" color="#838383" margin="0 0 10px 0">
+              * 3분 이내로 인증번호(5자리를) 입력해 주세요.
+            </StyledSpan>
+            <StyledSpan font="12px" color="#838383">
+              *인증번호가 전송되지 않을경우 "재전송" 버튼을 눌러주세요.
+            </StyledSpan>
+          </FlexBox>
+        </FlexBox>
+        <FlexBox direction="column">
+          <Button
+            type="button"
+            title="확인"
+            width="300px"
+            onClick={checkPhoneAuth}
+            margin="0 0 12px 0"
+          />
+          <Button
+            type="button"
+            title="취소"
+            width="300px"
+            onClick={cancelPhone}
+            margin="0"
+            background="unset"
+            border="1px solid #FF8400"
+            color="#FF8400"
+          />
+        </FlexBox>
+      </Modal>
+
       <FlexBox position="absolute" top="56px" right="40px">
         <StyledBody>
           이미 가입하셨나요? <StyledLink to="/register">로그인</StyledLink>
@@ -697,34 +762,31 @@ const Register = (props) => {
                 errors.password = "비밀번호를 입력해주세요.";
               }
               if (!values.confirm_password) {
-                errors.password = "비밀번호를 입력해주세요.";
+                errors.confirm_password = "비밀번호를 입력해주세요.";
               }
               if (!values.email) {
-                errors.password = "이메일을 입력해주세요.";
+                errors.email = "이메일을 입력해주세요.";
               }
               if (!values.phone) {
-                errors.password = "핸드폰번호 입력해주세요.";
+                errors.phone = "핸드폰번호 입력해주세요.";
               }
               if (!values.name) {
-                errors.password = "비밀번호를 입력해주세요.";
+                errors.name = "업체명을 입력해주세요.";
               }
               if (!values.addr) {
-                errors.password = "비밀번호를 입력해주세요.";
+                errors.addr = "주소를 입력해주세요.";
               }
               if (!values.zip_code) {
-                errors.password = "비밀번호를 입력해주세요.";
-              }
-              if (!values.detail_addr) {
-                errors.password = "비밀번호를 입력해주세요.";
+                errors.zip_code = "비밀번호를 입력해주세요.";
               }
               if (!values.busi_num) {
-                errors.password = "비밀번호를 입력해주세요.";
+                errors.busi_num = "사업자번호를 입력해주세요.";
               }
               if (!values.busi_num_img) {
-                errors.password = "비밀번호를 입력해주세요.";
+                errors.busi_num_img = "사업자등록증을 등록해주세요.";
               }
               if (!values.auth_phone) {
-                errors.password = "비밀번호를 입력해주세요.";
+                errors.auth_phone = "비밀번호를 입력해주세요.";
               }
 
               return errors;
@@ -746,7 +808,13 @@ const Register = (props) => {
               >
                 <FlexBox width="100%">
                   <FlexBox direction="column" width="50%" margin="-24px 0 0">
-                    <FirstLists touched={touched} errors={errors} />
+                    <FirstLists
+                      touched={touched}
+                      errors={errors}
+                      phoneAuthed={phoneAuthed}
+                      mobileDone={mobileDone}
+                      getPhoneAuth={getPhoneAuth}
+                    />
                   </FlexBox>
                   <FlexBox direction="column" width="50%" margin="-24px 0 0">
                     <SecondLists touched={touched} errors={errors} />
@@ -806,7 +874,13 @@ const Register = (props) => {
 
 export default Register;
 
-const FirstLists = ({ touched, errors }) => {
+const FirstLists = ({
+  touched,
+  errors,
+  phoneAuthed,
+  mobileDone,
+  getPhoneAuth,
+}) => {
   return (
     <>
       <StyledFiled
@@ -881,42 +955,39 @@ const FirstLists = ({ touched, errors }) => {
           width: "484px",
         }}
       />
-      <StyledFiled
-        type="phone"
-        name="phone"
-        placeholder="핸드폰번호"
-        error={touched.phone && errors.phone}
-        margin="24px 0 0"
-      />
-      <ErrorMessage
-        name="phone"
-        component="div"
-        style={{
-          color: "#FF4842",
-          fontSize: "12px",
-          marginTop: "6px",
-          textAlign: "right",
-          width: "484px",
-        }}
-      />
-      <StyledFiled
-        type="auth_phone"
-        name="auth_phone"
-        placeholder="인증번호"
-        error={touched.auth_phone && errors.auth_phone}
-        margin="24px 0 0"
-      />
-      <ErrorMessage
-        name="auth_phone"
-        component="div"
-        style={{
-          color: "#FF4842",
-          fontSize: "12px",
-          marginTop: "6px",
-          textAlign: "right",
-          width: "484px",
-        }}
-      />
+      <FlexBox position="relative" direction="column">
+        <StyledFiled
+          type="phone"
+          name="phone"
+          placeholder="핸드폰번호"
+          error={touched.phone && errors.phone}
+          margin="24px 0 0"
+        />
+        <ErrorMessage
+          name="phone"
+          component="div"
+          style={{
+            color: "#FF4842",
+            fontSize: "12px",
+            marginTop: "6px",
+            textAlign: "right",
+            width: "484px",
+          }}
+        />
+        <Button
+          color={phoneAuthed ? "tomato" : "#3b86ff"}
+          position="absolute"
+          right="80px"
+          top="50px"
+          background="unset"
+          type="button"
+          width="unset"
+          title={phoneAuthed ? "인증완료" : "인증하기"}
+          padding="unset"
+          font="14px"
+          onClick={phoneAuthed ? mobileDone : getPhoneAuth}
+        />
+      </FlexBox>
     </>
   );
 };
@@ -997,14 +1068,14 @@ const SecondLists = ({ touched, errors }) => {
         }}
       />
       <StyledFiled
-        type="busin_num"
-        name="busin_num"
+        type="busi_num"
+        name="busi_num"
         placeholder="사업자번호"
-        error={touched.busin_num && errors.busin_num}
+        error={touched.busi_num && errors.busi_num}
         margin="24px 0 0"
       />
       <ErrorMessage
-        name="busin_num"
+        name="busi_num"
         component="div"
         style={{
           color: "#FF4842",
