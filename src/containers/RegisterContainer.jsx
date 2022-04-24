@@ -22,6 +22,9 @@ import * as Yup from "yup";
 import { Formik, Form, ErrorMessage } from "formik";
 import Img from "../assets/register_img.png";
 
+// view
+import Tos from "../views/tos";
+
 // 모달
 Modal.setAppElement("#root");
 
@@ -90,27 +93,12 @@ const Register = (props) => {
   const [agreement, setAgreement] = useState(false);
   const [isPopup, setIsPopup] = useState("");
 
+  const [privacyModal, setPrivacyModal] = useState(false);
+
   // 핸드폰 인증번호 완료
   const [phoneAuthed, setPhoneAuthed] = useState(false);
   const [showModal, setShowModal] = useState(false);
   const [resendCode, setResendCode] = useState(false);
-
-  const FirstInputLists = [
-    "username",
-    "password",
-    "confirm_password",
-    "email",
-    "phone",
-    "auth_phone",
-  ];
-  const SecondInputLists = [
-    "name",
-    "addr",
-    "zip_code",
-    "detail_addr",
-    "busin_num",
-    "busi_num_img",
-  ];
 
   // 핸드폰 번호체크
   const getPhoneAuth = async () => {
@@ -186,6 +174,13 @@ const Register = (props) => {
     setShowModal(false);
   };
 
+  const openTosModal = () => {
+    setPrivacyModal(true);
+  };
+  const closeTosModal = () => {
+    setPrivacyModal(false);
+  };
+
   // 인증완료
   const mobileDone = () => {};
 
@@ -202,6 +197,32 @@ const Register = (props) => {
       zIndex: "999",
       width: "342px",
       height: "300px",
+      display: "flex",
+      flexDirection: "column",
+      justifyContent: "space-between",
+    },
+    overlay: {
+      position: "fixed",
+      top: "0",
+      left: "0",
+      right: "0",
+      bottom: "0",
+      backgroundColor: "rgba(0,0,0,0.6)",
+      zIndex: "999",
+    },
+  };
+  const tosModalStyle = {
+    content: {
+      position: "absolute",
+      top: "50%",
+      left: "50%",
+      right: "50%",
+      bottom: "50%",
+      transform: "translate(-50%,-50%)",
+      backgroundColor: "#fff",
+      zIndex: "999",
+      width: "800px",
+      height: "640px",
       display: "flex",
       flexDirection: "column",
       justifyContent: "space-between",
@@ -598,6 +619,20 @@ const Register = (props) => {
     //   </FlexBox>
     // </MainContainer>
     <MainContainer background="#F9FAFB">
+      {/* {privacyPopup && (
+        <div className="postContainer">
+          <Tos />
+        </div>
+      )} */}
+
+      <Modal
+        isOpen={privacyModal}
+        contentLabel="phone check"
+        onRequestClose={closeTosModal}
+        style={tosModalStyle}
+      >
+        <Tos />
+      </Modal>
       <FlexBox position="absolute" top="56px" right="40px">
         <StyledBody>
           이미 가입하셨나요? <StyledLink to="/register">로그인</StyledLink>
@@ -639,7 +674,20 @@ const Register = (props) => {
           </FlexBox>
 
           <Formik
-            initialValues={{ username: "", password: "" }}
+            initialValues={{
+              username: "",
+              password: "",
+              confirm_password: "",
+              email: "",
+              phone: "",
+              name: "",
+              addr: "",
+              zip_code: "",
+              detail_addr: "",
+              busi_num: "",
+              busi_num_img: "",
+              auth_phone: "",
+            }}
             validate={(values) => {
               const errors = {};
               if (!values.username) {
@@ -648,6 +696,37 @@ const Register = (props) => {
               if (!values.password) {
                 errors.password = "비밀번호를 입력해주세요.";
               }
+              if (!values.confirm_password) {
+                errors.password = "비밀번호를 입력해주세요.";
+              }
+              if (!values.email) {
+                errors.password = "이메일을 입력해주세요.";
+              }
+              if (!values.phone) {
+                errors.password = "핸드폰번호 입력해주세요.";
+              }
+              if (!values.name) {
+                errors.password = "비밀번호를 입력해주세요.";
+              }
+              if (!values.addr) {
+                errors.password = "비밀번호를 입력해주세요.";
+              }
+              if (!values.zip_code) {
+                errors.password = "비밀번호를 입력해주세요.";
+              }
+              if (!values.detail_addr) {
+                errors.password = "비밀번호를 입력해주세요.";
+              }
+              if (!values.busi_num) {
+                errors.password = "비밀번호를 입력해주세요.";
+              }
+              if (!values.busi_num_img) {
+                errors.password = "비밀번호를 입력해주세요.";
+              }
+              if (!values.auth_phone) {
+                errors.password = "비밀번호를 입력해주세요.";
+              }
+
               return errors;
             }}
             onSubmit={(values, { setSubmitting }) => {
@@ -666,73 +745,56 @@ const Register = (props) => {
                 }}
               >
                 <FlexBox width="100%">
-                  <FlexBox direction="column" width="50%" margin="0 0 -24px">
-                    {FirstInputLists.map((item) => (
-                      <>
-                        <StyledFiled
-                          type={item}
-                          name={item}
-                          placeholder={item}
-                          error={touched.item && errors.item}
-                          margin="0 0 24px"
-                        />
-                        <ErrorMessage
-                          name={item}
-                          component="div"
-                          style={{
-                            color: "#FF4842",
-                            fontSize: "12px",
-                            marginTop: "6px",
-                            textAlign: "right",
-                            width: "100%",
-                          }}
-                        />
-                      </>
-                    ))}
+                  <FlexBox direction="column" width="50%" margin="-24px 0 0">
+                    <FirstLists touched={touched} errors={errors} />
                   </FlexBox>
-                  <FlexBox direction="column" width="50%" margin="0 0 -24px">
-                    {SecondInputLists.map((item) => (
-                      <>
-                        <StyledFiled
-                          type={item}
-                          name={item}
-                          placeholder={item}
-                          error={touched.item && errors.item}
-                          margin="0 0 24px"
-                        />
-                        <ErrorMessage
-                          name={item}
-                          component="div"
-                          style={{
-                            color: "#FF4842",
-                            fontSize: "12px",
-                            marginTop: "6px",
-                            textAlign: "right",
-                            width: "100%",
-                          }}
-                        />
-                      </>
-                    ))}
+                  <FlexBox direction="column" width="50%" margin="-24px 0 0">
+                    <SecondLists touched={touched} errors={errors} />
                   </FlexBox>
                 </FlexBox>
-                <button
-                  type="submit"
-                  disabled={isSubmitting}
-                  style={{
-                    width: "100%",
-                    maxWidth: "480px",
-                    padding: "19.25px 20px",
-                    border: "unset",
-                    borderRadius: "8px",
-                    boxShadow: "rgb(249 217 189) 0px 8px 16px 0px",
-                    background: "#ff9030",
-                    color: "#fff",
-                    fontSize: "1rem",
-                    cursor: "pointer",
-                  }}
-                >
-                  로그인
-                </button>
+                <FlexBox width="100%" just="flex-end">
+                  <FlexBox
+                    width="50%"
+                    maxW="480px"
+                    margin="20px 0 20px 0"
+                    just="flex-end"
+                  ></FlexBox>
+                  <FlexBox direction="column" width="50%">
+                    <FlexBox
+                      width="100%"
+                      maxW="480px"
+                      margin="20px 0 20px 0"
+                      just="flex-end"
+                    >
+                      <PrivacyInput
+                        type="checkbox"
+                        id="term"
+                        checked={agreement}
+                        onChange={agreeTerms}
+                        htmlFor="term"
+                        onClick={openTosModal}
+                      />
+                    </FlexBox>
+                    <button
+                      type="submit"
+                      disabled={isSubmitting}
+                      style={{
+                        width: "100%",
+                        maxWidth: "480px",
+                        padding: "19.25px 20px",
+                        border: "unset",
+                        borderRadius: "8px",
+                        boxShadow: "rgb(249 217 189) 0px 8px 16px 0px",
+                        background: "#ff9030",
+                        color: "#fff",
+                        fontSize: "1rem",
+                        cursor: "pointer",
+                      }}
+                    >
+                      회원가입
+                    </button>
+                  </FlexBox>
+                </FlexBox>
               </Form>
             )}
           </Formik>
@@ -743,3 +805,233 @@ const Register = (props) => {
 };
 
 export default Register;
+
+const FirstLists = ({ touched, errors }) => {
+  return (
+    <>
+      <StyledFiled
+        type="username"
+        name="username"
+        placeholder="아이디"
+        error={touched.username && errors.username}
+        margin="24px 0 0"
+      />
+      <ErrorMessage
+        name="username"
+        component="div"
+        style={{
+          color: "#FF4842",
+          fontSize: "12px",
+          marginTop: "6px",
+          textAlign: "right",
+          width: "484px",
+        }}
+      />
+      <StyledFiled
+        type="password"
+        name="password"
+        placeholder="비밀번호"
+        error={touched.password && errors.password}
+        margin="24px 0 0"
+      />
+      <ErrorMessage
+        name="password"
+        component="div"
+        style={{
+          color: "#FF4842",
+          fontSize: "12px",
+          marginTop: "6px",
+          textAlign: "right",
+          width: "484px",
+        }}
+      />
+      <StyledFiled
+        type="confirm_password"
+        name="confirm_password"
+        placeholder="비밀번호 확인"
+        error={touched.confirm_password && errors.confirm_password}
+        margin="24px 0 0"
+      />
+      <ErrorMessage
+        name="confirm_password"
+        component="div"
+        style={{
+          color: "#FF4842",
+          fontSize: "12px",
+          marginTop: "6px",
+          textAlign: "right",
+          width: "484px",
+        }}
+      />
+      <StyledFiled
+        type="email"
+        name="email"
+        placeholder="이메일"
+        error={touched.email && errors.email}
+        margin="24px 0 0"
+      />
+      <ErrorMessage
+        name="email"
+        component="div"
+        style={{
+          color: "#FF4842",
+          fontSize: "12px",
+          marginTop: "6px",
+          textAlign: "right",
+          width: "484px",
+        }}
+      />
+      <StyledFiled
+        type="phone"
+        name="phone"
+        placeholder="핸드폰번호"
+        error={touched.phone && errors.phone}
+        margin="24px 0 0"
+      />
+      <ErrorMessage
+        name="phone"
+        component="div"
+        style={{
+          color: "#FF4842",
+          fontSize: "12px",
+          marginTop: "6px",
+          textAlign: "right",
+          width: "484px",
+        }}
+      />
+      <StyledFiled
+        type="auth_phone"
+        name="auth_phone"
+        placeholder="인증번호"
+        error={touched.auth_phone && errors.auth_phone}
+        margin="24px 0 0"
+      />
+      <ErrorMessage
+        name="auth_phone"
+        component="div"
+        style={{
+          color: "#FF4842",
+          fontSize: "12px",
+          marginTop: "6px",
+          textAlign: "right",
+          width: "484px",
+        }}
+      />
+    </>
+  );
+};
+
+const SecondLists = ({ touched, errors }) => {
+  return (
+    <>
+      <StyledFiled
+        type="name"
+        name="name"
+        placeholder="업체명"
+        error={touched.name && errors.name}
+        margin="24px 0 0"
+      />
+      <ErrorMessage
+        name="name"
+        component="div"
+        style={{
+          color: "#FF4842",
+          fontSize: "12px",
+          marginTop: "6px",
+          textAlign: "right",
+          width: "484px",
+        }}
+      />
+      <StyledFiled
+        type="addr"
+        name="addr"
+        placeholder="업체주소"
+        error={touched.addr && errors.addr}
+        margin="24px 0 0"
+      />
+      <ErrorMessage
+        name="addr"
+        component="div"
+        style={{
+          color: "#FF4842",
+          fontSize: "12px",
+          marginTop: "6px",
+          textAlign: "right",
+          width: "484px",
+        }}
+      />
+      <StyledFiled
+        type="zip_code"
+        name="zip_code"
+        placeholder="우편번호"
+        error={touched.zip_code && errors.zip_code}
+        margin="24px 0 0"
+      />
+      <ErrorMessage
+        name="zip_code"
+        component="div"
+        style={{
+          color: "#FF4842",
+          fontSize: "12px",
+          marginTop: "6px",
+          textAlign: "right",
+          width: "484px",
+        }}
+      />
+      <StyledFiled
+        type="detail_addr"
+        name="detail_addr"
+        placeholder="상세주소"
+        error={touched.detail_addr && errors.detail_addr}
+        margin="24px 0 0"
+      />
+      <ErrorMessage
+        name="detail_addr"
+        component="div"
+        style={{
+          color: "#FF4842",
+          fontSize: "12px",
+          marginTop: "6px",
+          textAlign: "right",
+          width: "484px",
+        }}
+      />
+      <StyledFiled
+        type="busin_num"
+        name="busin_num"
+        placeholder="사업자번호"
+        error={touched.busin_num && errors.busin_num}
+        margin="24px 0 0"
+      />
+      <ErrorMessage
+        name="busin_num"
+        component="div"
+        style={{
+          color: "#FF4842",
+          fontSize: "12px",
+          marginTop: "6px",
+          textAlign: "right",
+          width: "484px",
+        }}
+      />
+      <StyledFiled
+        type="busi_num_img"
+        name="busi_num_img"
+        placeholder="사업자등록증"
+        error={touched.busi_num_img && errors.busi_num_img}
+        margin="24px 0 0"
+      />
+      <ErrorMessage
+        name="busi_num_img"
+        component="div"
+        style={{
+          color: "#FF4842",
+          fontSize: "12px",
+          marginTop: "6px",
+          textAlign: "right",
+          width: "484px",
+        }}
+      />
+    </>
+  );
+};
