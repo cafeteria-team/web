@@ -176,8 +176,6 @@ const MemberEdit = ({ selectedUser, id, editUser }) => {
     }
   };
 
-  console.log(state.busi_num_img);
-
   return (
     <>
       <Form method="POST" direction="column">

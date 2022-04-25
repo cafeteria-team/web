@@ -7,7 +7,7 @@ const StyledButton = styled.button`
   height: ${({ height }) => height || ""};
   font-weight: ${({ weight }) => weight || "normal"};
   padding: ${({ padding }) => padding || "14px 20px"};
-  border-radius: 4px;
+  border-radius: 8px;
   outline: unset;
   transition: border, background 0.3s ease-in-out;
   margin: ${({ margin }) => margin || "0 0 20px 0"};
@@ -24,6 +24,7 @@ const StyledButton = styled.button`
   top: ${({ top }) => top || ""};
   bottom: ${({ bottom }) => bottom || ""};
   text-align: ${({ textAlign }) => textAlign || ""};
+  box-shadow: ${({ shadow }) => shadow || ""};
 
   &:hover {
     ${({ hover }) =>
@@ -74,6 +75,7 @@ function Button({
   left,
   bottom,
   height,
+  shadow,
 }) {
   return (
     <StyledButton
@@ -97,6 +99,7 @@ function Button({
       left={left}
       bottom={bottom}
       height={height}
+      shadow={shadow}
     >
       {title}
     </StyledButton>

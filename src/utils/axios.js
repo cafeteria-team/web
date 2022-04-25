@@ -7,7 +7,7 @@ const instance = axios.create({
   baseURL: "https://www.good-cafeteria.cf",
   // baseURL: PROXY,
   //proxy 설정후 빈칸
-  timeout: 1000,
+  timeout: 5000,
 });
 
 // const access = localStorage.getItem("access");

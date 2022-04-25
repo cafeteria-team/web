@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 
 //components
 import {
@@ -18,38 +18,34 @@ import { useStores } from "../../stores/Context";
 import { Formik, Form, ErrorMessage } from "formik";
 import Img from "../../assets/login_img.png";
 
-import ReactLoading from "react-loading";
+import Spinner from "../../components/Spinner";
 
-const Login = () => {
+import { observer } from "mobx-react";
+
+const Login = observer(() => {
   const { AuthStore } = useStores();
 
   const navigate = useNavigate();
+
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     AuthStore.user.authorization && navigate("/main/overview");
   });
 
   const _login = async (profile) => {
+    setLoading(true);
     await AuthStore.login(profile).then((res) => {
       let { data } = res;
       AuthStore.onLoginSucess(data.access, data.refresh, profile.username);
-      return navigate("/main/overview");
+      navigate("/main/overview");
+      return setLoading(false);
     });
   };
 
   return (
     <MainContainer background="#F9FAFB">
-      <FlexBox
-        position="fixed"
-        width="100%"
-        height="100%"
-        align="center"
-        just="center"
-        background="#50505038"
-      >
-        <ReactLoading type="bubbles" color="#ff9030" height={200} width={100} />
-      </FlexBox>
-
+      <Spinner loading={loading} />
       <FlexBox position="absolute" top="56px" right="40px">
         <StyledBody>
           아직 회원이 아니신가요?{" "}
@@ -192,5 +188,5 @@ const Login = () => {
       </FlexBox>
     </MainContainer>
   );
-};
+});
 export default Login;

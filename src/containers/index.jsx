@@ -7,7 +7,9 @@ import SubViewContainer from "./SubViewContainer";
 import Overview from "./Overview/Overview";
 import Member from "./Member/Member";
 import Manage from "./Manage/Manage";
+import Menu from "./Manage/Menu";
 import ManageAdmin from "./Manage/ManageAdmin";
+import LogoContainer from "./LogoContainer";
 
 export {
   RegisterContainer,
@@ -20,4 +22,6 @@ export {
   ManageAdmin,
   Member,
   Manage,
+  LogoContainer,
+  Menu,
 };

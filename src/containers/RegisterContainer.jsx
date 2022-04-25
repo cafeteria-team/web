@@ -134,6 +134,7 @@ const Register = (props) => {
       setResendCode(false);
       setPhoneAuthed(true);
       closeModal();
+      alert("핸드폰인증을 완료했습니다.");
       return response;
     } catch (error) {
       alert("인증번호가 다릅니다. 확인 후 다시 시도해주세요.");
@@ -258,6 +259,8 @@ const Register = (props) => {
   const register = async (data) => {
     if (!agreement) {
       alert("개인정보 이용약관에 동의해주세요");
+    } else if (!phoneAuthed) {
+      alert("핸드폰 본인인증을 완료해주십시오.");
     } else {
       const {
         username,
@@ -270,6 +273,7 @@ const Register = (props) => {
         busi_num,
       } = data;
       const { busi_num_img, zip_code, addr } = state;
+
       try {
         const response = await axios.post("/api/user/register", {
           username,
@@ -288,7 +292,7 @@ const Register = (props) => {
         navigate("/complete");
         return response;
       } catch (error) {
-        console.log(error.response);
+        console.log(error, error.response);
         return false;
       }
     }
@@ -456,7 +460,6 @@ const Register = (props) => {
 
           <Formik
             initialValues={initialValues}
-            // enableReinitialize
             validationSchema={Yup.object({
               username: Yup.string().required("아이디를 입력해주세요."),
               password: Yup.string().required("비밀번호를 입력해주세요."),
@@ -480,9 +483,8 @@ const Register = (props) => {
                 .required("사업자번호를 입력해주세요."),
             })}
             onSubmit={(values, { setSubmitting }) => {
-              console.log(values);
-              // register(values);
-              // setSubmitting(false);
+              register(values);
+              setSubmitting(false);
             }}
           >
             {(formik) => {
@@ -657,6 +659,7 @@ const FirstLists = ({
           title={phoneAuthed ? "인증완료" : "인증하기"}
           padding="unset"
           font="14px"
+          disabled={phoneAuthed ? true : false}
           onClick={
             phoneAuthed
               ? mobileDone
