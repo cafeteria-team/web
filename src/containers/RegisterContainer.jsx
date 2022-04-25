@@ -436,8 +436,8 @@ const Register = (props) => {
               email: "",
               phone: "",
               name: "",
-              addr: state.addr,
-              zip_code: state.zip_code,
+              addr: state.addr || "",
+              zip_code: state.zip_code || "",
               detail_addr: "",
               busi_num: "",
               busi_num_img: "",
@@ -495,7 +495,6 @@ const Register = (props) => {
                       errors={formik.errors}
                       field={formik}
                       popupOn={popupOn}
-                      state={state}
                       onFileChange={onFileChange}
                     />
                   </FlexBox>
@@ -576,6 +575,7 @@ const FirstLists = ({
         placeholder="아이디"
         error={touched.username && errors.username}
         margin="24px 0 0"
+        autoComplete="username"
         {...field.getFieldProps("username")}
       />
       {touched.username && errors.username ? (
@@ -586,6 +586,7 @@ const FirstLists = ({
         placeholder="비밀번호"
         error={touched.password && errors.password}
         margin="24px 0 0"
+        autoComplete="password"
         {...field.getFieldProps("password")}
       />
       {touched.password && errors.password ? (
@@ -594,6 +595,7 @@ const FirstLists = ({
       <StyledFiled
         type="password"
         placeholder="비밀번호 확인"
+        autoComplete="password"
         error={touched.confirm_password && errors.confirm_password}
         margin="24px 0 0"
         {...field.getFieldProps("confirm_password")}
@@ -644,14 +646,7 @@ const FirstLists = ({
   );
 };
 
-const SecondLists = ({
-  touched,
-  errors,
-  field,
-  popupOn,
-  state,
-  onFileChange,
-}) => {
+const SecondLists = ({ touched, errors, field, popupOn, onFileChange }) => {
   const errorStyle = {
     color: "#FF4842",
     fontSize: "12px",
@@ -680,7 +675,6 @@ const SecondLists = ({
           margin="24px 0 0"
           {...field.getFieldProps("zip_code")}
           disabled
-          // value={state.zip_code}
         />
 
         {touched.zip_code && errors.zip_code ? (

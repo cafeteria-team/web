@@ -15,7 +15,6 @@ import { useNavigate } from "react-router-dom";
 import { useStores } from "../../stores/Context";
 
 // formik
-import * as Yup from "yup";
 import { Formik, Form, ErrorMessage } from "formik";
 import Img from "../../assets/login_img.png";
 
@@ -128,6 +127,7 @@ const Login = () => {
                   type="password"
                   name="password"
                   placeholder="비밀번호"
+                  autoComplete="password"
                   style={{ marginTop: "24px" }}
                   error={touched.password && errors.password}
                 />
@@ -150,8 +150,8 @@ const Login = () => {
                 >
                   <StyledBody>
                     계정을 잊으셨나요?{" "}
-                    <StyledLink to="/register">ID찾기</StyledLink>
-                    또는 <StyledLink to="/register">비밀번호찾기</StyledLink>
+                    <StyledLink to="/register">ID찾기</StyledLink> 또는{" "}
+                    <StyledLink to="/register">비밀번호찾기</StyledLink>
                   </StyledBody>
                 </FlexBox>
                 <button
