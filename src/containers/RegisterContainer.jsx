@@ -274,17 +274,6 @@ const Register = (props) => {
     return emailRegex.test(email);
   };
 
-  // const handleChangeBusiness = (e) => {
-  //   const regex = /^[0-9\b -]{0,10}$/;
-  //   const { id, value } = e.target;
-  //   if (regex.test(value)) {
-  //     setState((prevState) => ({
-  //       ...prevState,
-  //       [id]: value,
-  //     }));
-  //   }
-  // };
-
   const handleSubmitClick = (e) => {
     e.preventDefault();
 
@@ -372,256 +361,20 @@ const Register = (props) => {
         ...prev,
         busi_num_img: uploaded,
       }));
+      alert("사업자등록증이 등록되었습니다.");
     }
   };
 
   return (
-    // <MainContainer bgImage="url('/img/mainbg.jpg')">
-    //   {isPopup && (
-    //     <div className="postContainer">
-    //       <Post setAddress={setState}></Post>
-    //     </div>
-    //   )}
-    //   <FlexBox
-    //     width="90%"
-    //     height="90%"
-    //     background="#fff"
-    //     rad="8px"
-    //     shadow="2px 4px 12px rgb(0 0 0 / 8%)"
-    //     align="center"
-    //     just="center"
-    //     direction="column"
-    //   >
-    //     <Modal
-    //       isOpen={showModal}
-    //       contentLabel="phone check"
-    //       onRequestClose={closeModal}
-    //       style={modalStyle}
-    //     >
-    //       <FlexBox direction="column">
-    //         <FlexBox position="relative" width="342px" align="center">
-    //           <Input
-    //             type="text"
-    //             id="auth_phone"
-    //             placeholder="인증번호"
-    //             value={state.auth_phone}
-    //             onChange={handleChangeAuthPhone}
-    //             margin="0 20px 10px 0"
-    //             width="240px"
-    //           />
-    //           <Timer
-    //             timesUp={timesUp}
-    //             phoneAuthed={phoneAuthed}
-    //             resendCode={resendCode}
-    //           />
-    //           <Button
-    //             color="tomato"
-    //             background="unset"
-    //             type="button"
-    //             width="unset"
-    //             title="재전송"
-    //             padding="unset"
-    //             font="14px"
-    //             textAlign="right"
-    //             onClick={mobileAuthResend}
-    //             margin="0 0 10px 0"
-    //           />
-    //         </FlexBox>
-    //         <FlexBox direction="column">
-    //           <StyledSpan font="12px" color="#838383" margin="0 0 10px 0">
-    //             * 3분 이내로 인증번호(5자리를) 입력해 주세요.
-    //           </StyledSpan>
-    //           <StyledSpan font="12px" color="#838383">
-    //             *인증번호가 전송되지 않을경우 "재전송" 버튼을 눌러주세요.
-    //           </StyledSpan>
-    //         </FlexBox>
-    //       </FlexBox>
-    //       <FlexBox direction="column">
-    //         <Button
-    //           type="button"
-    //           title="확인"
-    //           width="300px"
-    //           onClick={checkPhoneAuth}
-    //           margin="0 0 12px 0"
-    //         />
-    //         <Button
-    //           type="button"
-    //           title="취소"
-    //           width="300px"
-    //           onClick={cancelPhone}
-    //           margin="0"
-    //           background="unset"
-    //           border="1px solid #FF8400"
-    //           color="#FF8400"
-    //         />
-    //       </FlexBox>
-    //     </Modal>
-    //     <StyledTitle align="center" margin="0 0 40px 0">
-    //       회원가입
-    //     </StyledTitle>
-    //     <Form method="POST">
-    //       <FlexBox direction="column" margin="0 20px 0 0">
-    //         <Input
-    //           type="text"
-    //           id="username"
-    //           placeholder="아이디"
-    //           value={state.username}
-    //           onChange={handleChange}
-    //         />
-    //         <Input
-    //           type="email"
-    //           id="email"
-    //           placeholder="이메일"
-    //           value={state.email}
-    //           onChange={handleChange}
-    //         />
-    //         <Input
-    //           type="password"
-    //           id="password"
-    //           value={state.password}
-    //           placeholder="비밀번호"
-    //           onChange={handleChange}
-    //         />
-    //         <Input
-    //           type="password"
-    //           id="confirm_password"
-    //           value={state.confirm_password}
-    //           placeholder="비밀번호 재입력"
-    //           onChange={handleChange}
-    //         />
-    //         <Input
-    //           type="text"
-    //           id="name"
-    //           placeholder="업체명"
-    //           onChange={handleChange}
-    //           value={state.name}
-    //         />
-
-    //         <FlexBox position="relative">
-    //           <Input
-    //             type="text"
-    //             id="phone"
-    //             placeholder="핸드폰번호"
-    //             value={state.phone}
-    //             onChange={handleChangePhone}
-    //             disabled={phoneAuthed ? true : false}
-    //           />
-    //           <Button
-    //             color={phoneAuthed ? "tomato" : "#3b86ff"}
-    //             position="absolute"
-    //             right="10px"
-    //             top="13.5px"
-    //             background="unset"
-    //             type="button"
-    //             width="unset"
-    //             title={phoneAuthed ? "인증완료" : "인증하기"}
-    //             padding="unset"
-    //             font="14px"
-    //             onClick={phoneAuthed ? mobileDone : getPhoneAuth}
-    //           />
-    //         </FlexBox>
-
-    //         <FlexBox position="relative">
-    //           <Input
-    //             type="text"
-    //             placeholder="사업자번호"
-    //             value={state.busi_num}
-    //             id="busi_num"
-    //             onChange={handleChangeBusiness}
-    //           />
-    //           <ImageInput
-    //             onChange={onFileChange}
-    //             id="contained-button-file"
-    //             accept="image/*"
-    //           />
-    //         </FlexBox>
-    //         <StyledSpan font="12px" color="#838383" align="flex-end">
-    //           *사업자 번호와 사업자등록증을 등록해야합니다.
-    //         </StyledSpan>
-    //       </FlexBox>
-
-    //       <FlexBox direction="column" height="100%">
-    //         <FlexBox position="relative">
-    //           <Input
-    //             type="text"
-    //             id="zip_code"
-    //             placeholder="우편번호"
-    //             value={state.zip_code}
-    //             onChange={handleChange}
-    //             disabled="disabled"
-    //           />
-    //           <Button
-    //             color="#3b86ff"
-    //             position="absolute"
-    //             right="10px"
-    //             top="13.5px"
-    //             background="unset"
-    //             type="button"
-    //             width="unset"
-    //             title="주소검색"
-    //             padding="unset"
-    //             font="14px"
-    //             onClick={popupOn}
-    //           />
-    //         </FlexBox>
-    //         <Input
-    //           type="text"
-    //           id="addr"
-    //           placeholder="업체주소"
-    //           value={state.addr}
-    //           onChange={handleChange}
-    //           disabled="disabled"
-    //         />
-
-    //         <Input
-    //           type="text"
-    //           id="detail_addr"
-    //           placeholder="상세주소"
-    //           value={state.detail_addr}
-    //           onChange={handleChange}
-    //         />
-
-    //         <FlexBox>
-    //           <FlexBox width="342px" margin="0 0 40px 0">
-    //             <PrivacyInput
-    //               type="checkbox"
-    //               id="term"
-    //               checked={agreement}
-    //               onChange={agreeTerms}
-    //               htmlFor="term"
-    //             />
-    //           </FlexBox>
-    //         </FlexBox>
-
-    //         <Button
-    //           type="button"
-    //           title="회원가입"
-    //           width="300px"
-    //           onClick={handleSubmitClick}
-    //         />
-
-    //         <FlexBox>
-    //           <StyledBody margin="0 10px 0 0">이미 가입하셨나요?</StyledBody>
-    //           <StyledLink exact={"true"} to="/">
-    //             로그인
-    //           </StyledLink>
-    //         </FlexBox>
-    //       </FlexBox>
-    //     </Form>
-    //   </FlexBox>
-    // </MainContainer>
     <MainContainer background="#F9FAFB">
-      {/* {privacyPopup && (
-        <div className="postContainer">
-          <Tos />
-        </div>
-      )} */}
-
-      {isPopup && (
-        <div className="postContainer">
-          <Post setAddress={setState}></Post>
-        </div>
-      )}
+      <Modal
+        isOpen={isPopup}
+        contentLabel="phone check"
+        onRequestClose={popupOn}
+        className="postContainer"
+      >
+        <Post setAddress={setState}></Post>
+      </Modal>
       <Modal
         isOpen={privacyModal}
         contentLabel="phone check"
@@ -696,7 +449,7 @@ const Register = (props) => {
       </Modal>
       <FlexBox position="absolute" top="56px" right="40px">
         <StyledBody>
-          이미 가입하셨나요? <StyledLink to="/register">로그인</StyledLink>
+          이미 가입하셨나요? <StyledLink to="/">로그인</StyledLink>
         </StyledBody>
       </FlexBox>
       <FlexBox
@@ -760,8 +513,8 @@ const Register = (props) => {
                 .matches(mobileRegex, "옳바른 핸드폰번호를 입력해주세요")
                 .required("핸드폰번호를 입력해주세요."),
               name: Yup.string().required("업체명을 입력해주세요."),
-              addr: Yup.string().required("업체주소를 입력해주세요."),
-              zip_code: Yup.number().required("우편번호를 입력해주세요"),
+              // addr: Yup.string().required("업체주소를 입력해주세요."),
+              // zip_code: Yup.number().required("우편번호를 입력해주세요"),
               busi_num: Yup.string()
                 .min(10, "옳바른 사업자번호를 입력해주세요")
                 .matches(busiNumRegex, "옳바른 사업자번호를 입력해주세요")
@@ -769,8 +522,14 @@ const Register = (props) => {
               busi_num_img:
                 Yup.string().required("사업자등록증을 등록해주세요."),
             })}
-            onSubmit={(values, { setSubmitting }) => {
+            onSubmit={(values, { setSubmitting, setValues }) => {
+              setValues({
+                ...values,
+                addr: state.addr,
+                zip_code: state.zip_code,
+              });
               console.log(values);
+
               setSubmitting(false);
             }}
           >
@@ -803,6 +562,7 @@ const Register = (props) => {
                       field={formik}
                       popupOn={popupOn}
                       state={state}
+                      onFileChange={onFileChange}
                     />
                   </FlexBox>
                 </FlexBox>
@@ -899,7 +659,7 @@ const FirstLists = ({
         <div style={errorStyle}>{errors.password}</div>
       ) : null}
       <StyledFiled
-        type="confirm_password"
+        type="password"
         placeholder="비밀번호 확인"
         error={touched.confirm_password && errors.confirm_password}
         margin="24px 0 0"
@@ -951,7 +711,14 @@ const FirstLists = ({
   );
 };
 
-const SecondLists = ({ touched, errors, field, popupOn, state }) => {
+const SecondLists = ({
+  touched,
+  errors,
+  field,
+  popupOn,
+  state,
+  onFileChange,
+}) => {
   const errorStyle = {
     color: "#FF4842",
     fontSize: "12px",
@@ -963,7 +730,7 @@ const SecondLists = ({ touched, errors, field, popupOn, state }) => {
   return (
     <>
       <StyledFiled
-        type="name"
+        type="text"
         placeholder="업체명"
         error={touched.name && errors.name}
         margin="24px 0 0"
@@ -1000,7 +767,7 @@ const SecondLists = ({ touched, errors, field, popupOn, state }) => {
         />
       </FlexBox>
       <StyledFiled
-        type="addr"
+        type="text"
         placeholder="업체주소"
         error={touched.addr && errors.addr}
         margin="24px 0 0"
@@ -1013,7 +780,7 @@ const SecondLists = ({ touched, errors, field, popupOn, state }) => {
       ) : null}
 
       <StyledFiled
-        type="detail_addr"
+        type="text"
         name="detail_addr"
         placeholder="상세주소"
         error={touched.detail_addr && errors.detail_addr}
@@ -1024,26 +791,44 @@ const SecondLists = ({ touched, errors, field, popupOn, state }) => {
         <div style={errorStyle}>{errors.detail_addr}</div>
       ) : null}
 
-      <StyledFiled
-        type="busi_num"
-        placeholder="사업자번호"
-        error={touched.busi_num && errors.busi_num}
-        margin="24px 0 0"
-        {...field.getFieldProps("busi_num")}
-      />
-      {touched.busi_num && errors.busi_num ? (
-        <div style={errorStyle}>{errors.busi_num}</div>
-      ) : null}
-      <StyledFiled
-        type="busi_num_img"
-        placeholder="사업자등록증"
-        error={touched.busi_num_img && errors.busi_num_img}
-        margin="24px 0 0"
-        {...field.getFieldProps("busi_num_img")}
-      />
-      {touched.busi_num_img && errors.busi_num_img ? (
-        <div style={errorStyle}>{errors.busi_num_img}</div>
-      ) : null}
+      <FlexBox position="relative" direction="column">
+        <StyledFiled
+          type="text"
+          placeholder="사업자번호"
+          error={touched.busi_num && errors.busi_num}
+          margin="24px 0 0"
+          {...field.getFieldProps("busi_num")}
+        />
+
+        <ImageInput
+          onChange={onFileChange}
+          id="contained-button-file"
+          accept="image/*"
+        />
+        <FlexBox width="480px">
+          <StyledSpan
+            font="12px"
+            color="#838383"
+            align="flex-end"
+            style={{ width: "50%", marginTop: "6px" }}
+          >
+            *사업자 번호와 사업자등록증을 등록해야합니다.
+          </StyledSpan>
+          {touched.busi_num && errors.busi_num ? (
+            <div
+              style={{
+                color: "#FF4842",
+                fontSize: "12px",
+                marginTop: "6px",
+                textAlign: "right",
+                width: "50%",
+              }}
+            >
+              {errors.busi_num}
+            </div>
+          ) : null}
+        </FlexBox>
+      </FlexBox>
     </>
   );
 };

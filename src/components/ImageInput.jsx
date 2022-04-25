@@ -7,8 +7,8 @@ const StyledInput = styled.input.attrs({ type: "file" })`
 
 const StyledLabel = styled.label`
   position: absolute;
-  right: 10px;
-  top: 15.5px;
+  right: 80px;
+  top: 49px;
   background-color: unset;
   border: unset;
   color: #3b86ff;
