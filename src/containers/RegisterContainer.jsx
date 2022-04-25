@@ -1,4 +1,4 @@
-import React, { useState, memo, useEffect, useRef } from "react";
+import React, { useState, memo, useEffect } from "react";
 import axios from "../utils/axios";
 import Post from "../utils/Post";
 import ImageUploader from "../utils/imageuploader";
@@ -19,7 +19,7 @@ import Modal from "react-modal";
 
 // formik
 import * as Yup from "yup";
-import { Formik, Form, ErrorMessage, useField } from "formik";
+import { Formik } from "formik";
 import Img from "../assets/register_img.png";
 
 // view
@@ -75,13 +75,9 @@ const Register = (props) => {
   const navigate = useNavigate();
 
   const [state, setState] = useState({
-    addr: "",
-    zip_code: "",
     busi_num_img: "",
     auth_phone: "",
   });
-
-  const [errorAddr, setErrorAddr] = useState(false);
 
   const [agreement, setAgreement] = useState(false);
   const [isPopup, setIsPopup] = useState(false);
@@ -251,65 +247,10 @@ const Register = (props) => {
     });
   };
 
-  const handleChange = (e) => {
-    const { id, value } = e.target;
-    setState((prevState) => ({
-      ...prevState,
-      [id]: value,
-    }));
-  };
-
-  // 이메일 정규식
-  const checkEmail = (email) => {
-    const emailRegex =
-      /^(([^<>()\[\].,;:\s@"]+(\.[^<>()\[\].,;:\s@"]+)*)|(".+"))@(([^<>()[\].,;:\s@"]+\.)+[^<>()[\].,;:\s@"]{2,})$/i;
-
-    return emailRegex.test(email);
-  };
-
-  const handleSubmitClick = (e) => {
-    e.preventDefault();
-
-    if (!agreement) {
-      alert("개인정보 이용약관에 동의해주세요");
-    } else if (state.username === "") {
-      alert("아이디를 입력해주세요");
-    } else if (state.password === "") {
-      alert("비밀번호를 입력해주세요");
-    } else if (state.confirm_password === "") {
-      alert("비밀번호확인을 입력해주세요");
-    } else if (state.email === "") {
-      alert("이메일을 입력해주세요");
-    } else if (state.phone === "") {
-      alert("핸드폰번호를 입력해주세요");
-    } else if (state.name === "") {
-      alert("가게명을 입력해주세요");
-    } else if (state.addr === "") {
-      alert("주소를 입력해주세요");
-    } else if (state.zip_code === "") {
-      alert("주소를 입력해주세요");
-    } else if (state.busi_num === "") {
-      alert("사업자번호를 입력해주세요");
-    } else if (state.busi_num_img === "") {
-      alert("사업자등록증을 등록해주세요");
-    } else if (state.password !== state.confirm_password) {
-      alert("비밀번호가 일치하지않습니다.");
-    } else if (!phoneAuthed) {
-      alert("핸드폰번호를 인증해주세요.");
-    } else if (!checkEmail(state.email)) {
-      alert("옳바른 이메일을 등록해주세요.");
-    } else {
-      register();
-    }
-  };
-
   // 회원가입 등록
   const register = async (data) => {
     if (!agreement) {
       alert("개인정보 이용약관에 동의해주세요");
-    } else if (state.zip_code === "") {
-      alert("주소를 입력해주세요");
-      setErrorAddr(true);
     } else {
       const {
         username,
@@ -320,8 +261,10 @@ const Register = (props) => {
         name,
         detail_addr,
         busi_num,
+        zip_code,
+        addr,
       } = data;
-      const { zip_code, addr, busi_num_img } = state;
+      const { busi_num_img } = state;
       try {
         const response = await axios.post("/api/user/register", {
           username,
@@ -340,20 +283,7 @@ const Register = (props) => {
         navigate("/complete");
         return response;
       } catch (error) {
-        console.log(
-          error.response,
-          username,
-          password,
-          confirm_password,
-          email,
-          phone,
-          name,
-          detail_addr,
-          busi_num,
-          zip_code,
-          addr,
-          busi_num_img
-        );
+        console.log(error.response);
         return false;
       }
     }
@@ -535,11 +465,6 @@ const Register = (props) => {
             onSubmit={(values, { setSubmitting, setValues }) => {
               register(values);
               setSubmitting(false);
-
-              // setTimeout(() => {
-              //   alert(JSON.stringify(values, null, 2));
-              //   setSubmitting(false);
-              // }, 400);
             }}
           >
             {(formik) => (
@@ -572,8 +497,6 @@ const Register = (props) => {
                       popupOn={popupOn}
                       state={state}
                       onFileChange={onFileChange}
-                      setValues={formik.setValues}
-                      errorAddr={errorAddr}
                     />
                   </FlexBox>
                 </FlexBox>
@@ -600,25 +523,25 @@ const Register = (props) => {
                         onClick={openTosModal}
                       />
                     </FlexBox>
+                    <button
+                      type="submit"
+                      style={{
+                        width: "100%",
+                        maxWidth: "480px",
+                        padding: "19.25px 20px",
+                        border: "unset",
+                        borderRadius: "8px",
+                        boxShadow: "rgb(249 217 189) 0px 8px 16px 0px",
+                        background: "#ff9030",
+                        color: "#fff",
+                        fontSize: "1rem",
+                        cursor: "pointer",
+                      }}
+                    >
+                      회원가입
+                    </button>
                   </FlexBox>
                 </FlexBox>
-                <button
-                  type="submit"
-                  style={{
-                    width: "100%",
-                    maxWidth: "480px",
-                    padding: "19.25px 20px",
-                    border: "unset",
-                    borderRadius: "8px",
-                    boxShadow: "rgb(249 217 189) 0px 8px 16px 0px",
-                    background: "#ff9030",
-                    color: "#fff",
-                    fontSize: "1rem",
-                    cursor: "pointer",
-                  }}
-                >
-                  회원가입
-                </button>
               </form>
             )}
           </Formik>
@@ -728,8 +651,6 @@ const SecondLists = ({
   popupOn,
   state,
   onFileChange,
-  setValues,
-  errorAddr,
 }) => {
   const errorStyle = {
     color: "#FF4842",
@@ -738,8 +659,6 @@ const SecondLists = ({
     textAlign: "right",
     width: "484px",
   };
-
-  console.log(field.getFieldProps("zip_code"));
 
   return (
     <>
