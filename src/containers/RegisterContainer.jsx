@@ -373,7 +373,7 @@ const Register = (props) => {
         onRequestClose={popupOn}
         className="postContainer"
       >
-        <Post setAddress={setState}></Post>
+        <Post setAddress={setState} popupOn={popupOn}></Post>
       </Modal>
       <Modal
         isOpen={privacyModal}
@@ -513,8 +513,8 @@ const Register = (props) => {
                 .matches(mobileRegex, "옳바른 핸드폰번호를 입력해주세요")
                 .required("핸드폰번호를 입력해주세요."),
               name: Yup.string().required("업체명을 입력해주세요."),
-              // addr: Yup.string().required("업체주소를 입력해주세요."),
-              // zip_code: Yup.number().required("우편번호를 입력해주세요"),
+              addr: Yup.string().required("업체주소를 입력해주세요."),
+              zip_code: Yup.number().required("우편번호를 입력해주세요"),
               busi_num: Yup.string()
                 .min(10, "옳바른 사업자번호를 입력해주세요")
                 .matches(busiNumRegex, "옳바른 사업자번호를 입력해주세요")
@@ -743,13 +743,13 @@ const SecondLists = ({
         <StyledFiled
           type="zip_code"
           placeholder="우편번호"
-          error={touched.zip_code && errors.zip_code}
+          error={touched.zip_code && errors.zip_code && !state.zip_code}
           margin="24px 0 0"
           {...field.getFieldProps("zip_code")}
           disabled
           value={state.zip_code}
         />
-        {touched.zip_code && errors.zip_code ? (
+        {touched.zip_code && errors.zip_code && !state.zip_code ? (
           <div style={errorStyle}>{errors.zip_code}</div>
         ) : null}
         <Button
@@ -769,13 +769,13 @@ const SecondLists = ({
       <StyledFiled
         type="text"
         placeholder="업체주소"
-        error={touched.addr && errors.addr}
+        error={touched.addr && errors.addr && !state.addr}
         margin="24px 0 0"
         {...field.getFieldProps("addr")}
         disabled
         value={state.addr}
       />
-      {touched.addr && errors.addr ? (
+      {touched.addr && errors.addr && !state.addr ? (
         <div style={errorStyle}>{errors.addr}</div>
       ) : null}
 

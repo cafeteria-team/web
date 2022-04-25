@@ -24,6 +24,7 @@ const Post = (props) => {
       addr: fullAddress,
       zip_code: data.zonecode,
     }));
+    props.popupOn();
   };
 
   const postCodeStyle = {
