@@ -272,6 +272,28 @@ export const StyledFiled = styled(FilteredPropsInputField)`
         border: 2px solid rgb(255, 72, 66);
       }
     `}
+
+    ${({ errorAddr }) =>
+    errorAddr &&
+    css`
+      border: 2px solid rgb(255, 72, 66);
+      outline: none;
+
+      &:focus,
+      &:active {
+        box-shadow: rgb(244, 129, 116) 0px 0px 2px 1px,
+          rgb(251, 178, 174) 0px 0px 0px 3px;
+        border: 2px solid rgb(255, 72, 66);
+        outline: none;
+      }
+
+      /* Autocomplete styles in Chrome*/
+      &:-webkit-autofill,
+      &:-webkit-autofill:hover,
+      &:-webkit-autofill:focus {
+        border: 2px solid rgb(255, 72, 66);
+      }
+    `}
 `;
 
 // export const Field = styled.input`

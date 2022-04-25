@@ -506,12 +506,13 @@ const Register = (props) => {
               email: "",
               phone: "",
               name: "",
-              addr: "",
-              zip_code: "",
+              addr: state.addr,
+              zip_code: state.zip_code,
               detail_addr: "",
               busi_num: "",
               busi_num_img: "",
             }}
+            enableReinitialize
             validationSchema={Yup.object({
               username: Yup.string().required("아이디를 입력해주세요."),
               password: Yup.string().required("비밀번호를 입력해주세요."),
@@ -523,6 +524,8 @@ const Register = (props) => {
               phone: Yup.string()
                 .matches(mobileRegex, "옳바른 핸드폰번호를 입력해주세요")
                 .required("핸드폰번호를 입력해주세요."),
+              addr: Yup.string().required("주소를 입력해주세요."),
+              zip_code: Yup.string().required("주소를 입력해주세요."),
               name: Yup.string().required("업체명을 입력해주세요."),
               busi_num: Yup.string()
                 .min(10, "옳바른 사업자번호를 입력해주세요")
@@ -736,6 +739,8 @@ const SecondLists = ({
     width: "484px",
   };
 
+  console.log(field.getFieldProps("zip_code"));
+
   return (
     <>
       <StyledFiled
@@ -752,14 +757,14 @@ const SecondLists = ({
         <StyledFiled
           type="zip_code"
           placeholder="우편번호"
-          error={errorAddr && !state.zip_code}
+          error={touched.zip_code && errors.zip_code}
           margin="24px 0 0"
           {...field.getFieldProps("zip_code")}
           disabled
-          value={state.zip_code}
+          // value={state.zip_code}
         />
 
-        {errorAddr && !state.zip_code ? (
+        {touched.zip_code && errors.zip_code ? (
           <div style={errorStyle}>{errors.zip_code}</div>
         ) : null}
         <Button
@@ -780,13 +785,13 @@ const SecondLists = ({
       <StyledFiled
         type="text"
         placeholder="업체주소"
-        error={errorAddr && !state.addr}
+        error={touched.addr && errors.addr}
         margin="24px 0 0"
         {...field.getFieldProps("addr")}
         disabled
-        value={state.addr}
+        // value={state.addr}
       />
-      {errorAddr && !state.addr ? (
+      {touched.addr && errors.addr ? (
         <div style={errorStyle}>{errors.addr}</div>
       ) : null}
       <StyledFiled
