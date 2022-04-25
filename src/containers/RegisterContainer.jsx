@@ -19,7 +19,7 @@ import Modal from "react-modal";
 
 // formik
 import * as Yup from "yup";
-import { Formik, Form, ErrorMessage, useFormik } from "formik";
+import { Formik, Form, ErrorMessage, useField } from "formik";
 import Img from "../assets/register_img.png";
 
 // view
@@ -75,23 +75,16 @@ const Register = (props) => {
   const navigate = useNavigate();
 
   const [state, setState] = useState({
-    username: "",
-    email: "",
-    password: "",
-    confirm_password: "",
-    phone: "",
-    role: "STORE",
-    name: "",
     addr: "",
     zip_code: "",
-    detail_addr: "",
-    busi_num: "",
     busi_num_img: "",
     auth_phone: "",
   });
 
+  const [errorAddr, setErrorAddr] = useState(false);
+
   const [agreement, setAgreement] = useState(false);
-  const [isPopup, setIsPopup] = useState("");
+  const [isPopup, setIsPopup] = useState(false);
 
   const [privacyModal, setPrivacyModal] = useState(false);
 
@@ -311,40 +304,58 @@ const Register = (props) => {
   };
 
   // 회원가입 등록
-  const register = async () => {
-    const {
-      username,
-      password,
-      confirm_password,
-      email,
-      phone,
-      name,
-      addr,
-      zip_code,
-      detail_addr,
-      busi_num,
-      busi_num_img,
-    } = state;
-    try {
-      const response = await axios.post("/api/user/register", {
+  const register = async (data) => {
+    if (!agreement) {
+      alert("개인정보 이용약관에 동의해주세요");
+    } else if (state.zip_code === "") {
+      alert("주소를 입력해주세요");
+      setErrorAddr(true);
+    } else {
+      const {
         username,
         password,
         confirm_password,
         email,
         phone,
-        role: "STORE",
         name,
-        addr,
-        zip_code,
         detail_addr,
         busi_num,
-        busi_num_img,
-      });
-      navigate("/complete");
-      return response;
-    } catch (error) {
-      console.log(error.response, state);
-      return false;
+      } = data;
+      const { zip_code, addr, busi_num_img } = state;
+      try {
+        const response = await axios.post("/api/user/register", {
+          username,
+          password,
+          confirm_password,
+          email,
+          phone,
+          role: "STORE",
+          name,
+          addr,
+          zip_code,
+          detail_addr,
+          busi_num,
+          busi_num_img,
+        });
+        navigate("/complete");
+        return response;
+      } catch (error) {
+        console.log(
+          error.response,
+          username,
+          password,
+          confirm_password,
+          email,
+          phone,
+          name,
+          detail_addr,
+          busi_num,
+          zip_code,
+          addr,
+          busi_num_img
+        );
+        return false;
+      }
     }
   };
 
@@ -373,7 +384,7 @@ const Register = (props) => {
         onRequestClose={popupOn}
         className="postContainer"
       >
-        <Post setAddress={setState} popupOn={popupOn}></Post>
+        <Post popupOn={popupOn} setAddress={setState}></Post>
       </Modal>
       <Modal
         isOpen={privacyModal}
@@ -513,28 +524,23 @@ const Register = (props) => {
                 .matches(mobileRegex, "옳바른 핸드폰번호를 입력해주세요")
                 .required("핸드폰번호를 입력해주세요."),
               name: Yup.string().required("업체명을 입력해주세요."),
-              addr: Yup.string().required("업체주소를 입력해주세요."),
-              zip_code: Yup.number().required("우편번호를 입력해주세요"),
               busi_num: Yup.string()
                 .min(10, "옳바른 사업자번호를 입력해주세요")
                 .matches(busiNumRegex, "옳바른 사업자번호를 입력해주세요")
                 .required("사업자번호를 입력해주세요."),
-              busi_num_img:
-                Yup.string().required("사업자등록증을 등록해주세요."),
             })}
             onSubmit={(values, { setSubmitting, setValues }) => {
-              setValues({
-                ...values,
-                addr: state.addr,
-                zip_code: state.zip_code,
-              });
-              console.log(values);
-
+              register(values);
               setSubmitting(false);
+
+              // setTimeout(() => {
+              //   alert(JSON.stringify(values, null, 2));
+              //   setSubmitting(false);
+              // }, 400);
             }}
           >
-            {(formik, setSubmitting) => (
-              <Form
+            {(formik) => (
+              <form
                 style={{
                   display: "flex",
                   flexDirection: "column",
@@ -563,6 +569,8 @@ const Register = (props) => {
                       popupOn={popupOn}
                       state={state}
                       onFileChange={onFileChange}
+                      setValues={formik.setValues}
+                      errorAddr={errorAddr}
                     />
                   </FlexBox>
                 </FlexBox>
@@ -589,27 +597,26 @@ const Register = (props) => {
                         onClick={openTosModal}
                       />
                     </FlexBox>
-                    <button
-                      type="submit"
-                      disabled={setSubmitting}
-                      style={{
-                        width: "100%",
-                        maxWidth: "480px",
-                        padding: "19.25px 20px",
-                        border: "unset",
-                        borderRadius: "8px",
-                        boxShadow: "rgb(249 217 189) 0px 8px 16px 0px",
-                        background: "#ff9030",
-                        color: "#fff",
-                        fontSize: "1rem",
-                        cursor: "pointer",
-                      }}
-                    >
-                      회원가입
-                    </button>
                   </FlexBox>
                 </FlexBox>
-              </Form>
+                <button
+                  type="submit"
+                  style={{
+                    width: "100%",
+                    maxWidth: "480px",
+                    padding: "19.25px 20px",
+                    border: "unset",
+                    borderRadius: "8px",
+                    boxShadow: "rgb(249 217 189) 0px 8px 16px 0px",
+                    background: "#ff9030",
+                    color: "#fff",
+                    fontSize: "1rem",
+                    cursor: "pointer",
+                  }}
+                >
+                  회원가입
+                </button>
+              </form>
             )}
           </Formik>
         </FlexBox>
@@ -718,6 +725,8 @@ const SecondLists = ({
   popupOn,
   state,
   onFileChange,
+  setValues,
+  errorAddr,
 }) => {
   const errorStyle = {
     color: "#FF4842",
@@ -743,13 +752,14 @@ const SecondLists = ({
         <StyledFiled
           type="zip_code"
           placeholder="우편번호"
-          error={touched.zip_code && errors.zip_code && !state.zip_code}
+          error={errorAddr && !state.zip_code}
           margin="24px 0 0"
           {...field.getFieldProps("zip_code")}
           disabled
           value={state.zip_code}
         />
-        {touched.zip_code && errors.zip_code && !state.zip_code ? (
+
+        {errorAddr && !state.zip_code ? (
           <div style={errorStyle}>{errors.zip_code}</div>
         ) : null}
         <Button
@@ -766,19 +776,19 @@ const SecondLists = ({
           onClick={popupOn}
         />
       </FlexBox>
+
       <StyledFiled
         type="text"
         placeholder="업체주소"
-        error={touched.addr && errors.addr && !state.addr}
+        error={errorAddr && !state.addr}
         margin="24px 0 0"
         {...field.getFieldProps("addr")}
         disabled
         value={state.addr}
       />
-      {touched.addr && errors.addr && !state.addr ? (
+      {errorAddr && !state.addr ? (
         <div style={errorStyle}>{errors.addr}</div>
       ) : null}
-
       <StyledFiled
         type="text"
         name="detail_addr"
@@ -790,7 +800,6 @@ const SecondLists = ({
       {touched.detail_addr && errors.detail_addr ? (
         <div style={errorStyle}>{errors.detail_addr}</div>
       ) : null}
-
       <FlexBox position="relative" direction="column">
         <StyledFiled
           type="text"
@@ -805,6 +814,7 @@ const SecondLists = ({
           id="contained-button-file"
           accept="image/*"
         />
+
         <FlexBox width="480px">
           <StyledSpan
             font="12px"
@@ -812,7 +822,7 @@ const SecondLists = ({
             align="flex-end"
             style={{ width: "50%", marginTop: "6px" }}
           >
-            *사업자 번호와 사업자등록증을 등록해야합니다.
+            *이미지등록시, 사업자등록증을 등록해야합니다.
           </StyledSpan>
           {touched.busi_num && errors.busi_num ? (
             <div
