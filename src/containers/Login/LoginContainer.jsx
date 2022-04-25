@@ -18,6 +18,8 @@ import { useStores } from "../../stores/Context";
 import { Formik, Form, ErrorMessage } from "formik";
 import Img from "../../assets/login_img.png";
 
+import ReactLoading from "react-loading";
+
 const Login = () => {
   const { AuthStore } = useStores();
 
@@ -37,6 +39,17 @@ const Login = () => {
 
   return (
     <MainContainer background="#F9FAFB">
+      <FlexBox
+        position="fixed"
+        width="100%"
+        height="100%"
+        align="center"
+        just="center"
+        background="#50505038"
+      >
+        <ReactLoading type="bubbles" color="#ff9030" height={200} width={100} />
+      </FlexBox>
+
       <FlexBox position="absolute" top="56px" right="40px">
         <StyledBody>
           아직 회원이 아니신가요?{" "}

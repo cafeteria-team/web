@@ -19,7 +19,7 @@ import Modal from "react-modal";
 
 // formik
 import * as Yup from "yup";
-import { Formik } from "formik";
+import { Formik, useFormik } from "formik";
 import Img from "../assets/register_img.png";
 
 // view
@@ -75,7 +75,10 @@ const Register = (props) => {
   const navigate = useNavigate();
 
   const [state, setState] = useState({
+    addr: "",
+    zip_code: "",
     busi_num_img: "",
+    phone: "",
     auth_phone: "",
   });
 
@@ -101,6 +104,10 @@ const Register = (props) => {
         const response = await axios.post("/api/phone/auth", {
           phone_num: number,
         });
+        setState((prev) => ({
+          ...prev,
+          phone: number,
+        }));
         openModal();
         setResendCode(false);
         return response;
@@ -122,7 +129,7 @@ const Register = (props) => {
 
     try {
       const response = await axios.get(
-        `/api/phone/auth?phone_num=${phone}&auth_num=${auth_phone}`
+        `/api/phone/auth?phone_num=${phone}&auth_num=${auth_phone}&purpose=AUTH`
       );
       setResendCode(false);
       setPhoneAuthed(true);
@@ -261,10 +268,8 @@ const Register = (props) => {
         name,
         detail_addr,
         busi_num,
-        zip_code,
-        addr,
       } = data;
-      const { busi_num_img } = state;
+      const { busi_num_img, zip_code, addr } = state;
       try {
         const response = await axios.post("/api/user/register", {
           username,
@@ -305,6 +310,27 @@ const Register = (props) => {
       alert("사업자등록증이 등록되었습니다.");
     }
   };
+
+  const { values, setFieldValue, initialValues } = useFormik({
+    initialValues: {
+      username: "",
+      password: "",
+      confirm_password: "",
+      email: "",
+      phone: "",
+      name: "",
+      addr: state.addr,
+      zip_code: state.zip_code,
+      detail_addr: "",
+      busi_num: "",
+      busi_num_img: "",
+    },
+  });
+
+  useEffect(() => {
+    setFieldValue("addr", state.addr);
+    setFieldValue("zip_code", state.zip_code);
+  }, [state.addr, state.zip_code]);
 
   return (
     <MainContainer background="#F9FAFB">
@@ -429,20 +455,8 @@ const Register = (props) => {
           </FlexBox>
 
           <Formik
-            initialValues={{
-              username: "",
-              password: "",
-              confirm_password: "",
-              email: "",
-              phone: "",
-              name: "",
-              addr: state.addr || "",
-              zip_code: state.zip_code || "",
-              detail_addr: "",
-              busi_num: "",
-              busi_num_img: "",
-            }}
-            enableReinitialize
+            initialValues={initialValues}
+            // enableReinitialize
             validationSchema={Yup.object({
               username: Yup.string().required("아이디를 입력해주세요."),
               password: Yup.string().required("비밀번호를 입력해주세요."),
@@ -454,95 +468,103 @@ const Register = (props) => {
               phone: Yup.string()
                 .matches(mobileRegex, "옳바른 핸드폰번호를 입력해주세요")
                 .required("핸드폰번호를 입력해주세요."),
-              addr: Yup.string().required("주소를 입력해주세요."),
-              zip_code: Yup.string().required("주소를 입력해주세요."),
+              addr:
+                !state.addr && Yup.string().required("주소를 입력해주세요."),
+              zip_code:
+                !state.zip_code &&
+                Yup.string().required("주소를 입력해주세요."),
               name: Yup.string().required("업체명을 입력해주세요."),
               busi_num: Yup.string()
                 .min(10, "옳바른 사업자번호를 입력해주세요")
                 .matches(busiNumRegex, "옳바른 사업자번호를 입력해주세요")
                 .required("사업자번호를 입력해주세요."),
             })}
-            onSubmit={(values, { setSubmitting, setValues }) => {
-              register(values);
-              setSubmitting(false);
+            onSubmit={(values, { setSubmitting }) => {
+              console.log(values);
+              // register(values);
+              // setSubmitting(false);
             }}
           >
-            {(formik) => (
-              <form
-                style={{
-                  display: "flex",
-                  flexDirection: "column",
-                  alignItems: "center",
-                  width: "100%",
-                  marginTop: "50px",
-                }}
-                onSubmit={formik.handleSubmit}
-              >
-                <FlexBox width="100%">
-                  <FlexBox direction="column" width="50%" margin="-24px 0 0">
-                    <FirstLists
-                      touched={formik.touched}
-                      errors={formik.errors}
-                      phoneAuthed={phoneAuthed}
-                      mobileDone={mobileDone}
-                      getPhoneAuth={getPhoneAuth}
-                      field={formik}
-                    />
+            {(formik) => {
+              return (
+                <form
+                  style={{
+                    display: "flex",
+                    flexDirection: "column",
+                    alignItems: "center",
+                    width: "100%",
+                    marginTop: "50px",
+                  }}
+                  onSubmit={formik.handleSubmit}
+                >
+                  <FlexBox width="100%">
+                    <FlexBox direction="column" width="50%" margin="-24px 0 0">
+                      <FirstLists
+                        touched={formik.touched}
+                        errors={formik.errors}
+                        phoneAuthed={phoneAuthed}
+                        mobileDone={mobileDone}
+                        getPhoneAuth={getPhoneAuth}
+                        field={formik}
+                      />
+                    </FlexBox>
+                    <FlexBox direction="column" width="50%" margin="-24px 0 0">
+                      <SecondLists
+                        touched={formik.touched}
+                        errors={formik.errors}
+                        field={formik}
+                        popupOn={popupOn}
+                        onFileChange={onFileChange}
+                        state={state}
+                        values={values}
+                      />
+                    </FlexBox>
                   </FlexBox>
-                  <FlexBox direction="column" width="50%" margin="-24px 0 0">
-                    <SecondLists
-                      touched={formik.touched}
-                      errors={formik.errors}
-                      field={formik}
-                      popupOn={popupOn}
-                      onFileChange={onFileChange}
-                    />
-                  </FlexBox>
-                </FlexBox>
-                <FlexBox width="100%" just="flex-end">
-                  <FlexBox
-                    width="50%"
-                    maxW="480px"
-                    margin="20px 0 20px 0"
-                    just="flex-end"
-                  ></FlexBox>
-                  <FlexBox direction="column" width="50%">
+                  <FlexBox width="100%" just="flex-end">
                     <FlexBox
-                      width="100%"
+                      width="50%"
                       maxW="480px"
                       margin="20px 0 20px 0"
                       just="flex-end"
-                    >
-                      <PrivacyInput
-                        type="checkbox"
-                        id="term"
-                        checked={agreement}
-                        onChange={agreeTerms}
-                        htmlFor="term"
-                        onClick={openTosModal}
-                      />
+                    ></FlexBox>
+                    <FlexBox direction="column" width="50%">
+                      <FlexBox
+                        width="100%"
+                        maxW="480px"
+                        margin="20px 0 20px 0"
+                        just="flex-end"
+                      >
+                        <PrivacyInput
+                          type="checkbox"
+                          id="term"
+                          checked={agreement}
+                          onChange={agreeTerms}
+                          htmlFor="term"
+                          onClick={openTosModal}
+                        />
+                      </FlexBox>
+                      <button
+                        type="submit"
+                        style={{
+                          width: "100%",
+                          maxWidth: "480px",
+                          padding: "19.25px 20px",
+                          border: "unset",
+                          borderRadius: "8px",
+                          boxShadow: "rgb(249 217 189) 0px 8px 16px 0px",
+                          background: "#ff9030",
+                          color: "#fff",
+                          fontSize: "1rem",
+                          cursor: "pointer",
+                        }}
+                      >
+                        회원가입
+                      </button>
                     </FlexBox>
-                    <button
-                      type="submit"
-                      style={{
-                        width: "100%",
-                        maxWidth: "480px",
-                        padding: "19.25px 20px",
-                        border: "unset",
-                        borderRadius: "8px",
-                        boxShadow: "rgb(249 217 189) 0px 8px 16px 0px",
-                        background: "#ff9030",
-                        color: "#fff",
-                        fontSize: "1rem",
-                        cursor: "pointer",
-                      }}
-                    >
-                      회원가입
-                    </button>
                   </FlexBox>
-                </FlexBox>
-              </form>
-            )}
+                </form>
+              );
+            }}
           </Formik>
         </FlexBox>
       </FlexBox>
@@ -646,7 +668,15 @@ const FirstLists = ({
   );
 };
 
-const SecondLists = ({ touched, errors, field, popupOn, onFileChange }) => {
+const SecondLists = ({
+  touched,
+  errors,
+  field,
+  popupOn,
+  onFileChange,
+  state,
+  values,
+}) => {
   const errorStyle = {
     color: "#FF4842",
     fontSize: "12px",
@@ -669,15 +699,16 @@ const SecondLists = ({ touched, errors, field, popupOn, onFileChange }) => {
       ) : null}
       <FlexBox position="relative" direction="column">
         <StyledFiled
-          type="zip_code"
+          type="text"
           placeholder="우편번호"
-          error={touched.zip_code && errors.zip_code}
+          error={touched.zip_code && errors.zip_code && !values.zip_code}
           margin="24px 0 0"
-          {...field.getFieldProps("zip_code")}
+          // {...field.getFieldProps("zip_code")}
           disabled
+          value={values.zip_code}
         />
 
-        {touched.zip_code && errors.zip_code ? (
+        {touched.zip_code && errors.zip_code && !values.zip_code ? (
           <div style={errorStyle}>{errors.zip_code}</div>
         ) : null}
         <Button
@@ -698,15 +729,16 @@ const SecondLists = ({ touched, errors, field, popupOn, onFileChange }) => {
       <StyledFiled
         type="text"
         placeholder="업체주소"
-        error={touched.addr && errors.addr}
+        error={touched.addr && errors.addr && !values.addr}
         margin="24px 0 0"
         {...field.getFieldProps("addr")}
         disabled
-        // value={state.addr}
+        value={values.addr}
       />
-      {touched.addr && errors.addr ? (
+      {touched.addr && errors.addr && !values.addr ? (
         <div style={errorStyle}>{errors.addr}</div>
       ) : null}
+
       <StyledFiled
         type="text"
         name="detail_addr"
@@ -718,6 +750,7 @@ const SecondLists = ({ touched, errors, field, popupOn, onFileChange }) => {
       {touched.detail_addr && errors.detail_addr ? (
         <div style={errorStyle}>{errors.detail_addr}</div>
       ) : null}
+
       <FlexBox position="relative" direction="column">
         <StyledFiled
           type="text"
