@@ -42,20 +42,24 @@ export default function Router({ isLoggedIn }) {
   return useRoutes([
     {
       path: "/main",
-      element: isLoggedIn ? <Main /> : <Navigate to="/login" />,
+      //   element: isLoggedIn ? <Main /> : <Navigate to="/login" />,
+      element: <Main />,
       children: [
         { path: "overview", element: <Overview /> },
         // { path: "member/:name", element: <Member /> },
         { path: "manage", element: <Manage /> },
         { path: "manageAdmin", element: <ManageAdmin /> },
         { path: "menu", element: <Menu /> },
+        { path: "404", element: <NotFound /> },
+        { path: "*", element: <Navigate to="/404" /> },
       ],
     },
     {
       path: "/",
-      element: !isLoggedIn ? <LogoContainer /> : <Navigate to="/main" />,
+      //   element: !isLoggedIn ? <LogoContainer /> : <Navigate to="/main" />,
+      element: <LogoContainer />,
       children: [
-        { path: "/", element: <Navigate to="/" /> },
+        { path: "/", element: <Navigate to="/login" /> },
         { path: "login", element: <LoginContainer /> },
         { path: "register", element: <RegisterContainer /> },
         { path: "complete", element: <CompleteContainer /> },

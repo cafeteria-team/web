@@ -21,7 +21,7 @@ export const StyledTitle = memo((props) => {
 });
 
 const Body = styled.p`
-  font-size: ${({ theme }) => theme.fontSizes[2]};
+  font-size: ${({ theme, props }) => props.fontSize || theme.fontSizes[2]};
   margin: ${({ props }) => props.margin || ""};
   padding: ${({ props }) => props.padding || ""};
   color: ${({ props }) => props.color || ""};
@@ -75,6 +75,7 @@ export const FlexBox = styled.div`
   background-image: ${(props) => props.bgImage || ""};
   background-repeat: no-repeat;
   background-size: cover;
+  border: ${(props) => props.border || ""};
   border-radius: ${(props) => props.rad || ""};
   box-shadow: ${(props) => props.shadow || ""};
   position: ${(props) => props.position || ""};
@@ -93,6 +94,7 @@ export const FlexBox = styled.div`
   &:hover {
     background: ${(props) => props.hoverBg || ""};
     color: ${(props) => props.hoverColor || ""};
+    transform: ${(props) => props.hoverScale || ""};
   }
 `;
 
@@ -115,7 +117,6 @@ export const SideLi = styled.li`
   display: flex;
   flex-direction: column;
   justify-content: center;
-  // align-items: center;
   height: auto;
   min-height: 54px;
   width: 100%;
@@ -126,6 +127,7 @@ export const SideLi = styled.li`
   &:hover {
     background: #f97316;
   }
+  align-items: center;
 `;
 
 export const Ul = styled.ul`

@@ -17,7 +17,7 @@ const Main = observer(() => {
   }, []);
 
   return (
-    <FlexBox width="100%" height="100%" minHeight="100vh" background="#ededed">
+    <FlexBox width="100%" height="100%" minHeight="100vh" background="#F9FAFB">
       <SideMenu></SideMenu>
       <FlexBox direction="column" width="100%" height="100%">
         <Header name={userName} logout={AuthStore.logout} />
