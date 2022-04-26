@@ -6,13 +6,13 @@ import {
   MainViewContainer,
   SubViewContainer,
 } from "./containers";
-import { useCallback } from "react";
+import React, { useCallback, useState, useEffect } from "react";
 import { NotFound } from "./views";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import { ThemeProvider } from "styled-components";
 import theme from "./styles/theme";
 import ProtectedRoutes from "./containers/ProtectedRoutes";
-import React, { useEffect } from "react";
+
 import { observer } from "mobx-react";
 
 // useStores를 통해 data를 불러온다
@@ -29,34 +29,12 @@ const App = observer(() => {
 
   useEffect(() => {
     initializeUserInfo();
-  }, [initializeUserInfo]);
-
-  const isLoggedIn = localStorage.getItem("refresh");
+  }, [initializeUserInfo, AuthStore.getUser.authorization]);
 
   return (
     <ThemeProvider theme={theme}>
-      {/* <BrowserRouter className="App">
-        <Routes>
-          <Route
-            path="/"
-            element={<LoginContainer auth={AuthStore.user.authorization} />}
-          ></Route>
-          <Route path="/register" element={<RegisterContainer />}></Route>
-          <Route path="/complete" element={<CompleteContainer />}></Route>
-          <Route
-            element={<ProtectedRoutes auth={localStorage.getItem("refresh")} />}
-          >
-            <Route path="/main" element={<Main />}>
-              <Route path=":name" element={<MainViewContainer />}>
-                <Route path=":detail" element={<SubViewContainer />} />
-              </Route>
-            </Route>
-          </Route>
-          <Route path="*" element={<NotFound />} />
-        </Routes>
-      </BrowserRouter> */}
       <BrowserRouter className="App">
-        <Router isLoggedIn={isLoggedIn} />
+        <Router isLoggedIn={AuthStore.getUser.authorization} />
       </BrowserRouter>
     </ThemeProvider>
   );

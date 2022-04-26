@@ -30,17 +30,27 @@ const Login = observer(() => {
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
-    AuthStore.user.authorization && navigate("/main/overview");
+    AuthStore.user.authorization && navigate("/main");
+    return () => setLoading(false);
   });
 
   const _login = async (profile) => {
-    setLoading(true);
-    await AuthStore.login(profile).then((res) => {
-      let { data } = res;
-      AuthStore.onLoginSucess(data.access, data.refresh, profile.username);
-      navigate("/main/overview");
-      return setLoading(false);
-    });
+    try {
+      setLoading(true);
+      const response = await AuthStore.login(profile);
+      let { data } = response;
+      const res = await AuthStore.onLoginSucess(
+        data.access,
+        data.refresh,
+        profile.username
+      );
+      setLoading(false);
+      res && navigate("/main");
+    } catch (error) {
+      return alert("아이디 또는 비밀번호를 확인해주세요.");
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (

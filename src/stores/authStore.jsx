@@ -83,16 +83,13 @@ export class AuthStore {
       );
       return response;
     } catch (error) {
-      alert("아이디 또는 비밀번호를 확인해주세요.");
-      return false;
+      return error;
     }
   }
 
   onLoginSucess = (access, refresh, username) => {
     // user상태 저장
     this.setUser(access, true);
-
-    console.log(username);
 
     // accessToken 저장
     localStorage.setItem("access", access);

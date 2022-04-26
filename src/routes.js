@@ -17,34 +17,14 @@ import {
 
 import { NotFound } from "./views";
 
-import ProtectedRoutes from "./containers/ProtectedRoutes";
-
-{
-  /* <Routes>
-  <Route
-    path="/"
-    element={<LoginContainer auth={AuthStore.user.authorization} />}
-  ></Route>
-  <Route path="/register" element={<RegisterContainer />}></Route>
-  <Route path="/complete" element={<CompleteContainer />}></Route>
-  <Route element={<ProtectedRoutes auth={localStorage.getItem("refresh")} />}>
-    <Route path="/main" element={<Main />}>
-      <Route path=":name" element={<MainViewContainer />}>
-        <Route path=":detail" element={<SubViewContainer />} />
-      </Route>
-    </Route>
-  </Route>
-  <Route path="*" element={<NotFound />} />
-</Routes>; */
-}
-
-export default function Router({ isLoggedIn }) {
+const Router = ({ isLoggedIn }) => {
   return useRoutes([
     {
       path: "/main",
-      //   element: isLoggedIn ? <Main /> : <Navigate to="/login" />,
-      element: <Main />,
+      element: isLoggedIn ? <Main /> : <Navigate to="/login" />,
+      //   element: <Main />,
       children: [
+        { path: "/main", element: <Navigate to="/main/overview" /> },
         { path: "overview", element: <Overview /> },
         // { path: "member/:name", element: <Member /> },
         { path: "manage", element: <Manage /> },
@@ -56,8 +36,8 @@ export default function Router({ isLoggedIn }) {
     },
     {
       path: "/",
-      //   element: !isLoggedIn ? <LogoContainer /> : <Navigate to="/main" />,
-      element: <LogoContainer />,
+      element: !isLoggedIn ? <LogoContainer /> : <Navigate to="/main" />,
+      //   element: <LoginContainer />,
       children: [
         { path: "/", element: <Navigate to="/login" /> },
         { path: "login", element: <LoginContainer /> },
@@ -69,7 +49,9 @@ export default function Router({ isLoggedIn }) {
     },
     { path: "*", element: <Navigate to="/404" replace /> },
   ]);
-}
+};
+
+export default Router;
 
 // const routes = (isLoggedIn) => [
 //   {

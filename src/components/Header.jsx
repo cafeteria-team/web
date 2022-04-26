@@ -44,7 +44,6 @@ function Header({ name, logout }) {
             style={{ width: "40px", height: "fit-content", zIndex: 2 }}
           />
         </FlexBox>
-        {/* box */}
         <FlexBox
           position="absolute"
           top="60px"
@@ -70,7 +69,7 @@ function Header({ name, logout }) {
             boxSizing="border-box"
           >
             <StyledBody color="rgb(33, 43, 54)" fontSize="14px">
-              {name}ss
+              {name}
             </StyledBody>
           </FlexBox>
           <FlexBox

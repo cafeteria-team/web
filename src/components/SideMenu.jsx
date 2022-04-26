@@ -26,7 +26,7 @@ import Img from "../assets/side_img.png";
 const menuData = [
   {
     // JSX를 반환하는 함수를 설정하면, 실행했을 때 동적으로 코드를 구현할 수 있습니다.
-    header: (menuState, index) => (
+    header: (menuState) => (
       <NavLink
         to="/main/overview"
         style={{
@@ -74,7 +74,7 @@ const menuData = [
     ),
   },
   {
-    header: (menuState, index) => (
+    header: (menuState) => (
       <NavLink
         to="/main/member"
         style={{
@@ -258,7 +258,7 @@ const menuData = [
     ),
   },
   {
-    header: (menuState, index) => (
+    header: (menuState) => (
       <NavLink
         to="/main/setting"
         style={{
@@ -303,103 +303,14 @@ const menuData = [
       </NavLink>
     ),
   },
-  // {
-  //   header: (menuState, index) => (
-  //     <FlexBox
-  //       just="space-between"
-  //       align="center"
-  //       minHeight="48px"
-  //       padding="0 20px"
-  //     >
-  //       <FlexBox align="center">
-  //         <PersonIcon sx={{ color: grey[50] }} />
-  //         <StyledBody
-  //           margin="0 0 0 10px"
-  //           color="#fff"
-  //           weight="bold"
-  //           display={menuState ? "none" : ""}
-  //         >
-  //           회원정보관리
-  //         </StyledBody>
-  //       </FlexBox>
-  //       <FlexBox>
-  //         <ExpandMoreIcon
-  //           sx={{ color: grey[50] }}
-  //           style={{ display: menuState ? "none" : "" }}
-  //         />
-  //       </FlexBox>
-  //     </FlexBox>
-  //   ),
-  //   panel: (menuState, index, menuActive, _onClick) => (
-  //     <FlexBox
-  //       direction="column"
-  //       height="74px"
-  //       mHeight={menuActive === index ? "74px" : "0px"}
-  //       just="space-between"
-  //       overflow="hidden"
-  //     >
-  //       <NavLink
-  //         to="/main/member"
-  //         style={({ isActive }) =>
-  //           isActive
-  //             ? { background: "#f97316", padding: "0 26px" }
-  //             : { padding: "0 26px" }
-  //         }
-  //         onClick={_onClick}
-  //       >
-  //         <StyledBody
-  //           color="#fff"
-  //           display="block"
-  //           height="34px"
-  //           padding="0 0 0 34px"
-  //           lineH="34px"
-  //           boxSizing="border-box"
-  //         >
-  //           일반회원
-  //         </StyledBody>
-  //       </NavLink>
-  //       <NavLink
-  //         to="/main/request"
-  //         style={({ isActive }) =>
-  //           isActive
-  //             ? { background: "#f97316", padding: "0 26px" }
-  //             : { padding: "0 26px" }
-  //         }
-  //         onClick={_onClick}
-  //       >
-  //         <StyledBody
-  //           color="#fff"
-  //           display="block"
-  //           height="34px"
-  //           padding="0 0 0 34px"
-  //           lineH="34px"
-  //           boxSizing="border-box"
-  //         >
-  //           가입요청
-  //         </StyledBody>
-  //       </NavLink>
-  //     </FlexBox>
-  //   ),
-  // },
 ];
 
 const SideMenu = (props) => {
   const [menuList] = useState(menuData);
   const [menuState, setMenuState] = useState(false);
-  const [menuActive, setMenuActive] = useState(undefined);
-  const menuRef = useRef();
 
   const menuHide = () => {
     setMenuState((prev) => !prev);
-    setMenuActive(0);
-  };
-
-  const _onClick = (e, index) => {
-    setMenuActive((prev) => (prev === index ? 0 : index));
-  };
-
-  const hello = (e) => {
-    e.stopPropagation();
   };
 
   return (
@@ -461,22 +372,11 @@ const SideMenu = (props) => {
                 />
               </FlexBox>
             )}
-
-            {/* <IconButton onClick={menuHide}>
-            <MenuOpenIcon sx={{ color: grey[50] }} />
-          </IconButton> */}
           </FlexBox>
         </StyledTitle>
         <SideUl>
           {menuList.map((item, index) => {
-            return (
-              <SideLi onClick={(e) => _onClick(e, index)} key={index}>
-                {item.header(menuState)}
-                {item.panel
-                  ? item.panel(menuState, index, menuActive, hello, menuRef)
-                  : ""}
-              </SideLi>
-            );
+            return <SideLi key={index}>{item.header(menuState)}</SideLi>;
           })}
         </SideUl>
       </FlexBox>
