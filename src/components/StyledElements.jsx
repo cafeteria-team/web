@@ -1,5 +1,5 @@
 import React, { memo } from "react";
-import styled, { css } from "styled-components";
+import styled, { css, keyframes } from "styled-components";
 import { Link } from "react-router-dom";
 import FilteredPropsInputField from "./FilteredPropsInputField";
 
@@ -63,6 +63,7 @@ export const Form = styled.form`
   align-items: center;
   margin: ${(props) => props.margin || ""};
 `;
+
 export const FlexBox = styled.div`
   display: ${(props) => props.display || "flex"};
   flex-direction: ${(props) => props.direction || ""};
@@ -207,7 +208,7 @@ export const Li = styled.li`
   padding: ${(props) => props.padding || ""};
   width: ${(props) => props.width || ""};
   height: ${(props) => props.height || ""};
-  background-color: ${(props) => props.background || ""};
+  background: ${(props) => props.background || ""};
   background-image: ${(props) => props.bgImage || ""};
   background-repeat: no-repeat;
   background-size: cover;
@@ -229,6 +230,42 @@ export const Li = styled.li`
   &:hover {
     background: ${(props) => props.hoverBg || ""};
     color: ${(props) => props.hoverColor || ""};
+  }
+`;
+
+const loading = keyframes` 
+from {
+  left:0
+}
+to{
+  left:100%
+}`;
+
+export const LoadingLi = styled.li`
+  display: "flex";
+  justify-content: center;
+  align-items: ${(props) => props.align};
+  width: 20%;
+  height: 36px;
+  background: #f9fafb;
+  background-repeat: no-repeat;
+  background-size: cover;
+  position: relative;
+  transition: all 0.6s ease;
+  overflow: hidden;
+  &:before {
+    content: "";
+    position: absolute;
+    background: linear-gradient(
+      90deg,
+      rgba(249, 250, 251, 1) 0%,
+      rgba(240, 241, 242, 1) 51%,
+      rgba(249, 250, 251, 1) 100%
+    );
+    left: 0;
+    width: 25%;
+    height: 36px;
+    animation: ${loading} 1.5s linear infinite;
   }
 `;
 

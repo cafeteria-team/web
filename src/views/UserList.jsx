@@ -5,6 +5,7 @@ import {
   StyledBody,
   Ul,
   Li,
+  LoadingLi,
 } from "../components/StyledElements";
 import moment from "moment";
 
@@ -56,7 +57,7 @@ const ListHeader = memo(() => {
   );
 });
 
-const UserList = ({ userList }) => {
+const UserList = ({ userList, isLoading }) => {
   return (
     <FlexBox
       width="calc(70% - 30px)"
@@ -78,7 +79,11 @@ const UserList = ({ userList }) => {
         align="center"
         overflow="hidden"
       >
-        {userList ? (
+        {isLoading ? (
+          new Array(5).fill(1).map((_, i) => {
+            return <SkeletonList key={i} />;
+          })
+        ) : userList ? (
           userList
             .slice(0, 5)
             .map(({ date_joined, id, is_active, store, username }) => (
@@ -127,10 +132,44 @@ const UserList = ({ userList }) => {
               </Li>
             ))
         ) : (
-          <StyledBody>등록된 회원이없습니다.</StyledBody>
+          <Li
+            height="68px"
+            width="100%"
+            border="1px solid #e2e6e7"
+            align="center"
+            just="center"
+          >
+            <StyledBody color="rgb(33, 43, 54)" fontSize="14px">
+              등록된 리스트가없습니다.
+            </StyledBody>
+          </Li>
         )}
       </Ul>
     </FlexBox>
+  );
+};
+
+const SkeletonList = ({ key }) => {
+  return (
+    <Li
+      height="68px"
+      width="100%"
+      border="1px solid #e2e6e7"
+      align="center"
+      key={key}
+    >
+      <Ul
+        width="100%"
+        padding="14px 24px"
+        boxSizing="border-box"
+        just="space-around"
+      >
+        <LoadingLi></LoadingLi>
+        <LoadingLi></LoadingLi>
+        <LoadingLi></LoadingLi>
+        <LoadingLi></LoadingLi>
+      </Ul>
+    </Li>
   );
 };
 
