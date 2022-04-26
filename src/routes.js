@@ -21,7 +21,12 @@ const Router = ({ isLoggedIn }) => {
   return useRoutes([
     {
       path: "/main",
-      element: isLoggedIn ? <Main /> : <Navigate to="/login" />,
+      element:
+        localStorage.getItem("refresh") || isLoggedIn ? (
+          <Main />
+        ) : (
+          <Navigate to="/login" />
+        ),
       //   element: <Main />,
       children: [
         { path: "/main", element: <Navigate to="/main/overview" /> },
@@ -36,7 +41,12 @@ const Router = ({ isLoggedIn }) => {
     },
     {
       path: "/",
-      element: !isLoggedIn ? <LogoContainer /> : <Navigate to="/main" />,
+      element:
+        !localStorage.getItem("refresh") || !isLoggedIn ? (
+          <LogoContainer />
+        ) : (
+          <Navigate to="/main" />
+        ),
       //   element: <LoginContainer />,
       children: [
         { path: "/", element: <Navigate to="/login" /> },

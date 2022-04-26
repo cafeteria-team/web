@@ -20,7 +20,7 @@ const Overview = observer(() => {
   return (
     <FlexBox padding="30px 70px" direction="column" width="100%">
       <StyledTitle margin="0 0 30px 0">Overview</StyledTitle>
-      <FlexBox width="100%" just="space-between" height="480px">
+      <FlexBox width="100%" just="space-between">
         <UserList userList={ListStore.getUserList} />
         <StoreProductList />
       </FlexBox>

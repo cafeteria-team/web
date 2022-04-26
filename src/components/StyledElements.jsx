@@ -22,6 +22,7 @@ export const StyledTitle = memo((props) => {
 
 const Body = styled.p`
   font-size: ${({ theme, props }) => props.fontSize || theme.fontSizes[2]};
+  font-weight: ${({ props }) => props.fontW || ""};
   margin: ${({ props }) => props.margin || ""};
   padding: ${({ props }) => props.padding || ""};
   color: ${({ props }) => props.color || ""};
@@ -110,6 +111,33 @@ export const StyledLink = styled(Link)`
   text-decoration-color: #fdc89a !important;
 `;
 
+export const SeeMoreBtn = styled(Link)`
+  color: rgb(33, 43, 54);
+  font-size: 14px;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  transition: all 0.6s ease;
+  padding: 10px;
+  border-radius: 8px;
+  &:hover {
+    background: rgba(145, 158, 171, 0.12);
+  }
+`;
+
+export const DetailBtn = styled(Link)`
+  width: 80px;
+  padding: 12px 20px;
+  border: unset;
+  border-radius: 8px;
+  box-shadow: rgb(249 217 189) 0px 8px 16px 0px;
+  background: #ff9030;
+  color: #fff;
+  fontsize: 1rem;
+  cursor: pointer;
+  text-align: center;
+`;
+
 export const SideUl = styled.ul`
   display: flex;
   flex-direction: column;
@@ -144,6 +172,7 @@ export const Ul = styled.ul`
   background-image: ${(props) => props.bgImage || ""};
   background-repeat: no-repeat;
   background-size: cover;
+  border-bottom: ${(props) => props.borderB || ""};
   border-radius: ${(props) => props.rad || ""};
   box-shadow: ${(props) => props.shadow || ""};
   position: ${(props) => props.position || ""};
@@ -158,6 +187,8 @@ export const Ul = styled.ul`
   box-sizing: ${(props) => props.boxSizing || ""};
   color: ${(props) => props.color || ""};
   overflow: ${(props) => props.overflow || ""};
+  font-weight: ${(props) => props.fontW || ""};
+  font-size: ${(props) => props.fontSize || ""};
   &:hover {
     background: ${(props) => props.hoverBg || ""};
     color: ${(props) => props.hoverColor || ""};
@@ -190,6 +221,8 @@ export const Li = styled.li`
   top: ${(props) => props.top || ""};
   cursor: ${(props) => props.cursor || ""};
   box-sizing: ${(props) => props.boxSizing || ""};
+  font-weight: ${(props) => props.fontW || ""};
+  font-size: ${(props) => props.fontSize || ""};
   &:hover {
     background: ${(props) => props.hoverBg || ""};
     color: ${(props) => props.hoverColor || ""};

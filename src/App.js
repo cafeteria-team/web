@@ -1,17 +1,7 @@
-import {
-  RegisterContainer,
-  LoginContainer,
-  CompleteContainer,
-  Main,
-  MainViewContainer,
-  SubViewContainer,
-} from "./containers";
-import React, { useCallback, useState, useEffect } from "react";
-import { NotFound } from "./views";
-import { BrowserRouter, Route, Routes } from "react-router-dom";
+import React, { useCallback, useEffect } from "react";
+import { BrowserRouter } from "react-router-dom";
 import { ThemeProvider } from "styled-components";
 import theme from "./styles/theme";
-import ProtectedRoutes from "./containers/ProtectedRoutes";
 
 import { observer } from "mobx-react";
 
