@@ -76,6 +76,8 @@ export const FlexBox = styled.div`
   background-repeat: no-repeat;
   background-size: cover;
   border: ${(props) => props.border || ""};
+  border-bottom: ${(props) => props.borderB || ""};
+  border-top: ${(props) => props.borderT || ""};
   border-radius: ${(props) => props.rad || ""};
   box-shadow: ${(props) => props.shadow || ""};
   position: ${(props) => props.position || ""};
@@ -91,6 +93,9 @@ export const FlexBox = styled.div`
   right: ${(props) => props.right || ""};
   cursor: ${(props) => props.cursor || ""};
   box-sizing: ${(props) => props.boxSizing || ""};
+  opacity: ${(props) => props.opacity || ""};
+  pointer-events: ${(props) => props.pointE || ""};
+  transform: ${(props) => props.transform || ""};
   &:hover {
     background: ${(props) => props.hoverBg || ""};
     color: ${(props) => props.hoverColor || ""};
@@ -118,15 +123,11 @@ export const SideLi = styled.li`
   flex-direction: column;
   justify-content: center;
   height: auto;
-  min-height: 54px;
+  min-height: 48px;
   width: 100%;
-  // padding: 0 20px;
   background: ${(props) => props.background || ""};
   cursor: pointer;
   transition: background-color 0.6s ease;
-  &:hover {
-    background: #f97316;
-  }
   align-items: center;
 `;
 

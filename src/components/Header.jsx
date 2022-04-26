@@ -1,8 +1,10 @@
 import React, { useState } from "react";
 import { FlexBox, StyledBody } from "./StyledElements";
 import LogoutIcon from "@mui/icons-material/Logout";
-import ArrowDropDownIcon from "@mui/icons-material/ArrowDropDown";
+
 import { useNavigate } from "react-router-dom";
+
+import Img from "../assets/chef.png";
 
 function Header({ name, logout }) {
   const navigate = useNavigate();
@@ -20,6 +22,9 @@ function Header({ name, logout }) {
     navigate("/main/password");
   };
 
+  const options = ["one", "two", "three"];
+
+  const defaultOption = options[0];
   return (
     <>
       <FlexBox
@@ -33,50 +38,90 @@ function Header({ name, logout }) {
         background="#fff"
       >
         <FlexBox align="center" cursor="pointer" onClick={_onClick}>
-          <StyledBody margin="4px 0 0 0">{name}</StyledBody>
-          <ArrowDropDownIcon />
+          <img
+            src={Img}
+            alt="login_img"
+            style={{ width: "40px", height: "fit-content", zIndex: 2 }}
+          />
         </FlexBox>
+        {/* box */}
         <FlexBox
           position="absolute"
-          top="80px"
-          height="96px"
-          mHeight={box ? "96px" : "0"}
+          top="60px"
+          width="200px"
           overflow="hidden"
           direction="column"
           shadow="2px 4px 12px rgb(0 0 0 / 8%)"
+          opacity={box ? "1" : "0"}
+          pointE={box ? "all" : "none"}
+          transform={box ? "translateY(0px)" : "translateY(10px)"}
         >
           <FlexBox
             height="48px"
-            width="100px"
+            width="100%"
             just="space-between"
             rad="8px 8px 0 0"
             background="#fff"
             align="center"
             shadow="2px 4px 12px rgb(0 0 0 / 8%)"
-            padding="0 20px"
             cursor="pointer"
-            hoverBg="#f97316;"
-            hoverColor="#fff;"
-            onClick={_logout}
+            borderB="1px dashed rgba(145,158,171,0.24)"
+            padding="0 20px"
+            boxSizing="border-box"
           >
-            <LogoutIcon />
-            <StyledBody>로그아웃</StyledBody>
+            <StyledBody color="rgb(33, 43, 54)" fontSize="14px">
+              {name}ss
+            </StyledBody>
           </FlexBox>
           <FlexBox
             height="48px"
-            width="100px"
-            just="flex-end"
-            rad="0 0 8px 8px"
+            width="100%"
             background="#fff"
             align="center"
             shadow="2px 4px 12px rgb(0 0 0 / 8%)"
-            padding="0 20px"
             cursor="pointer"
-            hoverBg="#f97316;"
-            hoverColor="#fff;"
             onClick={_onClickPassword}
+            just="center"
           >
-            <StyledBody>비밀번호 변경</StyledBody>
+            <FlexBox
+              width="180px"
+              height="36px"
+              align="center"
+              rad="8px"
+              padding="0 10px"
+              boxSizing="border-box"
+              hoverBg="rgba(145, 158, 171, 0.12)"
+            >
+              <StyledBody fontSize="14px" color="rgb(33, 43, 54)">
+                비밀번호 변경
+              </StyledBody>
+            </FlexBox>
+          </FlexBox>
+          <FlexBox
+            height="48px"
+            width="100%"
+            background="#fff"
+            align="center"
+            shadow="2px 4px 12px rgb(0 0 0 / 8%)"
+            cursor="pointer"
+            just="center"
+            onClick={_logout}
+            borderT="1px dashed rgba(145,158,171,0.24)"
+            rad="0 0 8px 8px"
+          >
+            <FlexBox
+              width="180px"
+              height="36px"
+              align="center"
+              rad="8px"
+              padding="0 10px"
+              boxSizing="border-box"
+              hoverBg="rgba(145, 158, 171, 0.12)"
+            >
+              <StyledBody fontSize="14px" color="rgb(33, 43, 54)">
+                로그아웃
+              </StyledBody>
+            </FlexBox>
           </FlexBox>
         </FlexBox>
       </FlexBox>
