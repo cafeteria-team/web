@@ -31,7 +31,9 @@ const Login = observer(() => {
 
   useEffect(() => {
     AuthStore.user.authorization && navigate("/main");
-    return () => setLoading(false);
+    // return () => {
+    //   setLoading(false);
+    // };
   });
 
   const _login = async (profile) => {

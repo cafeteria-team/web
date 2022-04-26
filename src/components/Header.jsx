@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import { FlexBox, StyledBody } from "./StyledElements";
-import LogoutIcon from "@mui/icons-material/Logout";
 
 import { useNavigate } from "react-router-dom";
 
@@ -22,9 +21,6 @@ function Header({ name, logout }) {
     navigate("/main/password");
   };
 
-  const options = ["one", "two", "three"];
-
-  const defaultOption = options[0];
   return (
     <>
       <FlexBox
@@ -35,7 +31,7 @@ function Header({ name, logout }) {
         position="relative"
         padding="0 70px"
         boxSizing="border-box"
-        background="#fff"
+        background="#F9FAFB"
       >
         <FlexBox align="center" cursor="pointer" onClick={_onClick}>
           <img

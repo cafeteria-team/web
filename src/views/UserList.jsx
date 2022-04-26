@@ -30,7 +30,7 @@ const ListHeader = memo(() => {
       <Ul
         borderB="1px solid #e2e6e7"
         width="100%"
-        padding="14px"
+        padding="14px 24px"
         boxSizing="border-box"
         just="space-around"
         color="rgb(33, 43, 54)"
@@ -39,17 +39,17 @@ const ListHeader = memo(() => {
         height="68px"
         align="center"
       >
-        <Li just="center" width="25%">
+        <Li just="center" width="25%" align="center">
           가입일시
         </Li>
-        <Li just="center" width="25%">
+        <Li just="center" width="25%" align="center">
           아이디
         </Li>
-        <Li just="center" width="25%">
-          구분
-        </Li>
-        <Li just="center" width="25%">
+        <Li just="center" width="25%" align="center">
           업체명
+        </Li>
+        <Li just="center" width="25%" align="center">
+          회원승인
         </Li>
       </Ul>
     </>
@@ -91,21 +91,37 @@ const UserList = ({ userList }) => {
               >
                 <Ul
                   width="100%"
-                  padding="14px"
+                  padding="14px 24px"
                   boxSizing="border-box"
                   just="space-around"
                 >
-                  <Li just="center" width="25%">
+                  <Li just="center" width="25%" align="center">
                     {moment(date_joined).format("L")}
                   </Li>
-                  <Li just="center" width="25%">
+                  <Li just="center" width="25%" align="center">
                     {username}
                   </Li>
-                  <Li just="center" width="25%">
-                    {is_active.toString()}
-                  </Li>
-                  <Li just="center" width="25%">
+                  <Li just="center" width="25%" align="center">
                     {store.name}
+                  </Li>
+                  <Li just="center" width="25%" align="center">
+                    <FlexBox
+                      background={
+                        is_active === true
+                          ? "rgba(84, 214, 44, 0.16)"
+                          : "rgba(255, 72, 66, 0.16)"
+                      }
+                      padding="6px 8px"
+                      rad="8px"
+                      color={
+                        is_active === true
+                          ? "rgb(34, 154, 22)"
+                          : "rgb(183, 33, 54)"
+                      }
+                      fontW="600"
+                    >
+                      {is_active.toString()}
+                    </FlexBox>
                   </Li>
                 </Ul>
               </Li>

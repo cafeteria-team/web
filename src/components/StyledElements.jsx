@@ -84,6 +84,8 @@ export const FlexBox = styled.div`
   position: ${(props) => props.position || ""};
   min-width: ${(props) => props.minW || ""};
   max-width: ${(props) => props.maxW || ""};
+  color: ${(props) => props.color || ""};
+  font-weight: ${(props) => props.fontW || ""};
   flex: ${(props) => props.flex || ""};
   flex-wrap: ${(props) => props.wrap || ""};
   transition: all 0.6s ease;
@@ -161,6 +163,7 @@ export const SideLi = styled.li`
 
 export const Ul = styled.ul`
   display: ${(props) => props.display || "flex"};
+  height: ${(props) => props.height || "flex"};
   flex-direction: ${(props) => props.direction || ""};
   justify-content: ${(props) => props.just || ""};
   align-items: ${(props) => props.align};
