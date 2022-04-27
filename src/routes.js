@@ -1,4 +1,4 @@
-import { Navigate, useRoutes, Outlet } from "react-router-dom";
+import { Navigate, useRoutes } from "react-router-dom";
 
 import {
   RegisterContainer,
@@ -11,11 +11,9 @@ import {
   ManageAdmin,
   Menu,
   LogoContainer,
-  MainViewContainer,
-  SubViewContainer,
 } from "./containers";
 
-import { NotFound } from "./views";
+import { NotFound, Password, MemberEdit } from "./views";
 
 const Router = ({ isLoggedIn }) => {
   return useRoutes([
@@ -27,14 +25,15 @@ const Router = ({ isLoggedIn }) => {
         ) : (
           <Navigate to="/login" />
         ),
-      //   element: <Main />,
       children: [
         { path: "/main", element: <Navigate to="/main/overview" /> },
         { path: "overview", element: <Overview /> },
-        // { path: "member/:name", element: <Member /> },
+        { path: "member", element: <Member /> },
+        { path: "member/:name", element: <MemberEdit /> },
         { path: "manage", element: <Manage /> },
         { path: "manageAdmin", element: <ManageAdmin /> },
         { path: "menu", element: <Menu /> },
+        { path: "password", element: <Password /> },
         { path: "404", element: <NotFound /> },
         { path: "*", element: <Navigate to="/404" /> },
       ],
@@ -47,7 +46,6 @@ const Router = ({ isLoggedIn }) => {
         ) : (
           <Navigate to="/main" />
         ),
-      //   element: <LoginContainer />,
       children: [
         { path: "/", element: <Navigate to="/login" /> },
         { path: "login", element: <LoginContainer /> },

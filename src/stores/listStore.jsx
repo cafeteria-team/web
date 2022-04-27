@@ -62,7 +62,11 @@ export class ListStore {
   // 선택 유저 정보 수정
   getEditUser = async (userId, accessToken) => {
     try {
-      const response = await axios.get(`/api/user/${userId}`, {});
+      const response = await axios.get(`/api/user/${userId}`, {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+      });
       return response;
     } catch (error) {
       console.log(error.response);

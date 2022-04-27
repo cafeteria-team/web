@@ -14,6 +14,7 @@ const Title = styled.h1`
   position: ${({ props }) => props.position || ""};
   flex-shrink: 0;
   top: ${({ props }) => props.top || ""};
+  z-index: ${({ props }) => props.zIndex || ""};
 `;
 
 export const StyledTitle = memo((props) => {
@@ -23,6 +24,7 @@ export const StyledTitle = memo((props) => {
 const Body = styled.p`
   font-size: ${({ theme, props }) => props.fontSize || theme.fontSizes[2]};
   font-weight: ${({ props }) => props.fontW || ""};
+  text-align: ${({ props }) => props.textAlign || ""};
   margin: ${({ props }) => props.margin || ""};
   padding: ${({ props }) => props.padding || ""};
   color: ${({ props }) => props.color || ""};
@@ -85,6 +87,7 @@ export const FlexBox = styled.div`
   position: ${(props) => props.position || ""};
   min-width: ${(props) => props.minW || ""};
   max-width: ${(props) => props.maxW || ""};
+  max-height: ${(props) => props.maxH || ""};
   color: ${(props) => props.color || ""};
   font-weight: ${(props) => props.fontW || ""};
   flex: ${(props) => props.flex || ""};
@@ -95,11 +98,13 @@ export const FlexBox = styled.div`
   overflow: ${(props) => props.overflow || ""};
   top: ${(props) => props.top || ""};
   right: ${(props) => props.right || ""};
+  left: ${(props) => props.left || ""};
   cursor: ${(props) => props.cursor || ""};
   box-sizing: ${(props) => props.boxSizing || ""};
   opacity: ${(props) => props.opacity || ""};
   pointer-events: ${(props) => props.pointE || ""};
   transform: ${(props) => props.transform || ""};
+  z-index: ${(props) => props.zIndex || ""};
   &:hover {
     background: ${(props) => props.hoverBg || ""};
     color: ${(props) => props.hoverColor || ""};

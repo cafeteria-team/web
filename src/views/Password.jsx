@@ -131,6 +131,7 @@ const Password = (props) => {
 
   return (
     <FlexBox width="100%" direction="column" padding="30px 70px">
+      <StyledTitle margin="0 0 30px 0">비밀번호 변경</StyledTitle>
       {phoneAuthed ? (
         <NewPassword
           cancelPassword={cancelPassword}
@@ -142,6 +143,8 @@ const Password = (props) => {
           direction="column"
           align="center"
           padding="20px 20px 100px 20px"
+          rad="16px"
+          shadow="rgb(145 158 171 / 20%) 0px 3px 1px -2px, rgb(145 158 171 / 14%) 0px 2px 2px 0px, rgb(145 158 171 / 12%) 0px 1px 5px 0px"
         >
           <FlexBox
             just="center"
@@ -150,7 +153,7 @@ const Password = (props) => {
             margin="0 0 32px 0"
           >
             <StyledTitle margin="80px 0 20px 0">비밀번호 재설정</StyledTitle>
-            <StyledBody>
+            <StyledBody color="rgb(33, 43, 54)" fontSize="14px">
               안전한 사용을 위하여, 본인인증을 완료후 비밀번호 변경이
               가능합니다.
             </StyledBody>

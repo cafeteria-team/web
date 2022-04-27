@@ -1,19 +1,36 @@
-import React, { useEffect, useState } from "react";
-import { Button, Input, ImageInput } from "../components";
-import { Form, FlexBox, StyledBody } from "../components/StyledElements";
+import React, { useEffect, useState, useCallback } from "react";
+import { Button, ImageInput } from "../components";
+import {
+  Form,
+  FlexBox,
+  StyledBody,
+  StyledTitle,
+} from "../components/StyledElements";
 import { useNavigate } from "react-router-dom";
 import ImageUploader from "../utils/imageuploader";
+import { useParams } from "react-router";
+import TextField from "@mui/material/TextField";
+
+import { FaImage, FaCamera } from "react-icons/fa";
+import { observer } from "mobx-react";
+import { useStores } from "../stores/Context";
+
+import Spinner from "../components/Spinner";
 
 // 이미지 클라우드
 const imageUploader = new ImageUploader();
 
 const imageStyle = {
   wrap: {
-    width: "342px",
+    width: "100%",
+    height: "100%",
+    padding: "20px",
+    boxSizing: "border-box",
+    maxHeight: "440px",
   },
   div: {
     position: "relative",
-    paddingTop: "100%",
+    paddingTop: "75%",
     overflow: "hidden",
     borderRadius: "4px",
   },
@@ -32,15 +49,11 @@ const InputData = [
   {
     body: (selectedUser) => (
       <>
-        <FlexBox margin="0 10px 0 0" minW="100px">
-          아이디
-        </FlexBox>
-        <Input
+        <TextField
+          label="아이디"
+          fullWidth
+          defaultValue={selectedUser.username}
           disabled
-          type="text"
-          id="username"
-          margin="0"
-          value={selectedUser?.username}
         />
       </>
     ),
@@ -48,14 +61,11 @@ const InputData = [
   {
     body: (selectedUser, handleChange, state) => (
       <>
-        <FlexBox margin="0 10px 0 0" minW="100px">
-          이메일
-        </FlexBox>
-        <Input
-          type="email"
-          id="email"
-          margin="0"
-          value={state.email}
+        <TextField
+          label="이메일"
+          fullWidth
+          defaultValue={selectedUser.email}
+          // value={state.email}
           onChange={(e) => handleChange(e)}
         />
       </>
@@ -64,14 +74,11 @@ const InputData = [
   {
     body: (selectedUser, handleChange, state) => (
       <>
-        <FlexBox margin="0 10px 0 0" minW="100px">
-          가게명
-        </FlexBox>
-        <Input
-          type="text"
-          id="name"
-          margin="0"
-          value={state.name}
+        <TextField
+          label="업체명"
+          fullWidth
+          defaultValue={selectedUser.store.name}
+          // value={state.name}
           onChange={(e) => handleChange(e)}
         />
       </>
@@ -80,50 +87,87 @@ const InputData = [
   {
     body: (selectedUser, handleChange, state) => (
       <>
-        <FlexBox margin="0 10px 0 0" minW="100px">
-          사업자번호
-        </FlexBox>
-        <Input
-          type="text"
-          id="busi_num"
-          margin="0"
-          value={state.busi_num}
+        <TextField
+          fullWidth
+          label="사업자번호"
+          defaultValue={selectedUser.store.busi_num}
           onChange={(e) => handleChange(e)}
         />
-      </>
-    ),
-  },
-  {
-    body: (selectedUser, handleChange, state, onFileChange, editImage) => (
-      <>
-        <FlexBox margin="0 10px 0 0" minW="100px" direction="column">
-          <StyledBody margin="0 0 10px 0">사업자 이미지</StyledBody>
-          <ImageInput
-            onChange={onFileChange}
-            id="editImageInput"
-            accept="image/*"
-            editImage={editImage}
-          />
-        </FlexBox>
-        <div style={imageStyle.wrap}>
-          {state.busi_num_img === "" ? (
-            <div style={imageStyle.div}>
-              <img
-                src={state.busi_num_img}
-                alt="business_img"
-                style={imageStyle.image}
-              />
-            </div>
-          ) : (
-            <div>등록된 이미지가 없습니다.</div>
-          )}
-        </div>
       </>
     ),
   },
 ];
 
-const MemberEdit = ({ selectedUser, id, editUser }) => {
+const UploadedImage = ({ onFileChange, editImage, state, selectedUser }) => {
+  console.log(selectedUser);
+  return (
+    <FlexBox width="50%" direction="column" overflow="hidden">
+      <FlexBox margin="0 10px 0 0" minW="100px" align="center">
+        <StyledBody
+          olor="color rgb(33, 43, 54)"
+          fontSize="16px"
+          fontW="600"
+          margin="0 16px 0 0"
+        >
+          사업자 이미지
+        </StyledBody>
+        <ImageInput
+          onChange={onFileChange}
+          id="editImageInput"
+          accept="image/*"
+          editImage={editImage}
+          FaCamera={FaCamera}
+        />
+      </FlexBox>
+      <div style={imageStyle.wrap}>
+        {selectedUser.store.busi_num_img !== "" ? (
+          <div style={imageStyle.div}>
+            <img
+              src={selectedUser.store.busi_num_img}
+              alt="business_img"
+              style={imageStyle.image}
+            />
+          </div>
+        ) : (
+          <FlexBox
+            width="100%"
+            height="100%"
+            just="center"
+            align="center"
+            direction="column"
+            border="1px dashed rgba(145,158,171,0.24)"
+          >
+            <FaImage
+              style={{
+                width: "60px",
+                height: "60px",
+                color: "rgba(145,158,171,0.12)",
+                margin: "0 0 20px 0",
+              }}
+            />
+            <StyledBody
+              color="color rgb(33, 43, 54)"
+              fontSize="14px"
+              fontW="600"
+            >
+              등록된 이미지가 없습니다.
+            </StyledBody>
+          </FlexBox>
+        )}
+      </div>
+    </FlexBox>
+  );
+};
+
+const MemberEdit = observer(() => {
+  const { AuthStore, ListStore } = useStores();
+
+  const [selectedUser, setSelectedUser] = useState(null);
+
+  const [loading, setLoading] = useState(false);
+
+  const params = useParams();
+
   const navigate = useNavigate();
 
   const [state, setState] = useState({
@@ -135,14 +179,30 @@ const MemberEdit = ({ selectedUser, id, editUser }) => {
 
   const editImage = true;
 
+  // 유저수정 완료
+  const editUser = async () => {
+    // console.log("수정실행");
+    ListStore.editUser(params.name, state).then((res) =>
+      alert("회원정보가 수정되었습니다.")
+    );
+  };
+
+  // 선택된 유저 불러오기
+  const getEditUser = useCallback(
+    (userId) => {
+      setLoading(true);
+      const access = localStorage.getItem("access");
+      ListStore.getEditUser(userId, access).then((res) => {
+        setSelectedUser(res.data);
+        setLoading(false);
+      });
+    },
+    [ListStore]
+  );
+
   useEffect(() => {
-    setState({
-      email: selectedUser?.email,
-      name: selectedUser?.store.name,
-      busi_num: selectedUser?.store.busi_num,
-      busi_num_img: selectedUser?.store.busi_num_img,
-    });
-  }, [selectedUser]);
+    getEditUser(params.name);
+  }, [getEditUser]);
 
   const handleChange = (e) => {
     const { id, value } = e.target;
@@ -156,10 +216,6 @@ const MemberEdit = ({ selectedUser, id, editUser }) => {
     navigate("/main/member", { replace: true });
   };
 
-  const submit = (e) => {
-    editUser(id, state);
-  };
-
   // 이미지업로드
   const onFileChange = async (e) => {
     const maxSize = 10 * 1024 * 1024;
@@ -169,50 +225,103 @@ const MemberEdit = ({ selectedUser, id, editUser }) => {
       alert("이미지 용량은 10MB 이내로 등록가능합니다.");
     } else {
       const uploaded = await imageUploader.upload(e.target.files[0]);
-      setState((prev) => ({
+      setSelectedUser((prev) => ({
         ...prev,
-        busi_num_img: uploaded,
+        store: {
+          ...prev.store,
+          busi_num_img: uploaded,
+        },
       }));
     }
   };
 
   return (
-    <>
-      <Form method="POST" direction="column">
-        <FlexBox wrap="wrap" width="100%">
-          {InputData.map((item, index) => (
-            <FlexBox align="center" width="40%" margin="20px 30px" key={index}>
-              {item.body(
-                selectedUser,
-                handleChange,
-                state,
-                onFileChange,
-                editImage
+    <FlexBox padding="30px 70px" direction="column" width="100%">
+      <Spinner loading={loading} />
+      <StyledTitle margin="0 0 30px 0">회원정보관리 </StyledTitle>
+      <FlexBox
+        width="100%"
+        background="#fff"
+        boxSizing="border-box"
+        direction="column"
+        rad="16px"
+        shadow="rgb(145 158 171 / 20%) 0px 3px 1px -2px, rgb(145 158 171 / 14%) 0px 2px 2px 0px, rgb(145 158 171 / 12%) 0px 1px 5px 0px"
+      >
+        <FlexBox
+          just="space-between"
+          height="62px"
+          align="center"
+          padding="20px 24px"
+        >
+          <StyledBody color="color rgb(33, 43, 54)" fontSize="18px" fontW="600">
+            "회원관리" 님의 정보수정
+          </StyledBody>
+        </FlexBox>
+        <Form method="POST" direction="column">
+          <FlexBox width="100%" position="relative">
+            <FlexBox direction="column" width="50%" margin="32px 0 0">
+              {selectedUser ? (
+                InputData.map((item, index) => (
+                  <FlexBox align="center" margin="20px 30px" key={index}>
+                    {item.body(
+                      selectedUser,
+                      handleChange,
+                      state,
+                      onFileChange,
+                      editImage
+                    )}
+                  </FlexBox>
+                ))
+              ) : (
+                <div
+                  style={{
+                    color: "rgb(33, 43, 54)",
+                    fontSize: "14px",
+                    textAlign: "center",
+                    position: "absolute",
+                    left: "50%",
+                    transform: "translateX(-50%)",
+                    top: "20px",
+                  }}
+                >
+                  리스트를 불러오는중입니다.
+                </div>
               )}
             </FlexBox>
-          ))}
-        </FlexBox>
-        <FlexBox>
-          <Button
-            type="button"
-            title="수정"
-            width="150px"
-            margin="30px 20px 0 0"
-            background="#06c"
-            onClick={submit}
-          />
-          <Button
-            type="button"
-            title="목록"
-            width="150px"
-            margin="30px 0 0 0"
-            background="#33a66c"
-            onClick={goBacktoList}
-          />
-        </FlexBox>
-      </Form>
-    </>
+            {selectedUser && (
+              <UploadedImage
+                onFileChange={onFileChange}
+                editImage={editImage}
+                state={state}
+                selectedUser={selectedUser}
+              />
+            )}
+          </FlexBox>
+          <FlexBox margin="50px 0">
+            <Button
+              type="button"
+              title="수정"
+              width="140px"
+              margin="0 20px 0 0"
+              background="#ff9030"
+              shadow="rgb(249 217 189) 0px 8px 16px 0px"
+              onClick={editUser}
+            />
+            <Button
+              type="button"
+              title="목록"
+              width="140px"
+              margin="0"
+              color="#ff9030"
+              background="#fff"
+              border="1px solid #ff9030"
+              onClick={goBacktoList}
+            />
+          </FlexBox>
+        </Form>
+      </FlexBox>
+    </FlexBox>
   );
-};
+});
 
 export default MemberEdit;

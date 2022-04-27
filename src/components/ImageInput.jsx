@@ -26,7 +26,7 @@ const EditLabel = styled.label`
   z-index: 2;
 `;
 
-function ImageInput({ onClick, onChange, id, accept, editImage }) {
+function ImageInput({ onClick, onChange, id, accept, editImage, FaCamera }) {
   return (
     <>
       <StyledInput
@@ -37,11 +37,11 @@ function ImageInput({ onClick, onChange, id, accept, editImage }) {
       />
       {editImage ? (
         <EditLabel htmlFor={id}>
-          <p>수정하기</p>
+          <FaCamera style={{ width: "24px", height: "24px" }} />
         </EditLabel>
       ) : (
         <StyledLabel htmlFor={id}>
-          <p>이미지 등록</p>
+          <FaCamera style={{ width: "24px", height: "24px" }} />
         </StyledLabel>
       )}
     </>

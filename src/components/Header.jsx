@@ -50,6 +50,7 @@ function Header({ name, logout }) {
           opacity={box ? "1" : "0"}
           pointE={box ? "all" : "none"}
           transform={box ? "translateY(0px)" : "translateY(10px)"}
+          zIndex="999"
         >
           <FlexBox
             height="48px"

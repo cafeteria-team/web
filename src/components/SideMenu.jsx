@@ -1,4 +1,4 @@
-import React, { useState, useRef } from "react";
+import React, { useState } from "react";
 import {
   FlexBox,
   StyledTitle,
@@ -318,17 +318,20 @@ const SideMenu = (props) => {
       direction="column"
       width="100%"
       maxW={menuState ? "64px" : "280px"}
-      position="relative"
       border="1px dashed rgba(145, 158, 171, 0.24)"
       just="space-between"
+      height="100vh"
+      position="sticky"
+      top="0"
     >
       <FlexBox direction="column">
-        <StyledTitle color="#fff" position="sticky" top="0px">
+        <StyledTitle color="#fff" position="sticky" top="0px" zIndex="2">
           <FlexBox
             just={menuState ? "center" : "space-between"}
             align="center"
             padding={menuState ? "20px 10px" : "20px"}
             margin="0 0 34px 0"
+            background="#F9FAFB"
           >
             <StyledTitle display={menuState ? "none" : ""}>좋구내</StyledTitle>
             {menuState ? (
@@ -398,7 +401,7 @@ const SideMenu = (props) => {
           rad="100%"
           position="absolute"
           top={menuState ? "6px" : "30px"}
-          left="82px"
+          left={menuState ? "16px" : "82px"}
           shadow="rgb(249 217 189) 5px 3px 16px 0px"
         />
       </FlexBox>

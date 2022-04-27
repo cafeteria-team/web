@@ -7,7 +7,7 @@ import {
   Li,
   StyledSpan,
 } from "../../components/StyledElements";
-import { Input, Button, MyEditor } from "../../components";
+import { Button, MyEditor } from "../../components";
 import { useStores } from "../../stores/Context";
 import Select from "react-select";
 import Decode from "../../utils/decode";

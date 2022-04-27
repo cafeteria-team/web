@@ -117,25 +117,43 @@ const PasswordModal = ({
             </FlexBox>
           </FlexBox>
           <FlexBox direction="column">
-            <Button
+            <button
               type="button"
-              title="확인"
-              width="300px"
+              style={{
+                width: "342px",
+                padding: "14px 20px",
+                border: "unset",
+                borderRadius: "8px",
+                boxShadow: "rgb(249 217 189) 0px 8px 16px 0px",
+                background: "#ff9030",
+                color: "#fff",
+                fontSize: "1rem",
+                cursor: "pointer",
+                margin: "0 0 12px 0",
+              }}
               onClick={() => {
                 checkPhoneAuth(state.auth_phone);
               }}
-              margin="0 0 12px 0"
-            />
-            <Button
+            >
+              확인
+            </button>
+            <button
               type="button"
-              title="취소"
-              width="300px"
+              style={{
+                width: "342px",
+                padding: "14px 20px",
+                borderRadius: "8px",
+                background: "#fff",
+                border: "1px solid #ff9030",
+                color: "#ff9030",
+                fontSize: "1rem",
+                cursor: "pointer",
+                margin: "0 0 12px 0",
+              }}
               onClick={_canclePhone}
-              margin="0"
-              background="unset"
-              border="1px solid #FF8400"
-              color="#FF8400"
-            />
+            >
+              취소
+            </button>
           </FlexBox>
         </>
       ) : null}

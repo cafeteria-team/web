@@ -3,6 +3,9 @@ import React from "react";
 import styled from "styled-components";
 
 const StyledButton = styled.button`
+  display: ${({ display }) => display || ""};
+  align-items: ${({ align }) => align || ""};
+  justify-content: ${({ just }) => just || ""};
   width: ${({ width }) => width || "100%"};
   height: ${({ height }) => height || ""};
   font-weight: ${({ weight }) => weight || "normal"};
@@ -37,7 +40,7 @@ const StyledButton = styled.button`
   &[disabled] {
     ${({ disabled }) =>
       disabled &&
-      `background: grey;
+      `color: rgb(33, 43, 54);
   cursor: revert;
   transform: revert;`}
   }
@@ -76,6 +79,9 @@ function Button({
   bottom,
   height,
   shadow,
+  display,
+  align,
+  just,
 }) {
   return (
     <StyledButton
@@ -100,6 +106,9 @@ function Button({
       bottom={bottom}
       height={height}
       shadow={shadow}
+      display={display}
+      align={align}
+      just={just}
     >
       {title}
     </StyledButton>

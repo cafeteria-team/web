@@ -149,15 +149,9 @@ const UserList = ({ userList, isLoading }) => {
   );
 };
 
-const SkeletonList = ({ key }) => {
+const SkeletonList = () => {
   return (
-    <Li
-      height="68px"
-      width="100%"
-      border="1px solid #e2e6e7"
-      align="center"
-      key={key}
-    >
+    <Li height="68px" width="100%" border="1px solid #e2e6e7" align="center">
       <Ul
         width="100%"
         padding="14px 24px"
