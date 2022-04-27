@@ -63,6 +63,9 @@ const ManageAdmin = () => {
   const colourOptions = [
     { value: "CAFE", label: "CAFE" },
     { value: "COFFEE", label: "COFFEE" },
+    { value: "CONVEIENCE", label: "CONVEIENCE" },
+    { value: "NOODEL", label: "BREAD" },
+    { value: "BEVERAGE", label: "BEVERAGE" },
   ];
 
   const getFacilityList = useCallback(async () => {
@@ -128,9 +131,10 @@ const ManageAdmin = () => {
       <FlexBox
         width="100%"
         background="#fff"
-        padding="20px"
         boxSizing="border-box"
         direction="column"
+        rad="16px"
+        shadow="rgb(145 158 171 / 20%) 0px 3px 1px -2px, rgb(145 158 171 / 14%) 0px 2px 2px 0px, rgb(145 158 171 / 12%) 0px 1px 5px 0px"
       >
         <FlexBox just="space-between" align="center" margin="0 0 20px 0">
           <StyledBody>편의시설</StyledBody>
