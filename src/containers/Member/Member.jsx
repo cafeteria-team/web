@@ -11,7 +11,6 @@ import { Button, SearchBar, Pagination } from "../../components";
 import Toggle from "react-toggle";
 import moment from "moment";
 import { useNavigate } from "react-router-dom";
-import { useParams } from "react-router";
 import "react-toggle/style.css";
 import { observer } from "mobx-react";
 import { useStores } from "../../stores/Context";
@@ -135,8 +134,6 @@ const MemberList = ({
 const Member = observer(() => {
   const { AuthStore, ListStore } = useStores();
 
-  const params = useParams();
-
   const navigate = useNavigate();
 
   // state
@@ -202,12 +199,7 @@ const Member = observer(() => {
   };
 
   // 유저선택
-  const selectUser = async (userId) => {
-    // localStorage.setItem("userId", userId);
-    // let _userId = localStorage.getItem("userId");
-    // setId(_userId);
-
-    // await getEditUser();
+  const selectUser = (userId) => {
     navigate(`${userId}`);
   };
 
@@ -322,7 +314,7 @@ const Member = observer(() => {
           padding="20px 24px"
         >
           <StyledBody color="color rgb(33, 43, 54)" fontSize="18px" fontW="600">
-            회원관리 {params.detail && "- 기본정보"}
+            회원관리
           </StyledBody>
           <SearchBar search={state.search} handleChange={handleChange} />
         </FlexBox>

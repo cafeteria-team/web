@@ -50,7 +50,12 @@ export class ListStore {
   // 유저 정보 삭제
   deleteUser = async (userId) => {
     try {
-      const response = await axios.delete(`/api/user/${userId}`);
+      const access = localStorage.getItem("access");
+      const response = await axios.delete(`/api/user/${userId}`, {
+        headers: {
+          Authorization: `Bearer ${access}`,
+        },
+      });
       console.log(response);
       return response;
     } catch (error) {
@@ -69,28 +74,35 @@ export class ListStore {
       });
       return response;
     } catch (error) {
-      console.log(error.response);
-      return false;
+      return error;
     }
   };
 
   // 유저 정보 수정
   editUser = async (userId, data) => {
     try {
-      const { email, name, busi_num, busi_num_img } = data;
-      const response = await axios.patch(`/api/user/${userId}`, {
-        email,
-        store: {
-          name,
-          busi_num,
-          busi_num_img,
+      const access = localStorage.getItem("access");
+      // const { email, name, busi_num, busi_num_img } = data;
+      const response = await axios.patch(
+        `/api/user/${userId}`,
+        {
+          email: data.email,
+          store: {
+            name: data.store.name,
+            busi_num: data.store.busi_num,
+            busi_num_img: data.store.busi_num_img,
+          },
         },
-      });
-
+        {
+          headers: {
+            Authorization: `Bearer ${access}`,
+          },
+        }
+      );
       return response;
     } catch (error) {
-      console.log(error.response);
-      return;
+      alert("회원정보를 수정할수없습니다. 다시 시도해주세요.");
+      return error;
     }
   };
 

@@ -1,13 +1,12 @@
 import axios from "axios";
-import { removeCookie } from "../utils/cookie";
 
 // const PROXY = window.location.hostname === "localhost" ? "" : "/proxy";
 
 const instance = axios.create({
-  baseURL: "https://www.good-cafeteria.cf",
+  baseURL: process.env.REACT_APP_SERVER,
   // baseURL: PROXY,
   //proxy 설정후 빈칸
-  timeout: 5000,
+  timeout: 2000,
 });
 
 // const access = localStorage.getItem("access");

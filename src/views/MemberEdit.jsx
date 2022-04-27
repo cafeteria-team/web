@@ -59,52 +59,52 @@ const InputData = [
     ),
   },
   {
-    body: (selectedUser, handleChange, state) => (
+    body: (selectedUser, handleChange) => (
       <>
         <TextField
           label="이메일"
           fullWidth
+          id="email"
           defaultValue={selectedUser.email}
-          // value={state.email}
           onChange={(e) => handleChange(e)}
         />
       </>
     ),
   },
   {
-    body: (selectedUser, handleChange, state) => (
+    body: (selectedUser, handleChange, handleChangeStore) => (
       <>
         <TextField
           label="업체명"
           fullWidth
+          id="name"
           defaultValue={selectedUser.store.name}
-          // value={state.name}
-          onChange={(e) => handleChange(e)}
+          onChange={(e) => handleChangeStore(e)}
         />
       </>
     ),
   },
   {
-    body: (selectedUser, handleChange, state) => (
+    body: (selectedUser, handleChange, handleChangeStore) => (
       <>
         <TextField
           fullWidth
           label="사업자번호"
+          id="busi_num"
           defaultValue={selectedUser.store.busi_num}
-          onChange={(e) => handleChange(e)}
+          onChange={(e) => handleChangeStore(e)}
         />
       </>
     ),
   },
 ];
 
-const UploadedImage = ({ onFileChange, editImage, state, selectedUser }) => {
-  console.log(selectedUser);
+const UploadedImage = ({ onFileChange, editImage, selectedUser }) => {
   return (
     <FlexBox width="50%" direction="column" overflow="hidden">
       <FlexBox margin="0 10px 0 0" minW="100px" align="center">
         <StyledBody
-          olor="color rgb(33, 43, 54)"
+          color="rgb(33, 43, 54)"
           fontSize="16px"
           fontW="600"
           margin="0 16px 0 0"
@@ -124,7 +124,7 @@ const UploadedImage = ({ onFileChange, editImage, state, selectedUser }) => {
           <div style={imageStyle.div}>
             <img
               src={selectedUser.store.busi_num_img}
-              alt="business_img"
+              alt="사업자등록증"
               style={imageStyle.image}
             />
           </div>
@@ -160,7 +160,7 @@ const UploadedImage = ({ onFileChange, editImage, state, selectedUser }) => {
 };
 
 const MemberEdit = observer(() => {
-  const { AuthStore, ListStore } = useStores();
+  const { ListStore } = useStores();
 
   const [selectedUser, setSelectedUser] = useState(null);
 
@@ -170,25 +170,26 @@ const MemberEdit = observer(() => {
 
   const navigate = useNavigate();
 
-  const [state, setState] = useState({
-    email: "",
-    name: "",
-    busi_num: "",
-    busi_num_img: "",
-  });
-
   const editImage = true;
 
   // 유저수정 완료
-  const editUser = async () => {
-    // console.log("수정실행");
-    ListStore.editUser(params.name, state).then((res) =>
-      alert("회원정보가 수정되었습니다.")
+  const editUser = () => {
+    ListStore.editUser(params.name, selectedUser).then((res) =>
+      console.log(res, "sss")
     );
+
+    // try {
+    //   const response = await ListStore.editUser(params.name, selectedUser);
+    //   console.log(response);
+    //   // alert("회원정보가 수정되었습니다.");
+    //   // return navigate("/main/member");
+    // } catch (error) {
+    //   alert("서버와의 연결이 끊어졌습니다. 다시한번 시도해주십시오.");
+    // }
   };
 
   // 선택된 유저 불러오기
-  const getEditUser = useCallback(
+  const _getEditUser = useCallback(
     (userId) => {
       setLoading(true);
       const access = localStorage.getItem("access");
@@ -201,14 +202,26 @@ const MemberEdit = observer(() => {
   );
 
   useEffect(() => {
-    getEditUser(params.name);
-  }, [getEditUser]);
+    _getEditUser(params.name);
+  }, []);
 
   const handleChange = (e) => {
     const { id, value } = e.target;
-    setState((prev) => ({
+
+    setSelectedUser((prev) => ({
       ...prev,
       [id]: value,
+    }));
+  };
+
+  const handleChangeStore = (e) => {
+    const { id, value } = e.target;
+    setSelectedUser((prev) => ({
+      ...prev,
+      store: {
+        ...prev.store,
+        [id]: value,
+      },
     }));
   };
 
@@ -220,10 +233,10 @@ const MemberEdit = observer(() => {
   const onFileChange = async (e) => {
     const maxSize = 10 * 1024 * 1024;
     const imgSize = e.target.files[0].size;
-
     if (imgSize > maxSize) {
       alert("이미지 용량은 10MB 이내로 등록가능합니다.");
     } else {
+      setLoading(true);
       const uploaded = await imageUploader.upload(e.target.files[0]);
       setSelectedUser((prev) => ({
         ...prev,
@@ -232,6 +245,7 @@ const MemberEdit = observer(() => {
           busi_num_img: uploaded,
         },
       }));
+      setLoading(false);
     }
   };
 
@@ -263,13 +277,7 @@ const MemberEdit = observer(() => {
               {selectedUser ? (
                 InputData.map((item, index) => (
                   <FlexBox align="center" margin="20px 30px" key={index}>
-                    {item.body(
-                      selectedUser,
-                      handleChange,
-                      state,
-                      onFileChange,
-                      editImage
-                    )}
+                    {item.body(selectedUser, handleChange, handleChangeStore)}
                   </FlexBox>
                 ))
               ) : (
@@ -292,7 +300,6 @@ const MemberEdit = observer(() => {
               <UploadedImage
                 onFileChange={onFileChange}
                 editImage={editImage}
-                state={state}
                 selectedUser={selectedUser}
               />
             )}
