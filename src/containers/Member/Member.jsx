@@ -179,6 +179,7 @@ const Member = observer(() => {
           setIsLoading(false);
         })
         .catch((err) => {
+          console.log(err.response);
           alert("토큰값이 만료되었습니다. 새로고침 해주세요.");
           setIsLoading(false);
         })
@@ -188,10 +189,9 @@ const Member = observer(() => {
   );
 
   // 유저 권한수정
-  const approveUser = async (userId, data) => {
+  const approveUser = (userId, data) => {
     if (userId) {
-      await ListStore.approveUser(userId, data);
-      return _callUserList(AuthStore.user.accessT);
+      return ListStore.approveUser(userId, data);
     }
   };
 
