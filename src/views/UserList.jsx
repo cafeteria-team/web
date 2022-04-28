@@ -70,7 +70,6 @@ const UserList = ({ userList, isLoading }) => {
       <ListHeader />
       <Ul
         direction="column"
-        borderB="1px solid #e2e6e7"
         width="100%"
         boxSizing="border-box"
         just="space-around"
@@ -86,51 +85,53 @@ const UserList = ({ userList, isLoading }) => {
         ) : userList ? (
           userList
             .slice(0, 5)
-            .map(({ date_joined, id, is_active, store, username }) => (
-              <Li
-                key={id}
-                height="68px"
-                width="100%"
-                border="1px solid #e2e6e7"
-                align="center"
-              >
-                <Ul
+            .map(({ date_joined, id, is_active, store, username }, index) => {
+              return (
+                <Li
+                  key={id}
+                  height="68px"
                   width="100%"
-                  padding="14px 24px"
-                  boxSizing="border-box"
-                  just="space-around"
+                  border={index === 4 ? "unset" : "1px solid #e2e6e7"}
+                  align="center"
                 >
-                  <Li just="center" width="25%" align="center">
-                    {moment(date_joined).format("L")}
-                  </Li>
-                  <Li just="center" width="25%" align="center">
-                    {username}
-                  </Li>
-                  <Li just="center" width="25%" align="center">
-                    {store.name}
-                  </Li>
-                  <Li just="center" width="25%" align="center">
-                    <FlexBox
-                      background={
-                        is_active === true
-                          ? "rgba(84, 214, 44, 0.16)"
-                          : "rgba(255, 72, 66, 0.16)"
-                      }
-                      padding="6px 8px"
-                      rad="8px"
-                      color={
-                        is_active === true
-                          ? "rgb(34, 154, 22)"
-                          : "rgb(183, 33, 54)"
-                      }
-                      fontW="600"
-                    >
-                      {is_active.toString()}
-                    </FlexBox>
-                  </Li>
-                </Ul>
-              </Li>
-            ))
+                  <Ul
+                    width="100%"
+                    padding="14px 24px"
+                    boxSizing="border-box"
+                    just="space-around"
+                  >
+                    <Li just="center" width="25%" align="center">
+                      {moment(date_joined).format("L")}
+                    </Li>
+                    <Li just="center" width="25%" align="center">
+                      {username}
+                    </Li>
+                    <Li just="center" width="25%" align="center">
+                      {store.name}
+                    </Li>
+                    <Li just="center" width="25%" align="center">
+                      <FlexBox
+                        background={
+                          is_active === true
+                            ? "rgba(84, 214, 44, 0.16)"
+                            : "rgba(255, 72, 66, 0.16)"
+                        }
+                        padding="6px 8px"
+                        rad="8px"
+                        color={
+                          is_active === true
+                            ? "rgb(34, 154, 22)"
+                            : "rgb(183, 33, 54)"
+                        }
+                        fontW="600"
+                      >
+                        {is_active.toString()}
+                      </FlexBox>
+                    </Li>
+                  </Ul>
+                </Li>
+              );
+            })
         ) : (
           <Li
             height="68px"

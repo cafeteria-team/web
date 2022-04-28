@@ -54,17 +54,7 @@ const MemberList = ({
   changeToggled,
 }) => {
   return (
-    <Ul
-      direction="column"
-      borderB="1px solid #e2e6e7"
-      width="100%"
-      boxSizing="border-box"
-      just="space-around"
-      color="rgb(33, 43, 54)"
-      fontSize="14px"
-      align="center"
-      overflow="hidden"
-    >
+    <Ul direction="column">
       {results ? (
         results
           .slice(offset, offset + limit)

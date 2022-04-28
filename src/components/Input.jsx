@@ -3,6 +3,7 @@ import styled from "styled-components";
 
 const StyledInput = styled.input`
   width: ${({ width }) => width || "300px"};
+  width: ${({ maxW }) => maxW || ""};
   padding: ${({ padding }) => padding || "14px 20px"};
   margin: ${({ margin }) => margin || " 0 0 20px 0"};
   border: 1px solid #ccc;
@@ -30,6 +31,7 @@ const Input = memo(
     padding,
     margin,
     dataId,
+    maxW,
   }) => {
     return (
       <StyledInput
@@ -43,6 +45,7 @@ const Input = memo(
         padding={padding || ""}
         margin={margin || ""}
         data-id={dataId}
+        maxW={maxW}
       ></StyledInput>
     );
   }

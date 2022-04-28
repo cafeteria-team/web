@@ -70,8 +70,7 @@ export class ManageStore {
       this.setFacilityList(response.data);
       return response;
     } catch (error) {
-      console.log(error);
-      return false;
+      throw error;
     }
   };
 
@@ -82,8 +81,7 @@ export class ManageStore {
       this.setUserFacilityList(response.data.store_facility);
       return response;
     } catch (error) {
-      console.log(error);
-      return false;
+      throw error;
     }
   };
 
@@ -94,8 +92,7 @@ export class ManageStore {
       alert("편의시설이 삭제되었습니다.");
       return response;
     } catch (error) {
-      console.log(error, error.response);
-      return false;
+      throw error;
     }
   };
 
@@ -108,8 +105,7 @@ export class ManageStore {
       alert("편의시설이 삭제되었습니다.");
       return response;
     } catch (error) {
-      console.log(error, error.response);
-      return false;
+      throw error;
     }
   };
 
@@ -122,8 +118,7 @@ export class ManageStore {
       alert("편의시설이 삭제되었습니다.");
       return response;
     } catch (error) {
-      console.log(error, error.response);
-      return false;
+      throw error;
     }
   };
 
@@ -137,8 +132,7 @@ export class ManageStore {
       alert("편의시설이 변경되었습니다.");
       return response;
     } catch (error) {
-      alert("편의시설이 이미 등록되있거나 잘못된 입력입니다.");
-      return false;
+      throw error;
     }
   };
 
@@ -153,7 +147,7 @@ export class ManageStore {
       return response;
     } catch (error) {
       alert("편의시설이 이미 등록되있거나 잘못된 입력입니다.");
-      return false;
+      throw error;
     }
   };
 
@@ -168,10 +162,10 @@ export class ManageStore {
       return response;
     } catch (error) {
       if (error.response.status === 409) {
-        return alert("이미등록된 편의시설입니다.");
+        alert("이미등록된 편의시설입니다.");
+        throw error;
       }
-      console.log(error.response);
-      return false;
+      throw error;
     }
   };
 
