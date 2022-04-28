@@ -41,7 +41,7 @@ function ImageInput({ onClick, onChange, id, accept, editImage, FaCamera }) {
         </EditLabel>
       ) : (
         <StyledLabel htmlFor={id}>
-          <FaCamera style={{ width: "24px", height: "24px" }} />
+          <p>이미지 등록</p>
         </StyledLabel>
       )}
     </>

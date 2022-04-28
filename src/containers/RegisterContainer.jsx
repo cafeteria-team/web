@@ -71,6 +71,228 @@ const Timer = memo(({ timesUp, phoneAuthed, resendCode }) => {
   );
 });
 
+const FirstLists = ({
+  touched,
+  errors,
+  phoneAuthed,
+  mobileDone,
+  getPhoneAuth,
+  field,
+}) => {
+  const errorStyle = {
+    color: "#FF4842",
+    fontSize: "12px",
+    marginTop: "6px",
+    textAlign: "right",
+    width: "484px",
+  };
+
+  return (
+    <>
+      <StyledFiled
+        type="username"
+        placeholder="아이디"
+        error={touched.username && errors.username}
+        margin="24px 0 0"
+        autoComplete="username"
+        {...field.getFieldProps("username")}
+      />
+      {touched.username && errors.username ? (
+        <div style={errorStyle}>{errors.username}</div>
+      ) : null}
+      <StyledFiled
+        type="password"
+        placeholder="비밀번호"
+        error={touched.password && errors.password}
+        margin="24px 0 0"
+        autoComplete="password"
+        {...field.getFieldProps("password")}
+      />
+      {touched.password && errors.password ? (
+        <div style={errorStyle}>{errors.password}</div>
+      ) : null}
+      <StyledFiled
+        type="password"
+        placeholder="비밀번호 확인"
+        autoComplete="password"
+        error={touched.confirm_password && errors.confirm_password}
+        margin="24px 0 0"
+        {...field.getFieldProps("confirm_password")}
+      />
+      {touched.confirm_password && errors.confirm_password ? (
+        <div style={errorStyle}>{errors.confirm_password}</div>
+      ) : null}
+      <StyledFiled
+        type="email"
+        placeholder="이메일"
+        error={touched.email && errors.email}
+        margin="24px 0 0"
+        {...field.getFieldProps("email")}
+      />
+      {touched.email && errors.email ? (
+        <div style={errorStyle}>{errors.email}</div>
+      ) : null}
+      <FlexBox position="relative" direction="column">
+        <StyledFiled
+          type="phone"
+          placeholder="핸드폰번호"
+          error={touched.phone && errors.phone}
+          margin="24px 0 0"
+          {...field.getFieldProps("phone")}
+        />
+        {touched.phone && errors.phone ? (
+          <div style={errorStyle}>{errors.phone}</div>
+        ) : null}
+        <Button
+          color={phoneAuthed ? "tomato" : "#3b86ff"}
+          position="absolute"
+          right="80px"
+          top="49px"
+          background="unset"
+          type="button"
+          width="unset"
+          title={phoneAuthed ? "인증완료" : "인증하기"}
+          padding="unset"
+          font="14px"
+          disabled={phoneAuthed ? true : false}
+          onClick={
+            phoneAuthed
+              ? mobileDone
+              : () => getPhoneAuth(field.values.phone, errors.phone)
+          }
+        />
+      </FlexBox>
+    </>
+  );
+};
+
+const SecondLists = ({
+  touched,
+  errors,
+  field,
+  popupOn,
+  onFileChange,
+  state,
+  values,
+}) => {
+  const errorStyle = {
+    color: "#FF4842",
+    fontSize: "12px",
+    marginTop: "6px",
+    textAlign: "right",
+    width: "484px",
+  };
+
+  return (
+    <>
+      <StyledFiled
+        type="text"
+        placeholder="업체명"
+        error={touched.name && errors.name}
+        margin="24px 0 0"
+        {...field.getFieldProps("name")}
+      />
+      {touched.name && errors.name ? (
+        <div style={errorStyle}>{errors.name}</div>
+      ) : null}
+      <FlexBox position="relative" direction="column">
+        <StyledFiled
+          type="text"
+          placeholder="우편번호"
+          error={touched.zip_code && errors.zip_code && !values.zip_code}
+          margin="24px 0 0"
+          // {...field.getFieldProps("zip_code")}
+          disabled
+          value={values.zip_code}
+        />
+
+        {touched.zip_code && errors.zip_code && !values.zip_code ? (
+          <div style={errorStyle}>{errors.zip_code}</div>
+        ) : null}
+        <Button
+          color="#3b86ff"
+          position="absolute"
+          right="80px"
+          top="49px"
+          background="unset"
+          type="button"
+          width="unset"
+          title="주소검색"
+          padding="unset"
+          font="14px"
+          onClick={popupOn}
+        />
+      </FlexBox>
+
+      <StyledFiled
+        type="text"
+        placeholder="업체주소"
+        error={touched.addr && errors.addr && !values.addr}
+        margin="24px 0 0"
+        {...field.getFieldProps("addr")}
+        disabled
+        value={values.addr}
+      />
+      {touched.addr && errors.addr && !values.addr ? (
+        <div style={errorStyle}>{errors.addr}</div>
+      ) : null}
+
+      <StyledFiled
+        type="text"
+        name="detail_addr"
+        placeholder="상세주소"
+        error={touched.detail_addr && errors.detail_addr}
+        margin="24px 0 0"
+        {...field.getFieldProps("detail_addr")}
+      />
+      {touched.detail_addr && errors.detail_addr ? (
+        <div style={errorStyle}>{errors.detail_addr}</div>
+      ) : null}
+
+      <FlexBox position="relative" direction="column">
+        <StyledFiled
+          type="text"
+          placeholder="사업자번호"
+          error={touched.busi_num && errors.busi_num}
+          margin="24px 0 0"
+          {...field.getFieldProps("busi_num")}
+        />
+
+        <ImageInput
+          onChange={onFileChange}
+          id="contained-button-file"
+          accept="image/*"
+          editImage={false}
+        />
+
+        <FlexBox width="480px">
+          <StyledSpan
+            font="12px"
+            color="#838383"
+            align="flex-end"
+            style={{ width: "50%", marginTop: "6px" }}
+          >
+            *이미지등록시, 사업자등록증을 등록해야합니다.
+          </StyledSpan>
+          {touched.busi_num && errors.busi_num ? (
+            <div
+              style={{
+                color: "#FF4842",
+                fontSize: "12px",
+                marginTop: "6px",
+                textAlign: "right",
+                width: "50%",
+              }}
+            >
+              {errors.busi_num}
+            </div>
+          ) : null}
+        </FlexBox>
+      </FlexBox>
+    </>
+  );
+};
+
 const Register = (props) => {
   const navigate = useNavigate();
 
@@ -575,224 +797,3 @@ const Register = (props) => {
 };
 
 export default Register;
-
-const FirstLists = ({
-  touched,
-  errors,
-  phoneAuthed,
-  mobileDone,
-  getPhoneAuth,
-  field,
-}) => {
-  const errorStyle = {
-    color: "#FF4842",
-    fontSize: "12px",
-    marginTop: "6px",
-    textAlign: "right",
-    width: "484px",
-  };
-
-  return (
-    <>
-      <StyledFiled
-        type="username"
-        placeholder="아이디"
-        error={touched.username && errors.username}
-        margin="24px 0 0"
-        autoComplete="username"
-        {...field.getFieldProps("username")}
-      />
-      {touched.username && errors.username ? (
-        <div style={errorStyle}>{errors.username}</div>
-      ) : null}
-      <StyledFiled
-        type="password"
-        placeholder="비밀번호"
-        error={touched.password && errors.password}
-        margin="24px 0 0"
-        autoComplete="password"
-        {...field.getFieldProps("password")}
-      />
-      {touched.password && errors.password ? (
-        <div style={errorStyle}>{errors.password}</div>
-      ) : null}
-      <StyledFiled
-        type="password"
-        placeholder="비밀번호 확인"
-        autoComplete="password"
-        error={touched.confirm_password && errors.confirm_password}
-        margin="24px 0 0"
-        {...field.getFieldProps("confirm_password")}
-      />
-      {touched.confirm_password && errors.confirm_password ? (
-        <div style={errorStyle}>{errors.confirm_password}</div>
-      ) : null}
-      <StyledFiled
-        type="email"
-        placeholder="이메일"
-        error={touched.email && errors.email}
-        margin="24px 0 0"
-        {...field.getFieldProps("email")}
-      />
-      {touched.email && errors.email ? (
-        <div style={errorStyle}>{errors.email}</div>
-      ) : null}
-      <FlexBox position="relative" direction="column">
-        <StyledFiled
-          type="phone"
-          placeholder="핸드폰번호"
-          error={touched.phone && errors.phone}
-          margin="24px 0 0"
-          {...field.getFieldProps("phone")}
-        />
-        {touched.phone && errors.phone ? (
-          <div style={errorStyle}>{errors.phone}</div>
-        ) : null}
-        <Button
-          color={phoneAuthed ? "tomato" : "#3b86ff"}
-          position="absolute"
-          right="80px"
-          top="49px"
-          background="unset"
-          type="button"
-          width="unset"
-          title={phoneAuthed ? "인증완료" : "인증하기"}
-          padding="unset"
-          font="14px"
-          disabled={phoneAuthed ? true : false}
-          onClick={
-            phoneAuthed
-              ? mobileDone
-              : () => getPhoneAuth(field.values.phone, errors.phone)
-          }
-        />
-      </FlexBox>
-    </>
-  );
-};
-
-const SecondLists = ({
-  touched,
-  errors,
-  field,
-  popupOn,
-  onFileChange,
-  state,
-  values,
-}) => {
-  const errorStyle = {
-    color: "#FF4842",
-    fontSize: "12px",
-    marginTop: "6px",
-    textAlign: "right",
-    width: "484px",
-  };
-
-  return (
-    <>
-      <StyledFiled
-        type="text"
-        placeholder="업체명"
-        error={touched.name && errors.name}
-        margin="24px 0 0"
-        {...field.getFieldProps("name")}
-      />
-      {touched.name && errors.name ? (
-        <div style={errorStyle}>{errors.name}</div>
-      ) : null}
-      <FlexBox position="relative" direction="column">
-        <StyledFiled
-          type="text"
-          placeholder="우편번호"
-          error={touched.zip_code && errors.zip_code && !values.zip_code}
-          margin="24px 0 0"
-          // {...field.getFieldProps("zip_code")}
-          disabled
-          value={values.zip_code}
-        />
-
-        {touched.zip_code && errors.zip_code && !values.zip_code ? (
-          <div style={errorStyle}>{errors.zip_code}</div>
-        ) : null}
-        <Button
-          color="#3b86ff"
-          position="absolute"
-          right="80px"
-          top="49px"
-          background="unset"
-          type="button"
-          width="unset"
-          title="주소검색"
-          padding="unset"
-          font="14px"
-          onClick={popupOn}
-        />
-      </FlexBox>
-
-      <StyledFiled
-        type="text"
-        placeholder="업체주소"
-        error={touched.addr && errors.addr && !values.addr}
-        margin="24px 0 0"
-        {...field.getFieldProps("addr")}
-        disabled
-        value={values.addr}
-      />
-      {touched.addr && errors.addr && !values.addr ? (
-        <div style={errorStyle}>{errors.addr}</div>
-      ) : null}
-
-      <StyledFiled
-        type="text"
-        name="detail_addr"
-        placeholder="상세주소"
-        error={touched.detail_addr && errors.detail_addr}
-        margin="24px 0 0"
-        {...field.getFieldProps("detail_addr")}
-      />
-      {touched.detail_addr && errors.detail_addr ? (
-        <div style={errorStyle}>{errors.detail_addr}</div>
-      ) : null}
-
-      <FlexBox position="relative" direction="column">
-        <StyledFiled
-          type="text"
-          placeholder="사업자번호"
-          error={touched.busi_num && errors.busi_num}
-          margin="24px 0 0"
-          {...field.getFieldProps("busi_num")}
-        />
-
-        <ImageInput
-          onChange={onFileChange}
-          id="contained-button-file"
-          accept="image/*"
-        />
-
-        <FlexBox width="480px">
-          <StyledSpan
-            font="12px"
-            color="#838383"
-            align="flex-end"
-            style={{ width: "50%", marginTop: "6px" }}
-          >
-            *이미지등록시, 사업자등록증을 등록해야합니다.
-          </StyledSpan>
-          {touched.busi_num && errors.busi_num ? (
-            <div
-              style={{
-                color: "#FF4842",
-                fontSize: "12px",
-                marginTop: "6px",
-                textAlign: "right",
-                width: "50%",
-              }}
-            >
-              {errors.busi_num}
-            </div>
-          ) : null}
-        </FlexBox>
-      </FlexBox>
-    </>
-  );
-};
