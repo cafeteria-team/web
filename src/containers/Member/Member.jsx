@@ -170,12 +170,19 @@ const Member = observer(() => {
 
   // 유저 리스트 불러오기
   const _callUserList = useCallback(
-    async (access) => {
+    (access) => {
       setIsLoading(true);
-      await ListStore.callUserList(access);
-      setUserList(ListStore.userList);
-      setTotal(ListStore.userList.length);
-      setIsLoading(false);
+      ListStore.callUserList(access)
+        .then((res) => {
+          setUserList(res.data);
+          setTotal(res.data.length);
+          setIsLoading(false);
+        })
+        .catch((err) => {
+          alert("토큰값이 만료되었습니다. 새로고침 해주세요.");
+          setIsLoading(false);
+        })
+        .finally(() => setIsLoading(false));
     },
     [ListStore]
   );
@@ -221,13 +228,14 @@ const Member = observer(() => {
   };
 
   useEffect(() => {
+    const access = localStorage.getItem("access");
     // 유저정보 불러오기
-    _callUserList();
+    _callUserList(access);
 
     return () => {
       setUserList("");
     };
-  }, [AuthStore.user.accessT, _callUserList]);
+  }, [_callUserList]);
 
   return (
     <FlexBox padding="30px 70px" direction="column" width="100%">
@@ -314,7 +322,7 @@ const Member = observer(() => {
             new Array(5).fill(1).map((_, i) => {
               return <SkeletonList key={i} />;
             })
-          ) : userList ? (
+          ) : userList !== null ? (
             <>
               <MemberList
                 results={userList}

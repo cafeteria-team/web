@@ -41,9 +41,7 @@ export class ListStore {
       this.setUserList(response.data);
       return response;
     } catch (error) {
-      console.log(error, error.response);
-      alert("토큰값이 만료되었습니다. 새로고침 해주세요.");
-      return false;
+      throw error;
     }
   };
 
