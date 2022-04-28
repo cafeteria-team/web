@@ -172,22 +172,19 @@ const MemberEdit = observer(() => {
 
   const editImage = true;
 
-  const EditUser = () => {
-    console.log("ss");
-  };
-
   // 유저수정 완료
   const editUser = async () => {
-    // ListStore.editUser(params.name, selectedUser)
-    //   .then((res) => console.log(res, "성공"))
-    //   .catch((error) => console.log(error, "실패"));
-    try {
-      const response = await ListStore.editUser(params.name, selectedUser);
-      alert("회원정보가 수정되었습니다.");
-      return response && navigate("/main/member");
-    } catch (error) {
-      alert("서버와의 연결이 끊어졌습니다. 다시한번 시도해주십시오.");
-    }
+    ListStore.editUser(params.name, selectedUser)
+      .then((res) => {
+        alert("회원정보가 수정되었습니다.");
+        return navigate("/main/member");
+      })
+      .catch((error) => {
+        alert(
+          "회원정보를 수정할수없습니다. 다시 시도해주세요. *사업자번호는 10자리입니다."
+        );
+        return error;
+      });
   };
 
   // 선택된 유저 불러오기

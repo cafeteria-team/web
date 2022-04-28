@@ -60,7 +60,7 @@ export class ListStore {
       return response;
     } catch (error) {
       alert("유저를 삭제하는데 실패했습니다.");
-      return false;
+      throw error;
     }
   };
 
@@ -74,7 +74,7 @@ export class ListStore {
       });
       return response;
     } catch (error) {
-      return error;
+      throw error;
     }
   };
 
@@ -101,8 +101,7 @@ export class ListStore {
       );
       return response;
     } catch (error) {
-      alert("회원정보를 수정할수없습니다. 다시 시도해주세요.");
-      return error;
+      throw error;
     }
   };
 
