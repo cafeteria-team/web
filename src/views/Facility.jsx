@@ -10,6 +10,7 @@ import {
 import uuid from "react-uuid";
 
 const Facility = ({
+  isLoading,
   facilityList,
   DragDropContext,
   Draggable,
@@ -29,9 +30,38 @@ const Facility = ({
         </StyledBody>
       </FlexBox>
       <DragDropContext onDragEnd={(result) => onDragEnd(result)}>
-        {facilityList.map((item, index) => (
-          <div key={uuid()}>{item.name}</div>
-        ))}
+        <Droppable droppableId="facilities">
+          {(provided) => (
+            <Ul
+              className="facilities"
+              {...provided.droppableProps}
+              ref={provided.innerRef}
+              direction="column"
+            >
+              {isLoading ? (
+                <div>로딩중</div>
+              ) : facilityList ? (
+                facilityList.map(({ id, name }, index) => (
+                  <Draggable key={uuid()} index={index} draggableId={`${id}`}>
+                    {(provided) => (
+                      <Li
+                        ref={provided.innerRef}
+                        {...provided.draggableProps}
+                        {...provided.dragHandleProps}
+                        height="48px"
+                      >
+                        {name}
+                      </Li>
+                    )}
+                  </Draggable>
+                ))
+              ) : (
+                <div>ss</div>
+              )}
+              {provided.placeholder}
+            </Ul>
+          )}
+        </Droppable>
       </DragDropContext>
     </>
   );

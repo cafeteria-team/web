@@ -10,6 +10,7 @@ import Manage from "./Manage/Manage";
 import Menu from "./Manage/Menu";
 import ManageAdmin from "./Manage/ManageAdmin";
 import LogoContainer from "./LogoContainer";
+import ManageContainer from "./Manage/ManageContainer";
 
 export {
   RegisterContainer,
@@ -24,4 +25,5 @@ export {
   Manage,
   LogoContainer,
   Menu,
+  ManageContainer,
 };

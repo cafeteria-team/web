@@ -7,10 +7,10 @@ import {
   Main,
   Overview,
   Member,
-  Manage,
   ManageAdmin,
   Menu,
   LogoContainer,
+  ManageContainer,
 } from "./containers";
 
 import { NotFound, Password, MemberEdit } from "./views";
@@ -30,7 +30,7 @@ const Router = ({ isLoggedIn }) => {
         { path: "overview", element: <Overview /> },
         { path: "member", element: <Member /> },
         { path: "member/:name", element: <MemberEdit /> },
-        { path: "manage", element: <Manage /> },
+        { path: "manage", element: <ManageContainer /> },
         { path: "manageAdmin", element: <ManageAdmin /> },
         { path: "menu", element: <Menu /> },
         { path: "password", element: <Password /> },

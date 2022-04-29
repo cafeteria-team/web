@@ -19,6 +19,7 @@
     "formik": "^2.2.9",
     "history": "5",
     "jwt-decode": "^3.1.2",
+    "memoize-one": "^6.0.0",
     "moment": "^2.29.3",
     "netlify-cli": "9.6.2",
     "radium": "^0.26.2",

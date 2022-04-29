@@ -26,6 +26,6 @@ export {
   Password,
   UserList,
   StoreProductList,
-  Facility
+  Facility,
   MemberListTitle,
 };

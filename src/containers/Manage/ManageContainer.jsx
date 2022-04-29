@@ -16,13 +16,23 @@ import { observer } from "mobx-react";
 const ManageContainer = observer(() => {
   const { ManageStore } = useStores();
 
+  const [isLoading, setIsLoading] = useState(false);
+
   const [facilityList, setFacilityList] = useState(null);
 
   // 편의시설 리스트 받아오기
   const getFacilityList = () => {
+    setIsLoading(true);
     ManageStore.callFacilityList()
-      .then((res) => setFacilityList(res.data))
-      .catch((err) => alert("편의시설 정보를 불러올수없습니다."));
+      .then((res) => {
+        setFacilityList(res.data);
+        setIsLoading(false);
+      })
+      .catch((err) => {
+        alert("편의시설 정보를 불러올수없습니다.");
+        setIsLoading(false);
+      })
+      .finally(() => setIsLoading(false));
   };
 
   useEffect(() => {
@@ -78,6 +88,7 @@ const ManageContainer = observer(() => {
         shadow="rgb(145 158 171 / 20%) 0px 3px 1px -2px, rgb(145 158 171 / 14%) 0px 2px 2px 0px, rgb(145 158 171 / 12%) 0px 1px 5px 0px"
       >
         <Facility
+          isLoading={isLoading}
           facilityList={facilityList}
           DragDropContext={DragDropContext}
           Draggable={Draggable}
