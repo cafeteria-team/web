@@ -11,6 +11,7 @@ import Password from "./Password";
 import UserList from "./UserList";
 import StoreProductList from "./StoreProductList";
 import MemberListTitle from "./MemberListTitle";
+import Facility from "./Facility";
 
 export {
   Overview,
@@ -25,5 +26,6 @@ export {
   Password,
   UserList,
   StoreProductList,
+  Facility
   MemberListTitle,
 };
