@@ -56,88 +56,75 @@ const ManageContainer = observer(() => {
     getFacilityList();
   }, []);
 
-  //   const onDragEnd = (result, columns, setColumns) => {
-  //     if (!result.destination) return;
-  //     const { source, destination } = result;
+  const onDragEnd = ({ source, destination }) => {
+    console.log(source);
+    // Make sure we have a valid destination
+    if (destination === undefined || destination === null) return null;
 
-  //     if (source.droppableId !== destination.droppableId) {
-  //       const sourceColumn = columns[source.droppableId];
-  //       const destColumn = columns[destination.droppableId];
-  //       const sourceItems = [...sourceColumn.items];
-  //       const destItems = [...destColumn.items];
-  //       const [removed] = sourceItems.splice(source.index, 1);
-  //       destItems.splice(destination.index, 0, removed);
-  //       setColumns({
-  //         ...columns,
-  //         [source.droppableId]: {
-  //           ...sourceColumn,
-  //           items: sourceItems,
-  //         },
-  //         [destination.droppableId]: {
-  //           ...destColumn,
-  //           items: destItems,
-  //         },
-  //       });
-  //     } else {
-  //       const column = columns[source.droppableId];
-  //       const copiedItems = [...column.items];
-  //       const [removed] = copiedItems.splice(source.index, 1);
-  //       copiedItems.splice(destination.index, 0, removed);
-  //       setColumns({
-  //         ...columns,
-  //         [source.droppableId]: {
-  //           ...column,
-  //           items: copiedItems,
-  //         },
-  //       });
-  //     }
-  //   };
-
-  //   function handleOnDragEnd(result) {
-  //     /**
-  //      * 필요한 요소
-  //      *  드래그할 대상의 index
-  //      *  드래그가 끝났을때의 index
-  //      *
-  //      * 할 일
-  //      * 1. 드래그할 대상의 index를 지운다
-  //      * 2. 드래그가 끝난 당시의 index에 현재 드래그 중인 요소를 넣는다
-  //      */
-
-  //     const currentTags = [...facilityList];
-  //     const draggingItemIndex = result.source.index;
-  //     const afterDragItemIndex = result.destination.index;
-
-  //     const removeTag = currentTags.splice(beforeDragItemIndex, 1);
-
-  //     currentTags.splice(afterDragItemIndex, 0, removeTag[0]);
-
-  //     setFacilityList(currentTags);
-  //   }
-
-  const onDragEnd = (result) => {
-    const { destination, source, draggableId } = result;
-    if (!destination) {
-      return;
-    }
+    // Make sure we're actually moving the item
     if (
-      destination.droppableId === source.droppableId &&
+      source.droppableId === destination.droppableId &&
       destination.index === source.index
-    ) {
-      return;
+    )
+      return null;
+
+    // Set start and end variables
+    const start = facilityList[source.droppableId];
+    const end = facilityList[destination.droppableId];
+
+    // If start is the same as end, we're in the same column
+    if (start === end) {
+      // Move the item within the list
+      // Start by making a new list without the dragged item
+      const newList = start.list.filter((_, idx) => idx !== source.index);
+
+      // Then insert the item at the right location
+      newList.splice(destination.index, 0, start.list[source.index]);
+
+      // Then create a new copy of the column object
+      const newCol = {
+        id: start.id,
+        list: newList,
+        title: start.title,
+      };
+
+      // Update the state
+      setFacilityList((state) => ({ ...state, [newCol.id]: newCol }));
+      return null;
+    } else {
+      // If start is different from end, we need to update multiple columns
+      // Filter the start list like before
+      const newStartList = start.list.filter((_, idx) => idx !== source.index);
+
+      // Create a new start column
+      const newStartCol = {
+        id: start.id,
+        list: newStartList,
+        title: start.title,
+      };
+
+      // Make a new end list array
+      const newEndList = end.list;
+
+      // Insert the item into the end list
+      newEndList.splice(destination.index, 0, start.list[source.index]);
+
+      // Create a new end column
+      const newEndCol = {
+        id: end.id,
+        list: newEndList,
+        title: end.title,
+      };
+
+      // Update the state
+      setFacilityList((state) => ({
+        ...state,
+        [newStartCol.id]: newStartCol,
+        [newEndCol.id]: newEndCol,
+      }));
+      return null;
     }
-
-    // Move the item within the list
-    // Start by making a new list without the dragged item
-    const newList = facilityList.filter((_, idx) => idx !== source.index);
-
-    // Then insert the item at the right location
-    newList.splice(destination.index, 0, facilityList[source.index]);
-
-    // Update the list
-    setFacilityList(newList);
   };
-
   return (
     <FlexBox padding="30px 70px" direction="column" width="100%">
       <StyledTitle margin="0 0 30px 0">업체관리 </StyledTitle>
@@ -152,9 +139,6 @@ const ManageContainer = observer(() => {
         <Facility
           isLoading={isLoading}
           columns={facilityList}
-          //   DragDropContext={DragDropContext}
-          //   Draggable={Draggable}
-          //   Droppable={Droppable}
           onDragEnd={onDragEnd}
         />
       </FlexBox>
