@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { BrowserRouter } from "react-router-dom";
 import { ThemeProvider } from "styled-components";
 import theme from "./styles/theme";
@@ -13,18 +13,23 @@ import Router from "./routes";
 const App = observer(() => {
   const { AuthStore } = useStores();
 
+  const [state, setState] = useState(null);
+
   const initializeUserInfo = useCallback(async () => {
     await AuthStore.onSilentRefresh();
   }, [AuthStore]);
 
   useEffect(() => {
+    AuthStore.getPersistedAuth().then((res) =>
+      setState(res.user.authorization)
+    );
     initializeUserInfo();
-  }, [initializeUserInfo, AuthStore.getUser.authorization]);
+  }, [initializeUserInfo, AuthStore]);
 
   return (
     <ThemeProvider theme={theme}>
       <BrowserRouter className="App">
-        <Router isLoggedIn={AuthStore.getUser.authorization} />
+        <Router isLoggedIn={state} />
       </BrowserRouter>
     </ThemeProvider>
   );

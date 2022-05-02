@@ -6,6 +6,7 @@ import {
   Li,
   StyledSpan,
 } from "../components/StyledElements";
+import { Button } from "../components";
 import uuid from "react-uuid";
 import { DragDropContext, Draggable, Droppable } from "react-beautiful-dnd";
 
@@ -14,37 +15,42 @@ const Column = ({ col: { list, id, title } }) => {
     <Droppable droppableId={id}>
       {(provided) => {
         return (
-          <FlexBox>
+          <FlexBox
+            width="50%"
+            direction="column"
+            padding="20px"
+            margin="0 24px 24px"
+            rad="8px"
+            background={
+              id === "facility"
+                ? "rgba(145, 158, 171, 0.12)"
+                : "rgb(209, 233, 252)"
+            }
+          >
+            <StyledBody
+              color={
+                id === "facility" ? "color rgb(33, 43, 54)" : "rgb(6, 27, 100)"
+              }
+              fontSize="14px"
+              fontW="600"
+              width="100%"
+              margin="0 0 20px"
+            >
+              {title}
+            </StyledBody>
             <Ul
               className="facilities"
               {...provided.droppableProps}
               ref={provided.innerRef}
               direction="column"
-              padding="20px"
-              margin="0 24px 24px"
-              rad="8px"
-              width="fit-content"
+              width="100%"
               mWidth="242px"
-              align="center"
-              background={
-                id === "facility"
-                  ? "rgba(145, 158, 171, 0.12)"
-                  : "rgb(209, 233, 252)"
-              }
+              //   align="center"
+              margin="-24px"
+              mHeight="362px"
+              wrap="wrap"
+              padding="12px"
             >
-              <StyledBody
-                color={
-                  id === "facility"
-                    ? "color rgb(33, 43, 54)"
-                    : "rgb(6, 27, 100)"
-                }
-                fontSize="14px"
-                fontW="600"
-                width="100%"
-                margin="0 0 20px"
-              >
-                {title}
-              </StyledBody>
               {list.map((text, index, arr) => {
                 return (
                   <Item
@@ -52,6 +58,7 @@ const Column = ({ col: { list, id, title } }) => {
                     text={text}
                     index={index}
                     last={arr.length - 1}
+                    id={id}
                   />
                 );
               })}
@@ -64,7 +71,7 @@ const Column = ({ col: { list, id, title } }) => {
   );
 };
 
-const Item = ({ text, index, last }) => {
+const Item = ({ text, index, last, id }) => {
   return (
     <Draggable draggableId={`${text}`} index={index}>
       {(provided) => {
@@ -74,14 +81,19 @@ const Item = ({ text, index, last }) => {
             {...provided.draggableProps}
             {...provided.dragHandleProps}
             height="48px"
-            borderA="1px solid #e2e6e7"
-            width="200px"
+            borderA={
+              id === "facility"
+                ? "1px solid #e2e6e7"
+                : "1px solid rgb(147 171 225)"
+            }
+            width="45%"
             rad="8px"
             align="center"
             just="center"
-            background="#fff"
-            // margin="0 0 24px"
-            margin={last === index ? "0" : "0 0 24px"}
+            color={id === "facility" ? "#212B36" : "rgb(16, 57, 150)"}
+            background={id === "facility" ? "#fff" : "rgba(16, 57, 150, 0.24)"}
+            fontW={id === "facility" ? "400" : "600"}
+            margin="12px"
           >
             {text}
           </Li>
@@ -91,7 +103,7 @@ const Item = ({ text, index, last }) => {
   );
 };
 
-const Facility = ({ isLoading, columns, onDragEnd }) => {
+const Facility = ({ isLoading, columns, onDragEnd, sendFacility }) => {
   return (
     <>
       <FlexBox
@@ -99,7 +111,7 @@ const Facility = ({ isLoading, columns, onDragEnd }) => {
         height="62px"
         align="center"
         padding="20px 24px"
-        minW="612px"
+        // minW="612px"
       >
         <StyledBody color="color rgb(33, 43, 54)" fontSize="18px" fontW="600">
           편의시설관리
@@ -108,21 +120,34 @@ const Facility = ({ isLoading, columns, onDragEnd }) => {
           원하시는 품목을 마우스로 끌어서 넣어주세요.
         </StyledSpan>
       </FlexBox>
-      <DragDropContext
-        onDragEnd={(result) => {
-          onDragEnd(result);
-        }}
-      >
-        {isLoading ? (
-          <FlexBox padding="24px">리스트를 불러오는중입니다.</FlexBox>
-        ) : (
-          <FlexBox>
-            {Object.values(columns).map((col) => (
-              <Column col={col} key={col.id} />
-            ))}
-          </FlexBox>
-        )}
-      </DragDropContext>
+      <FlexBox just="center">
+        <DragDropContext
+          onDragEnd={(result) => {
+            onDragEnd(result);
+          }}
+        >
+          {isLoading ? (
+            <FlexBox padding="24px">리스트를 불러오는중입니다.</FlexBox>
+          ) : (
+            <FlexBox width="100%">
+              {Object.values(columns).map((col) => (
+                <Column col={col} key={col.id} />
+              ))}
+            </FlexBox>
+          )}
+        </DragDropContext>
+      </FlexBox>
+      <FlexBox just="center" padding="0 24px 50px">
+        <Button
+          type="button"
+          width="240px"
+          title="편의시설 저장"
+          onClick={sendFacility}
+          margin="32px 0 0 0"
+          background="#ff9030"
+          shadow="rgb(249 217 189) 0px 8px 16px 0px"
+        />
+      </FlexBox>
     </>
   );
 };

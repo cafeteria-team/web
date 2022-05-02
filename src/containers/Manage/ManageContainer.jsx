@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Facility } from "../../views";
+import { Facility, TextEditor, Menu } from "../../views";
 import {
   FlexBox,
   StyledTitle,
@@ -34,7 +34,6 @@ const ManageContainer = observer(() => {
   // 편의시설 리스트 받아오기
   const getFacilityList = (userLists) => {
     setIsLoading(true);
-
     ManageStore.callFacilityList()
       .then((res) => {
         const nameLists = res.data.map((item) => item.name);
@@ -62,32 +61,31 @@ const ManageContainer = observer(() => {
   const getSelectedFacilityList = () => {
     setIsLoading(true);
 
-    const userId = AuthStore.getUser.userId;
-
-    ManageStore.callUserFacilityList(userId)
+    AuthStore.getPersistedAuth()
       .then((res) => {
-        const nameLists = res.data.store_facility.map(
-          (item) => item.facility.name
-        );
-        setFacilityList((prev) => ({
-          ...prev,
-          userFacility: {
-            ...prev.userFacility,
-            list: nameLists,
-          },
-        }));
-        getFacilityList(nameLists);
+        ManageStore.callUserFacilityList(res.user.userId)
+          .then((res) => {
+            const nameLists = res.data.store_facility.map(
+              (item) => item.facility.name
+            );
+            setFacilityList((prev) => ({
+              ...prev,
+              userFacility: {
+                ...prev.userFacility,
+                list: nameLists,
+              },
+            }));
+            getFacilityList(nameLists);
+          })
+          .catch((err) => {
+            alert("편의시설 정보를 불러올수없습니다.");
+            setIsLoading(false);
+          });
       })
-      .catch((err) => {
-        alert("편의시설 정보를 불러올수없습니다.");
-        setIsLoading(false);
-      });
+      .catch((err) => console.log(err));
   };
 
-  console.log(facilityList);
-
   useEffect(() => {
-    // getFacilityList();
     getSelectedFacilityList();
     return () => AuthStore.stopStore();
   }, [AuthStore]);
@@ -162,12 +160,31 @@ const ManageContainer = observer(() => {
     }
   };
 
+  // 공지사항 저장
+  const sendNotice = (result) => {
+    console.log(result);
+  };
+
+  // 편의시설 저장
+  const sendFacility = () => {};
+
   return (
     <FlexBox padding="30px 70px" direction="column" width="100%">
       <StyledTitle margin="0 0 30px 0">업체관리</StyledTitle>
+      <FlexBox
+        width="100%"
+        background="#fff"
+        boxSizing="border-box"
+        direction="column"
+        rad="16px"
+        shadow="rgb(145 158 171 / 20%) 0px 3px 1px -2px, rgb(145 158 171 / 14%) 0px 2px 2px 0px, rgb(145 158 171 / 12%) 0px 1px 5px 0px"
+      >
+        <Menu />
+      </FlexBox>
 
       <FlexBox
-        width="fit-content"
+        width="100%"
+        margin="24px 0 0"
         background="#fff"
         boxSizing="border-box"
         direction="column"
@@ -178,7 +195,19 @@ const ManageContainer = observer(() => {
           isLoading={isLoading}
           columns={facilityList}
           onDragEnd={onDragEnd}
+          sendFacility={sendFacility}
         />
+      </FlexBox>
+      <FlexBox
+        width="100%"
+        margin="24px 0 0"
+        background="#fff"
+        boxSizing="border-box"
+        direction="column"
+        rad="16px"
+        shadow="rgb(145 158 171 / 20%) 0px 3px 1px -2px, rgb(145 158 171 / 14%) 0px 2px 2px 0px, rgb(145 158 171 / 12%) 0px 1px 5px 0px"
+      >
+        <TextEditor sendNotice={sendNotice} />
       </FlexBox>
     </FlexBox>
   );

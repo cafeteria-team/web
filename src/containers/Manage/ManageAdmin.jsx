@@ -130,7 +130,7 @@ const ManageAdmin = observer(() => {
           selectRef.current.clearValue();
         })
         .catch((err) => {
-          if (err.response.status === 409) {
+          if (err?.response?.status === 409) {
             return;
           } else {
             alert("카테고리 등록에 실패했습니다. 다시 시도해주세요.");

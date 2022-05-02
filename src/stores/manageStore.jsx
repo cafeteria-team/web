@@ -81,6 +81,7 @@ export class ManageStore {
       this.setUserFacilityList(response.data.store_facility);
       return response;
     } catch (error) {
+      console.log(error.response);
       throw error;
     }
   };

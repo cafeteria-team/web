@@ -12,6 +12,8 @@ import UserList from "./UserList";
 import StoreProductList from "./StoreProductList";
 import MemberListTitle from "./MemberListTitle";
 import Facility from "./Facility";
+import TextEditor from "./TextEditor";
+import Menu from "./Menu";
 
 export {
   Overview,
@@ -28,4 +30,6 @@ export {
   StoreProductList,
   Facility,
   MemberListTitle,
+  TextEditor,
+  Menu,
 };

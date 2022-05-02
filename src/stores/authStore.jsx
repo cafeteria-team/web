@@ -83,10 +83,13 @@ export class AuthStore {
     this.decode = new Decode();
   }
 
-  async getPersistedData() {
-    const data = await getPersistedStore(this);
-
-    alert(JSON.stringify(data));
+  getPersistedAuth() {
+    try {
+      const res = getPersistedStore(this);
+      return toJS(res);
+    } catch (err) {
+      throw err;
+    }
   }
 
   get getUser() {
@@ -117,7 +120,7 @@ export class AuthStore {
       );
       return response;
     } catch (error) {
-      return error;
+      throw error;
     }
   }
 

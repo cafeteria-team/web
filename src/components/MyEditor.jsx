@@ -9,6 +9,9 @@ import { FlexBox } from "../components/StyledElements";
 
 const MyBlock = styled.div`
   width: 100%;
+  border-radius: 16px;
+  padding: 0 24px 24px;
+  box-sizing: border-box;
   .wrapper-class {
     background: #fff;
   }
@@ -34,7 +37,7 @@ const MyBlock = styled.div`
 //   "components.controls.blocktype.normal": "Normal",
 // };
 
-const MyEditor = () => {
+const MyEditor = ({ sendNotice }) => {
   // useState로 상태관리하기 초기값은 EditorState.createEmpty()
   // EditorState의 비어있는 ContentState 기본 구성으로 새 개체를 반환 => 이렇게 안하면 상태 값을 나중에 변경할 수 없음.
   const [editorState, setEditorState] = useState(EditorState.createEmpty());
@@ -53,7 +56,7 @@ const MyEditor = () => {
   useEffect(() => {}, [editorState]);
 
   const sendText = () => {
-    console.log(convertedContent);
+    sendNotice(convertedContent);
   };
 
   return (
@@ -126,13 +129,15 @@ const MyEditor = () => {
         // 에디터의 값이 변경될 때마다 onEditorStateChange 호출
         onEditorStateChange={handleEditorChange}
       />
-      <FlexBox width="100%" just="center">
+      <FlexBox width="100%" just="center" padding="0 0 26px">
         <Button
           type="button"
-          width="300px"
-          title="확인"
+          width="240px"
+          title="공지사항 저장"
           onClick={sendText}
           margin="32px 0 0 0"
+          background="#ff9030"
+          shadow="rgb(249 217 189) 0px 8px 16px 0px"
         />
       </FlexBox>
     </MyBlock>

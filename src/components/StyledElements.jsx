@@ -172,6 +172,7 @@ export const Ul = styled.ul`
   display: ${(props) => props.display || "flex"};
   height: ${(props) => props.height || "flex"};
   flex-direction: ${(props) => props.direction || ""};
+  flex-wrap: ${(props) => props.wrap || ""};
   justify-content: ${(props) => props.just || ""};
   align-items: ${(props) => props.align};
   margin: ${(props) => props.margin || ""};
@@ -208,6 +209,8 @@ export const Ul = styled.ul`
 
 export const Li = styled.li`
   display: ${(props) => props.display || "flex"};
+  color: ${(props) => props.color || ""};
+  font-weight: ${(props) => props.fontW || ""};
   flex-direction: ${(props) => props.direction || ""};
   justify-content: ${(props) => props.just || ""};
   align-items: ${(props) => props.align};
