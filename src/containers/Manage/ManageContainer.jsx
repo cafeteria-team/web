@@ -36,11 +36,13 @@ const ManageContainer = observer(() => {
     setIsLoading(true);
     ManageStore.callFacilityList()
       .then((res) => {
+        const nameLists = res.data.map((item) => item.name);
+
         setFacilityList((prev) => ({
           ...prev,
           facility: {
             ...prev.facility,
-            list: res.data,
+            list: nameLists,
           },
         }));
         setIsLoading(false);

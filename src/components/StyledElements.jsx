@@ -189,6 +189,7 @@ export const Ul = styled.ul`
   max-width: ${(props) => props.maxW || ""};
   flex: ${(props) => props.flex || ""};
   transition: all 0.6s ease;
+  min-width: ${(props) => props.mWidth || ""};
   max-height: ${(props) => props.mHeight || ""};
   min-height: ${(props) => props.minHeight || ""};
   overflow: ${(props) => props.overflow || ""};

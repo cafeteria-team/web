@@ -14,7 +14,7 @@ const Column = ({ col: { list, id, title } }) => {
   return (
     <Droppable droppableId={id}>
       {(provided) => {
-        console.log(provided.placeholder);
+        console.log(id);
         return (
           <FlexBox>
             <Ul
@@ -26,9 +26,14 @@ const Column = ({ col: { list, id, title } }) => {
               margin="0 24px 24px"
               rad="8px"
               width="fit-content"
-              just="center"
+              mWidth="242px"
+              //   just="center"
               align="center"
-              background="rgba(145, 158, 171, 0.12)"
+              background={
+                id === "facility"
+                  ? "rgba(145, 158, 171, 0.12)"
+                  : "rgb(209, 233, 252)"
+              }
             >
               <StyledBody
                 color="color rgb(33, 43, 54)"
@@ -71,7 +76,7 @@ const Item = ({ text, index }) => {
             margin="0 0 24px"
             // margin={item.length - 1 === index ? "0" : "0 0 24px"}
           >
-            {text.name}
+            {text}
           </Li>
         );
       }}
