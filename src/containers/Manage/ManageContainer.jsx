@@ -32,19 +32,21 @@ const ManageContainer = observer(() => {
   });
 
   // 편의시설 리스트 받아오기
-  const getFacilityList = () => {
+  const getFacilityList = (userLists) => {
     setIsLoading(true);
-    const userId = AuthStore.getUser.userId;
 
     ManageStore.callFacilityList()
       .then((res) => {
         const nameLists = res.data.map((item) => item.name);
 
+        var intersection = nameLists.filter(
+          (value) => userLists.indexOf(value) === -1
+        );
         setFacilityList((prev) => ({
           ...prev,
           facility: {
             ...prev.facility,
-            list: nameLists,
+            list: intersection,
           },
         }));
         setIsLoading(false);
@@ -74,19 +76,18 @@ const ManageContainer = observer(() => {
             list: nameLists,
           },
         }));
-        setIsLoading(false);
+        getFacilityList(nameLists);
       })
       .catch((err) => {
         alert("편의시설 정보를 불러올수없습니다.");
         setIsLoading(false);
-      })
-      .finally(() => setIsLoading(false));
+      });
   };
 
   console.log(facilityList);
 
   useEffect(() => {
-    getFacilityList();
+    // getFacilityList();
     getSelectedFacilityList();
     return () => AuthStore.stopStore();
   }, [AuthStore]);
