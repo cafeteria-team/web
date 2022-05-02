@@ -8,13 +8,13 @@ import {
   Li,
   LoadingLi,
 } from "../../components/StyledElements";
-import { DragDropContext, Draggable, Droppable } from "react-beautiful-dnd";
+
 import uuid from "react-uuid";
 import { useStores } from "../../stores/Context";
 import { observer } from "mobx-react";
 
 const ManageContainer = observer(() => {
-  const { ManageStore } = useStores();
+  const { AuthStore, ManageStore } = useStores();
 
   const [isLoading, setIsLoading] = useState(false);
 
@@ -34,6 +34,8 @@ const ManageContainer = observer(() => {
   // 편의시설 리스트 받아오기
   const getFacilityList = () => {
     setIsLoading(true);
+    const userId = AuthStore.getUser.userId;
+
     ManageStore.callFacilityList()
       .then((res) => {
         const nameLists = res.data.map((item) => item.name);
@@ -54,9 +56,40 @@ const ManageContainer = observer(() => {
       .finally(() => setIsLoading(false));
   };
 
+  // 선택된 편의시설 리스트
+  const getSelectedFacilityList = () => {
+    setIsLoading(true);
+
+    const userId = AuthStore.getUser.userId;
+
+    ManageStore.callUserFacilityList(userId)
+      .then((res) => {
+        const nameLists = res.data.store_facility.map(
+          (item) => item.facility.name
+        );
+        setFacilityList((prev) => ({
+          ...prev,
+          userFacility: {
+            ...prev.userFacility,
+            list: nameLists,
+          },
+        }));
+        setIsLoading(false);
+      })
+      .catch((err) => {
+        alert("편의시설 정보를 불러올수없습니다.");
+        setIsLoading(false);
+      })
+      .finally(() => setIsLoading(false));
+  };
+
+  console.log(facilityList);
+
   useEffect(() => {
     getFacilityList();
-  }, []);
+    getSelectedFacilityList();
+    return () => AuthStore.stopStore();
+  }, [AuthStore]);
 
   const onDragEnd = ({ source, destination }) => {
     console.log(source);
@@ -127,11 +160,13 @@ const ManageContainer = observer(() => {
       return null;
     }
   };
+
   return (
     <FlexBox padding="30px 70px" direction="column" width="100%">
-      <StyledTitle margin="0 0 30px 0">업체관리 </StyledTitle>
+      <StyledTitle margin="0 0 30px 0">업체관리</StyledTitle>
+
       <FlexBox
-        width="100%"
+        width="fit-content"
         background="#fff"
         boxSizing="border-box"
         direction="column"

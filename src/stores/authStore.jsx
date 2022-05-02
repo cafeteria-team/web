@@ -2,16 +2,24 @@ import { observable, action, computed, makeObservable, toJS } from "mobx";
 import axios from "../utils/axios";
 import { setCookie, getCookie, removeCookie } from "../utils/cookie";
 import Decode from "../utils/decode";
+import {
+  makePersistable,
+  getPersistedStore,
+  stopPersisting,
+  PersistStoreMap,
+} from "mobx-persist-store";
 
 class User {
   userId;
   authorization;
-  accessT;
+  access;
+  refresh;
 
-  constructor(userId, authorization, access) {
+  constructor(userId, authorization, access, refresh) {
     this.userId = userId;
     this.authorization = authorization;
-    this.accessT = access;
+    this.access = access;
+    this.refresh = refresh;
   }
 }
 
@@ -44,6 +52,26 @@ export class AuthStore {
         logout: action,
       }
     );
+
+    this.checkStorage = Array.from(PersistStoreMap.values())
+      .map((persistStore) => persistStore.storageName)
+      .includes("AuthStore");
+
+    // if (this.checkStorage) {
+    //   return;
+    // } else {
+    //   makePersistable(this, {
+    //     name: "AuthStore",
+    //     properties: ["user"],
+    //     storage: window.localStorage,
+    //   });
+    // }
+    makePersistable(this, {
+      name: "AuthStore",
+      properties: ["user"],
+      storage: window.localStorage,
+    });
+
     // 토큰 기본시간
     this.JWT_EXPIRY_TIME = 3600 * 1000;
 
@@ -55,15 +83,21 @@ export class AuthStore {
     this.decode = new Decode();
   }
 
+  async getPersistedData() {
+    const data = await getPersistedStore(this);
+
+    alert(JSON.stringify(data));
+  }
+
   get getUser() {
     return toJS(this.user);
   }
 
   // 업체명 설정
-  setUser = (access, state) => {
+  setUser = (access, refresh, state) => {
     if (access) {
       const userId = this.decode.getUserId(access).user_id;
-      this.user = new User(userId, state, access);
+      this.user = new User(userId, state, access, refresh);
     } else {
       this.user = new User("", state, "");
     }
@@ -89,7 +123,7 @@ export class AuthStore {
 
   onLoginSucess = (access, refresh, username) => {
     // user상태 저장
-    this.setUser(access, true);
+    this.setUser(access, refresh, true);
 
     // accessToken 저장
     localStorage.setItem("access", access);
@@ -134,6 +168,10 @@ export class AuthStore {
       return;
     }
   };
+
+  stopStore() {
+    stopPersisting(this);
+  }
 
   logout = () => {
     this.setUser("", false);

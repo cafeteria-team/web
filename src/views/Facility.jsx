@@ -1,11 +1,10 @@
 import React from "react";
 import {
   FlexBox,
-  StyledTitle,
   StyledBody,
   Ul,
   Li,
-  LoadingLi,
+  StyledSpan,
 } from "../components/StyledElements";
 import uuid from "react-uuid";
 import { DragDropContext, Draggable, Droppable } from "react-beautiful-dnd";
@@ -14,7 +13,6 @@ const Column = ({ col: { list, id, title } }) => {
   return (
     <Droppable droppableId={id}>
       {(provided) => {
-        console.log(id);
         return (
           <FlexBox>
             <Ul
@@ -27,7 +25,6 @@ const Column = ({ col: { list, id, title } }) => {
               rad="8px"
               width="fit-content"
               mWidth="242px"
-              //   just="center"
               align="center"
               background={
                 id === "facility"
@@ -36,7 +33,11 @@ const Column = ({ col: { list, id, title } }) => {
               }
             >
               <StyledBody
-                color="color rgb(33, 43, 54)"
+                color={
+                  id === "facility"
+                    ? "color rgb(33, 43, 54)"
+                    : "rgb(6, 27, 100)"
+                }
                 fontSize="14px"
                 fontW="600"
                 width="100%"
@@ -44,9 +45,16 @@ const Column = ({ col: { list, id, title } }) => {
               >
                 {title}
               </StyledBody>
-              {list.map((text, index) => (
-                <Item key={uuid()} text={text} index={index} />
-              ))}
+              {list.map((text, index, arr) => {
+                return (
+                  <Item
+                    key={uuid()}
+                    text={text}
+                    index={index}
+                    last={arr.length - 1}
+                  />
+                );
+              })}
               {provided.placeholder}
             </Ul>
           </FlexBox>
@@ -56,8 +64,7 @@ const Column = ({ col: { list, id, title } }) => {
   );
 };
 
-const Item = ({ text, index }) => {
-  console.log(text);
+const Item = ({ text, index, last }) => {
   return (
     <Draggable draggableId={`${text}`} index={index}>
       {(provided) => {
@@ -73,8 +80,8 @@ const Item = ({ text, index }) => {
             align="center"
             just="center"
             background="#fff"
-            margin="0 0 24px"
-            // margin={item.length - 1 === index ? "0" : "0 0 24px"}
+            // margin="0 0 24px"
+            margin={last === index ? "0" : "0 0 24px"}
           >
             {text}
           </Li>
@@ -92,10 +99,14 @@ const Facility = ({ isLoading, columns, onDragEnd }) => {
         height="62px"
         align="center"
         padding="20px 24px"
+        minW="612px"
       >
         <StyledBody color="color rgb(33, 43, 54)" fontSize="18px" fontW="600">
           편의시설관리
         </StyledBody>
+        <StyledSpan color="rgb(99, 115, 129)" font="12px">
+          원하시는 품목을 마우스로 끌어서 넣어주세요.
+        </StyledSpan>
       </FlexBox>
       <DragDropContext
         onDragEnd={(result) => {
@@ -103,7 +114,7 @@ const Facility = ({ isLoading, columns, onDragEnd }) => {
         }}
       >
         {isLoading ? (
-          <div>리스트를 불러오는중입니다.</div>
+          <FlexBox padding="24px">리스트를 불러오는중입니다.</FlexBox>
         ) : (
           <FlexBox>
             {Object.values(columns).map((col) => (
