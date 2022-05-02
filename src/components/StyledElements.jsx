@@ -35,6 +35,7 @@ const Body = styled.p`
   line-height: ${({ props }) => props.lineH || ""};
   box-sizing: ${({ props }) => props.boxSizing || ""};
   height: ${({ props }) => props.height || ""};
+  width: ${({ props }) => props.width || ""};
 `;
 
 export const StyledBody = memo((props) => {
@@ -218,6 +219,7 @@ export const Li = styled.li`
   background-repeat: no-repeat;
   background-size: cover;
   border-bottom: ${(props) => props.border || ""};
+  border: ${(props) => props.borderA || ""};
   border-radius: ${(props) => props.rad || ""};
   box-shadow: ${(props) => props.shadow || ""};
   position: ${(props) => props.position || ""};
