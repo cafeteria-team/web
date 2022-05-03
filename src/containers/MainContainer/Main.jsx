@@ -18,7 +18,7 @@ const Main = observer(() => {
 
   return (
     <FlexBox width="100%" height="100%" minHeight="100vh" background="#F9FAFB">
-      <SideMenu></SideMenu>
+      <SideMenu check={AuthStore.getUser}></SideMenu>
       <FlexBox direction="column" width="100%" height="100%">
         <Header name={userName} logout={AuthStore.logout} />
         <FlexBox height="100%">

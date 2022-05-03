@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   FlexBox,
   StyledTitle,
@@ -6,6 +6,8 @@ import {
   SideLi,
   StyledBody,
 } from "./StyledElements";
+
+import Decode from "../utils/decode";
 
 import { NavLink } from "react-router-dom";
 
@@ -74,13 +76,14 @@ const menuData = [
     ),
   },
   {
-    header: (menuState) => (
+    header: (menuState, role) => (
       <NavLink
         to="/main/member"
         style={{
           padding: "0 10px",
           boxSizing: "border-box",
           width: "100%",
+          display: role === "ADMIN" ? "flex" : "none",
         }}
       >
         {({ isActive }) => (
@@ -120,13 +123,14 @@ const menuData = [
     ),
   },
   {
-    header: (menuState) => (
+    header: (menuState, role) => (
       <NavLink
         to="/main/manageAdmin"
         style={{
           padding: "0 10px",
           boxSizing: "border-box",
           width: "100%",
+          display: role === "ADMIN" ? "flex" : "none",
         }}
       >
         {({ isActive }) => (
@@ -166,7 +170,7 @@ const menuData = [
     ),
   },
   {
-    header: (menuState) => (
+    header: (menuState, role) => (
       <NavLink
         to="/main/manage"
         style={{
@@ -212,13 +216,14 @@ const menuData = [
     ),
   },
   {
-    header: (menuState) => (
+    header: (menuState, role) => (
       <NavLink
         to="/main/notice"
         style={{
           padding: "0 10px",
           boxSizing: "border-box",
           width: "100%",
+          display: role === "ADMIN" ? "flex" : "none",
         }}
       >
         {({ isActive }) => (
@@ -258,7 +263,7 @@ const menuData = [
     ),
   },
   {
-    header: (menuState) => (
+    header: (menuState, role) => (
       <NavLink
         to="/main/setting"
         style={{
@@ -305,13 +310,26 @@ const menuData = [
   },
 ];
 
-const SideMenu = (props) => {
+const SideMenu = ({ check }) => {
   const [menuList] = useState(menuData);
   const [menuState, setMenuState] = useState(false);
 
   const menuHide = () => {
     setMenuState((prev) => !prev);
   };
+  const [role, setRole] = useState("");
+
+  useEffect(() => {
+    const decode = new Decode();
+    const access = localStorage.getItem("access");
+    if (access) {
+      const data = decode.getUserId(access);
+      setRole(data.user_role);
+    } else if (check.access) {
+      const data = decode.getUserId(check.access);
+      setRole(data.user_role);
+    }
+  }, [check]);
 
   return (
     <FlexBox
@@ -379,7 +397,7 @@ const SideMenu = (props) => {
         </StyledTitle>
         <SideUl>
           {menuList.map((item, index) => {
-            return <SideLi key={index}>{item.header(menuState)}</SideLi>;
+            return <SideLi key={index}>{item.header(menuState, role)}</SideLi>;
           })}
         </SideUl>
       </FlexBox>

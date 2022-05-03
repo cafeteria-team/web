@@ -16,6 +16,7 @@ import { observer } from "mobx-react";
 import { useStores } from "../../stores/Context";
 import { MemberListTitle } from "../../views";
 import Modal from "react-modal";
+import Decode from "../../utils/decode";
 
 // modal style
 const modalStyle = {
@@ -228,9 +229,16 @@ const Member = observer(() => {
   };
 
   useEffect(() => {
+    const decode = new Decode();
     const access = localStorage.getItem("access");
-    // 유저정보 불러오기
-    _callUserList(access);
+    const data = decode.getUserId(access);
+    if (data.user_role === "ADMIN") {
+      // 유저정보 불러오기
+      _callUserList(access);
+    } else {
+      alert("접근권한이 없습니다.");
+      navigate("/main");
+    }
 
     return () => {
       setUserList("");

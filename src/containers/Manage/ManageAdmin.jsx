@@ -10,6 +10,8 @@ import { Ul, Li } from "../../components/StyledElements";
 import { useStores } from "../../stores/Context";
 import Select from "react-select";
 import { observer } from "mobx-react";
+import { useNavigate } from "react-router-dom";
+import Decode from "../../utils/decode";
 
 const ListTitle = memo(() => {
   return (
@@ -42,6 +44,7 @@ const ListTitle = memo(() => {
 });
 
 const ManageAdmin = observer(() => {
+  const navigate = useNavigate();
   const { ManageStore } = useStores();
 
   const [facilityList, setFacilityList] = useState([]);
@@ -158,7 +161,15 @@ const ManageAdmin = observer(() => {
   };
 
   useEffect(() => {
-    getFacilityList();
+    const decode = new Decode();
+    const access = localStorage.getItem("access");
+    const data = decode.getUserId(access);
+    if (data.user_role === "ADMIN") {
+      getFacilityList();
+    } else {
+      alert("접근권한이 없습니다.");
+      navigate("/main");
+    }
   }, [getFacilityList]);
 
   return (

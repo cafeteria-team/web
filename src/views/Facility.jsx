@@ -47,7 +47,7 @@ const Column = ({ col: { list, id, title } }) => {
               mWidth="242px"
               //   align="center"
               margin="-24px"
-              mHeight="362px"
+              mHeight="380px"
               wrap="wrap"
               padding="12px"
             >

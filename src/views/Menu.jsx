@@ -115,8 +115,8 @@ const Menu = ({ isLoading, menuList, selectedDate }) => {
           </StyledBody>
           <FlexBox>
             <Input
-              placeholder="편의시설 이름"
-              width="auto"
+              placeholder="메뉴이름"
+              width="300px"
               margin="0 10px 0px 0"
               // value={state.name}
               id="name"

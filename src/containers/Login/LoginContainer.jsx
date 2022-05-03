@@ -30,26 +30,45 @@ const Login = observer(() => {
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
-    AuthStore.user.authorization && navigate("/main");
+    // AuthStore.user.authorization && navigate("/main");
+    return () => setLoading(false);
   });
 
-  const _login = async (profile) => {
-    try {
-      setLoading(true);
-      const response = await AuthStore.login(profile);
-      let { data } = response;
-      const res = await AuthStore.onLoginSucess(
-        data.access,
-        data.refresh,
-        profile.username
-      );
-      setLoading(false);
-      res && navigate("/main");
-    } catch (error) {
-      return alert("아이디 또는 비밀번호를 확인해주세요.");
-    } finally {
-      setLoading(false);
-    }
+  // const _login = async (profile) => {
+  //   try {
+  //     setLoading(true);
+  //     const response = await AuthStore.login(profile);
+  //     let { data } = response;
+  //     AuthStore.onLoginSucess(data.access, data.refresh, profile.username);
+  //     setLoading(false);
+  //     navigate("/main");
+  //   } catch (error) {
+  //     return alert("아이디 또는 비밀번호를 확인해주세요.");
+  //   } finally {
+  //     setLoading(false);
+  //   }
+  // };
+
+  const _login = (profile) => {
+    setLoading(true);
+    AuthStore.login(profile)
+      .then((res) => {
+        AuthStore.onLoginSucess(
+          res.data.access,
+          res.data.refresh,
+          profile.username
+        );
+        setLoading(false);
+        navigate("/main");
+      })
+      .catch((err) => {
+        if (err.response.status === 200) {
+          alert("사용자 계정이 활성화 되지 않았습니다. 관리자에게 문의하세요.");
+        } else {
+          return alert("아이디 또는 비밀번호를 확인해주세요.");
+        }
+      })
+      .finally(() => setLoading(false));
   };
 
   return (

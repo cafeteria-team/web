@@ -101,14 +101,10 @@ export class AuthStore {
   login(profile) {
     const { username, password } = profile;
     try {
-      const response = axios.post(
-        "/api/user/login",
-        {
-          username,
-          password,
-        }
-        // { withCredentials: true }
-      );
+      const response = axios.post("/api/user/login", {
+        username,
+        password,
+      });
       return response;
     } catch (error) {
       throw error;

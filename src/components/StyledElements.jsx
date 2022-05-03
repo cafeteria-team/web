@@ -160,7 +160,7 @@ export const SideLi = styled.li`
   flex-direction: column;
   justify-content: center;
   height: auto;
-  min-height: 48px;
+  // min-height: 48px;
   width: 100%;
   background: ${(props) => props.background || ""};
   cursor: pointer;
