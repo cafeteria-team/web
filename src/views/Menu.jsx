@@ -42,8 +42,26 @@ const ListTitle = memo(() => {
   );
 });
 
-const Menu = ({ isLoading, menuList }) => {
-  const [value, setValue] = useState(null);
+const DateContainer = styled("div")`
+  .css-1t8l2tu-MuiInputBase-input-MuiOutlinedInput-input {
+    width: 370px;
+  }
+
+  .MuiInputBase-input-MuiOutlinedInput-input {
+    width: 370px;
+  }
+
+  .MuiOutlinedInput-input {
+    width: 370px;
+  }
+  .MuiInputBase-input {
+    width: 370px;
+  }
+`;
+
+const Menu = ({ isLoading, menuList, selectedDate }) => {
+  const [date, setDate] = useState(null);
+  console.log(date);
 
   return (
     <>
@@ -58,7 +76,7 @@ const Menu = ({ isLoading, menuList }) => {
           메뉴등록
         </StyledBody>
       </FlexBox>
-      <FlexBox padding="24px" width="372px" direction="column">
+      <FlexBox padding="24px" width="100%" direction="column">
         <StyledBody
           color="color rgb(33, 43, 54)"
           fontSize="14px"
@@ -68,27 +86,52 @@ const Menu = ({ isLoading, menuList }) => {
         >
           날짜 선택
         </StyledBody>
-        <LocalizationProvider dateAdapter={AdapterDateFns} fullWidth>
-          <DatePicker
-            label="원하시는 날짜를 선택 또는 기입해주세요."
-            value={value}
-            onChange={(newValue) => {
-              setValue(newValue);
-            }}
-            renderInput={(params) => <TextField {...params} />}
-          />
-        </LocalizationProvider>
+        <DateContainer width="100%">
+          <LocalizationProvider dateAdapter={AdapterDateFns}>
+            <DatePicker
+              label="원하시는 날짜를 선택 또는 기입해주세요."
+              value={date}
+              onChange={(newValue) => {
+                setDate(newValue);
+              }}
+              renderInput={(params) => <TextField {...params} />}
+            />
+          </LocalizationProvider>
+          <Button
+            width="120px"
+            margin="0 0 0 20px"
+            padding="18.25px 20px"
+            background="#ff9030"
+            shadow="rgb(249 217 189) 0px 8px 16px 0px"
+            title="선택"
+            onClick={(date) => selectedDate(date)}
+          ></Button>
+        </DateContainer>
       </FlexBox>
       <FlexBox padding="24px" direction="column">
-        <StyledBody
-          color="color rgb(33, 43, 54)"
-          fontSize="14px"
-          fontW="600"
-          width="100%"
-          margin="0 0 20px"
-        >
-          메뉴 리스트
-        </StyledBody>
+        <FlexBox just="space-between" margin="0 0 20px" align="center">
+          <StyledBody color="color rgb(33, 43, 54)" fontSize="14px" fontW="600">
+            메뉴 리스트
+          </StyledBody>
+          <FlexBox>
+            <Input
+              placeholder="편의시설 이름"
+              width="auto"
+              margin="0 10px 0px 0"
+              // value={state.name}
+              id="name"
+              // onChange={handleChange}
+            />
+            <Button
+              title="추가"
+              margin="0 10px 0 0"
+              padding="6px 8px"
+              width="40px"
+              background="rgb(24, 144, 255)"
+              // onClick={addList}
+            />
+          </FlexBox>
+        </FlexBox>
         <FlexBox
           background="rgba(145,158,171,0.12)"
           rad="12px"
