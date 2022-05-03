@@ -139,16 +139,10 @@ const Menu = ({ isLoading, menuList, selectedDate }) => {
         >
           <ListTitle />
           <Ul
-            direction="column"
             width="100%"
-            boxSizing="border-box"
-            just="space-around"
-            color="rgb(33, 43, 54)"
-            fontSize="14px"
-            align="center"
-            overflow="hidden"
             background="#fff"
             rad="0 0 12px 12px"
+            direction="column"
           >
             {isLoading ? (
               new Array(5).fill(1).map((_, i) => {
@@ -162,11 +156,14 @@ const Menu = ({ isLoading, menuList, selectedDate }) => {
                     border={
                       item.length - 1 === index ? "null" : "1px solid #e2e6e7"
                     }
-                    align="center"
                     width="100%"
                     padding="14px 24px"
                     boxSizing="border-box"
-                    just="space-around"
+                    just="space-between"
+                    color="rgb(33, 43, 54)"
+                    fontSize="14px"
+                    height="68px"
+                    align="center"
                   >
                     <FlexBox
                       width="20%"

@@ -17,6 +17,7 @@ import { observer } from "mobx-react";
 const ManageContainer = observer(() => {
   const { AuthStore, ManageStore } = useStores();
 
+  const [isMenuLoading, setIsMenuLoading] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [isNoticeLoading, setIsNoticeLoading] = useState(false);
 
@@ -166,9 +167,11 @@ const ManageContainer = observer(() => {
 
   // 공지사항 저장
   const sendNotice = (result) => {
-    ManageStore.postNotice(result, AuthStore.getUser.userId).then((res) =>
-      alert("공지사항이 등록되었습니다.")
-    );
+    ManageStore.postNotice(result, AuthStore.getUser.userId)
+      .then((res) => alert("공지사항이 등록되었습니다."))
+      .catch((err) =>
+        alert("공지사항을 저장할수없습니다. 잠시후 다시 시도해주세요.")
+      );
   };
 
   // 공지사항 불러오기
@@ -192,6 +195,17 @@ const ManageContainer = observer(() => {
     console.log(moment(date).format());
   };
 
+  const menuList = [
+    {
+      provide_at: "2022-05-03T03:19:33.575000Z",
+      menus: ["후에에", "하이이이우우"],
+    },
+    {
+      provide_at: "2022-05-03T03:19:33.575000Z",
+      menus: ["후에에", "하이이이우우"],
+    },
+  ];
+
   return (
     <FlexBox padding="30px 70px" direction="column" width="100%">
       <StyledTitle margin="0 0 30px 0">업체관리</StyledTitle>
@@ -203,7 +217,11 @@ const ManageContainer = observer(() => {
         rad="16px"
         shadow="rgb(145 158 171 / 20%) 0px 3px 1px -2px, rgb(145 158 171 / 14%) 0px 2px 2px 0px, rgb(145 158 171 / 12%) 0px 1px 5px 0px"
       >
-        <Menu selectedDate={selectedDate} />
+        <Menu
+          isLoading={isMenuLoading}
+          menuList={menuList}
+          selectedDate={selectedDate}
+        />
       </FlexBox>
 
       <FlexBox

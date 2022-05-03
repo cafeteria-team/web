@@ -40,6 +40,7 @@ const MyEditor = ({ sendNotice, noticeData }) => {
 
   const convertContentToHTML = (editorState) => {
     let currentContentAsHTML = convertToHTML(editorState.getCurrentContent());
+
     sendNotice(currentContentAsHTML);
   };
 
