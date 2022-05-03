@@ -57,15 +57,6 @@ export class AuthStore {
       .map((persistStore) => persistStore.storageName)
       .includes("AuthStore");
 
-    // if (this.checkStorage) {
-    //   return;
-    // } else {
-    //   makePersistable(this, {
-    //     name: "AuthStore",
-    //     properties: ["user"],
-    //     storage: window.localStorage,
-    //   });
-    // }
     makePersistable(this, {
       name: "AuthStore",
       properties: ["user"],

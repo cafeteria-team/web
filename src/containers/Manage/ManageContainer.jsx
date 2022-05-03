@@ -87,7 +87,6 @@ const ManageContainer = observer(() => {
 
   useEffect(() => {
     getSelectedFacilityList();
-    return () => AuthStore.stopStore();
   }, [AuthStore]);
 
   const onDragEnd = ({ source, destination }) => {
