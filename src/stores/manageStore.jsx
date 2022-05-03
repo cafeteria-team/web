@@ -31,6 +31,8 @@ export class ManageStore {
       addMenu: action,
       deleteMenu: action,
       editMenu: action,
+      postNotice: action,
+      callNotice: action,
     });
   }
 
@@ -207,6 +209,34 @@ export class ManageStore {
       return response.data;
     } catch (error) {
       return console.log(error.response);
+    }
+  };
+
+  //공지사항 등록
+  postNotice = async (content, id) => {
+    try {
+      const response = await axios.post(`/api/notice/${id}`, {
+        subject: "title",
+        content,
+        view: true,
+      });
+      return response;
+    } catch (err) {
+      throw err;
+    }
+  };
+  //공지사항 불러오기
+  callNotice = async (id) => {
+    try {
+      const access = localStorage.getItem("access");
+      const response = await axios.get(`/api/notice/${id}`, {
+        headers: {
+          Authorization: `Bearer ${access}`,
+        },
+      });
+      return response;
+    } catch (err) {
+      throw err;
     }
   };
 }

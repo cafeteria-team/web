@@ -8,7 +8,7 @@ import {
 } from "../components/StyledElements";
 import { MyEditor } from "../components";
 
-const TextEditor = ({ sendNotice }) => {
+const TextEditor = ({ isLoading, sendNotice, noticeData }) => {
   return (
     <>
       <FlexBox
@@ -22,7 +22,13 @@ const TextEditor = ({ sendNotice }) => {
           공지사항 관리
         </StyledBody>
       </FlexBox>
-      <MyEditor sendNotice={sendNotice} />
+      {isLoading ? (
+        <FlexBox padding="24px" just="center" width="100%">
+          공지사항을 불러오는중입니다.
+        </FlexBox>
+      ) : (
+        <MyEditor sendNotice={sendNotice} noticeData={noticeData} />
+      )}
     </>
   );
 };

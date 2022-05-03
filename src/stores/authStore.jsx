@@ -141,13 +141,9 @@ export class AuthStore {
 
     if (data) {
       try {
-        const res = await axios.post(
-          "/api/user/token/refresh/",
-          { refresh: data }
-          // {
-          //   withCredentials: true,
-          // }
-        );
+        const res = await axios.post("/api/user/token/refresh/", {
+          refresh: data,
+        });
         this.onLoginSucess(res.data.access, res.data.refresh, username);
         return res;
       } catch (error) {

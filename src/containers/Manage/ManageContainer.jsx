@@ -18,6 +18,9 @@ const ManageContainer = observer(() => {
   const { AuthStore, ManageStore } = useStores();
 
   const [isLoading, setIsLoading] = useState(false);
+  const [isNoticeLoading, setIsNoticeLoading] = useState(false);
+
+  const [noticeData, setNoticeData] = useState("");
 
   const [facilityList, setFacilityList] = useState({
     facility: {
@@ -88,6 +91,7 @@ const ManageContainer = observer(() => {
 
   useEffect(() => {
     getSelectedFacilityList();
+    callNotice();
   }, [AuthStore]);
 
   const onDragEnd = ({ source, destination }) => {
@@ -162,7 +166,22 @@ const ManageContainer = observer(() => {
 
   // 공지사항 저장
   const sendNotice = (result) => {
-    console.log(result);
+    ManageStore.postNotice(result, AuthStore.getUser.userId).then((res) =>
+      alert("공지사항이 등록되었습니다.")
+    );
+  };
+
+  // 공지사항 불러오기
+  const callNotice = () => {
+    setIsNoticeLoading(true);
+    AuthStore.getPersistedAuth().then((res) => {
+      ManageStore.callNotice(res.user.userId)
+        .then((res) => {
+          setNoticeData(res.data.content);
+          setIsNoticeLoading(false);
+        })
+        .catch((err) => alert("공지사항을 불러올수없습니다."));
+    });
   };
 
   // 편의시설 저장
@@ -212,7 +231,11 @@ const ManageContainer = observer(() => {
         rad="16px"
         shadow="rgb(145 158 171 / 20%) 0px 3px 1px -2px, rgb(145 158 171 / 14%) 0px 2px 2px 0px, rgb(145 158 171 / 12%) 0px 1px 5px 0px"
       >
-        <TextEditor sendNotice={sendNotice} />
+        <TextEditor
+          isLoading={isNoticeLoading}
+          sendNotice={sendNotice}
+          noticeData={noticeData}
+        />
       </FlexBox>
     </FlexBox>
   );

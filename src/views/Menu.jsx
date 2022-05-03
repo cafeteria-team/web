@@ -61,7 +61,6 @@ const DateContainer = styled("div")`
 
 const Menu = ({ isLoading, menuList, selectedDate }) => {
   const [date, setDate] = useState(null);
-  console.log(date);
 
   return (
     <>

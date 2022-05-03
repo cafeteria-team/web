@@ -1,11 +1,12 @@
-import React, { useState, useEffect, memo } from "react";
+import React, { useState, useEffect, memo, useRef } from "react";
 import { Editor } from "react-draft-wysiwyg";
 import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
 import styled from "styled-components";
-import { EditorState } from "draft-js";
+import { EditorState, ContentState } from "draft-js";
 import { convertToHTML } from "draft-convert";
 import { Button } from "../components";
 import { FlexBox } from "../components/StyledElements";
+import htmlToDraft from "html-to-draftjs";
 
 const MyBlock = styled.div`
   width: 100%;
@@ -23,40 +24,46 @@ const MyBlock = styled.div`
   }
 `;
 
-// const editorLabels = {
-//   // BlockType
-//   "components.controls.blocktype.h1": "Heading 1",
-//   "components.controls.blocktype.h2": "Heading 2",
-//   "components.controls.blocktype.h3": "Heading 3",
-//   "components.controls.blocktype.h4": "Heading 4",
-//   "components.controls.blocktype.h5": "Heading 5",
-//   "components.controls.blocktype.h6": "Heading 6",
-//   "components.controls.blocktype.blockquote": "Blockquote",
-//   "components.controls.blocktype.code": "Code",
-//   "components.controls.blocktype.blocktype": "Block Type",
-//   "components.controls.blocktype.normal": "Normal",
-// };
+const MyEditor = ({ sendNotice, noticeData }) => {
+  const htmlToEditor = noticeData;
 
-const MyEditor = ({ sendNotice }) => {
+  // console.log(noticeData);
   // useState로 상태관리하기 초기값은 EditorState.createEmpty()
   // EditorState의 비어있는 ContentState 기본 구성으로 새 개체를 반환 => 이렇게 안하면 상태 값을 나중에 변경할 수 없음.
   const [editorState, setEditorState] = useState(EditorState.createEmpty());
-  const [convertedContent, setConvertedContent] = useState("");
 
   const handleEditorChange = (state) => {
     // editorState에 값 설정
     setEditorState(state);
-    convertContentToHTML(state);
+    // convertContentToHTML(state);
   };
+
   const convertContentToHTML = (editorState) => {
     let currentContentAsHTML = convertToHTML(editorState.getCurrentContent());
-    setConvertedContent(currentContentAsHTML);
+    sendNotice(currentContentAsHTML);
   };
 
   useEffect(() => {}, [editorState]);
 
+  const rendered = useRef(false);
+
+  useEffect(() => {
+    if (rendered.current) return;
+    rendered.current = true;
+    const blocksFromHtml = htmlToDraft(htmlToEditor);
+    if (blocksFromHtml) {
+      const { contentBlocks, entityMap } = blocksFromHtml;
+      const contentState = ContentState.createFromBlockArray(
+        contentBlocks,
+        entityMap
+      );
+      const editorState = EditorState.createWithContent(contentState);
+      setEditorState(editorState);
+    }
+  }, [htmlToEditor, noticeData]);
+
   const sendText = () => {
-    sendNotice(convertedContent);
+    convertContentToHTML(editorState);
   };
 
   return (
@@ -126,7 +133,7 @@ const MyEditor = ({ sendNotice }) => {
         }}
         // 초기값 설정
         editorState={editorState}
-        // 에디터의 값이 변경될 때마다 onEditorStateChange 호출
+        // defaultEditorState={noticeData}
         onEditorStateChange={handleEditorChange}
       />
       <FlexBox width="100%" just="center" padding="0 0 26px">
