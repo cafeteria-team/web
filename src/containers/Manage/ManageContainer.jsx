@@ -198,11 +198,11 @@ const ManageContainer = observer(() => {
   const menuList = [
     {
       provide_at: "2022-05-03T03:19:33.575000Z",
-      menus: ["후에에", "하이이이우우"],
+      menus: ["후에에"],
     },
     {
       provide_at: "2022-05-03T03:19:33.575000Z",
-      menus: ["후에에", "하이이이우우"],
+      menus: ["후에sss에"],
     },
   ];
 
