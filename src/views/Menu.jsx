@@ -260,15 +260,6 @@ const Menu = ({ isLoading, menuList, selectedDate }) => {
 
   const [test, setTest] = useState(false);
 
-  const testDate = () => {
-    if (date === "") {
-      alert("날짜를 선택해주세요.");
-      setTest(false);
-    } else {
-      setTest(true);
-    }
-  };
-
   return (
     <>
       <FlexBox
@@ -310,8 +301,7 @@ const Menu = ({ isLoading, menuList, selectedDate }) => {
             background="#ff9030"
             shadow="rgb(249 217 189) 0px 8px 16px 0px"
             title="선택"
-            // onClick={(date) => selectedDate(date)}
-            onClick={testDate}
+            onClick={() => selectedDate(date)}
           ></Button>
         </DateContainer>
       </FlexBox>

@@ -192,7 +192,14 @@ const ManageContainer = observer(() => {
 
   // 메뉴날짜선정
   const selectedDate = (date) => {
-    console.log(moment(date).format());
+    if (date === "") {
+      alert("날짜를 선택해주세요.");
+    } else {
+      const finalDate = moment(date).format("YYYY-MM-DD");
+      ManageStore.callMenu(AuthStore.getUser.userId, finalDate).then((res) =>
+        console.log(res)
+      );
+    }
   };
 
   const menuList = [

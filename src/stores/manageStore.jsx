@@ -203,9 +203,10 @@ export class ManageStore {
     }
   };
   //메뉴불러오기
-  callMenu = async (id) => {
+  callMenu = async (id, date) => {
     try {
-      const response = await axios.get(`/api/menu/${id}`);
+      const response = await axios.get(`/api/menu/${id}?provide_at=${date}
+      `);
       return response.data;
     } catch (error) {
       return console.log(error.response);
