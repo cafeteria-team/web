@@ -14,6 +14,7 @@ import MemberListTitle from "./MemberListTitle";
 import Facility from "./Facility";
 import TextEditor from "./TextEditor";
 import Menu from "./Menu";
+import Price from "./Price";
 
 export {
   Overview,
@@ -32,4 +33,5 @@ export {
   MemberListTitle,
   TextEditor,
   Menu,
+  Price,
 };

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Facility, TextEditor, Menu } from "../../views";
+import { Facility, TextEditor, Menu, Price } from "../../views";
 import {
   FlexBox,
   StyledTitle,
@@ -17,12 +17,17 @@ import { observer } from "mobx-react";
 const ManageContainer = observer(() => {
   const { AuthStore, ManageStore } = useStores();
 
+  // 리스트 로딩
   const [isMenuLoading, setIsMenuLoading] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [isNoticeLoading, setIsNoticeLoading] = useState(false);
+  const [isPriceLoading, setIsPriceLoadging] = useState(false);
+
+  // 메뉴 리스트 판독
   const [showMenuList, setShowMenuList] = useState(false);
   const [firstTry, setFirstTry] = useState(false);
 
+  // 데이터셋
   const [noticeData, setNoticeData] = useState("");
 
   const [menuData, setMenuData] = useState(null);
@@ -41,6 +46,12 @@ const ManageContainer = observer(() => {
       title: "우리 업체 시설목록",
     },
   });
+
+  const [priceData, setPriceData] = useState([
+    { 1: "" },
+    { 5: "" },
+    { 10: "" },
+  ]);
 
   // 편의시설 리스트 받아오기
   const getFacilityList = (userLists) => {
@@ -245,6 +256,45 @@ const ManageContainer = observer(() => {
     setMenuData((prev) => prev.filter((item, i) => i !== index));
   };
 
+  // 가격 리스트 불러오기
+  const getPriceList = () => {
+    setIsPriceLoadging(true);
+
+    AuthStore.getPersistedAuth()
+      .then((res) => {
+        ManageStore.callPrice(res.user.userId)
+          .then((res) => {
+            setPriceData(res.data.price);
+            setIsPriceLoadging(false);
+          })
+          .catch((err) => {
+            alert("가격정보를 불러올수없습니다. 잠시후 다시 시도해주세요.");
+          })
+          .finally(() => {
+            setIsPriceLoadging(false);
+          });
+      })
+      .catch((err) => console.log(err));
+  };
+
+  // 가격 리스트 추가
+  // 가격 리스트 저장
+  // 가격 리스트 수정
+  // 가격 리스트 변경
+  const editPriceList = (e, index) => {
+    const { id, value } = e.target;
+    setPriceData((prev) =>
+      prev.map((item, i) => (i === index ? { [id]: value } : item))
+    );
+  };
+  // 가격 리스트 삭제
+  const deletePriceList = (index, _id) => {
+    console.log(_id);
+    setPriceData((prev) =>
+      prev.map((item, i) => (i === index ? { [_id]: "" } : item))
+    );
+  };
+
   // 공지사항 저장
   const sendNotice = (result) => {
     ManageStore.postNotice(result, AuthStore.getUser.userId)
@@ -270,6 +320,7 @@ const ManageContainer = observer(() => {
   useEffect(() => {
     getSelectedFacilityList();
     callNotice();
+    getPriceList();
   }, [AuthStore]);
 
   return (
@@ -310,6 +361,22 @@ const ManageContainer = observer(() => {
           columns={facilityList}
           onDragEnd={onDragEnd}
           sendFacility={sendFacility}
+        />
+      </FlexBox>
+      <FlexBox
+        width="100%"
+        margin="24px 0 0"
+        background="#fff"
+        boxSizing="border-box"
+        direction="column"
+        rad="16px"
+        shadow="rgb(145 158 171 / 20%) 0px 3px 1px -2px, rgb(145 158 171 / 14%) 0px 2px 2px 0px, rgb(145 158 171 / 12%) 0px 1px 5px 0px"
+      >
+        <Price
+          isLoading={isPriceLoading}
+          priceList={priceData}
+          editList={editPriceList}
+          deleteList={deletePriceList}
         />
       </FlexBox>
       <FlexBox

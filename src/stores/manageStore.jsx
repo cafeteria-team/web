@@ -33,6 +33,10 @@ export class ManageStore {
       editMenu: action,
       postNotice: action,
       callNotice: action,
+      callPrice: action,
+      editPrice: action,
+      deletePrice: action,
+      savePrice: action,
     });
   }
 
@@ -235,6 +239,52 @@ export class ManageStore {
           Authorization: `Bearer ${access}`,
         },
       });
+      return response;
+    } catch (err) {
+      throw err;
+    }
+  };
+
+  //가격 리스트 불러오기
+  callPrice = async (id) => {
+    try {
+      const access = localStorage.getItem("access");
+      const response = await axios.get(`/api/store/${id}/price`, {
+        headers: {
+          Authorization: `Bearer ${access}`,
+        },
+      });
+      return response;
+    } catch (err) {
+      throw err;
+    }
+  };
+  // 가격 리스트 저장
+  savePrice = async (id, price) => {
+    try {
+      const response = await axios.post(`/api/store/${id}/price`, {
+        price,
+      });
+      return response;
+    } catch (err) {
+      throw err;
+    }
+  };
+  // 가격 리스트 수정
+  editPrice = async (id, price) => {
+    try {
+      const response = await axios.patch(`/api/store/${id}/price`, {
+        price,
+      });
+      return response;
+    } catch (err) {
+      throw err;
+    }
+  };
+  // 가격 리스트 삭제
+  deletePrice = async (id, price) => {
+    try {
+      const response = await axios.delete(`/api/store/${id}/price`);
       return response;
     } catch (err) {
       throw err;
