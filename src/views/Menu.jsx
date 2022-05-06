@@ -1,4 +1,4 @@
-import React, { useState, memo } from "react";
+import React, { useState, memo, useEffect } from "react";
 import {
   FlexBox,
   StyledBody,
@@ -21,6 +21,10 @@ const MenuListContainer = ({
   addList,
   isLoading,
   menuList,
+  date,
+  saveMenuList,
+  firstTry,
+  editMenuList,
 }) => {
   return (
     <FlexBox padding="24px" direction="column">
@@ -47,12 +51,21 @@ const MenuListContainer = ({
           />
         </FlexBox>
       </FlexBox>
-      <MenuList isLoading={isLoading} menuList={menuList} />
+      <MenuList isLoading={isLoading} menuList={menuList} date={date} />
+      <Button
+        width="120px"
+        margin="40px auto 10px"
+        padding="18.25px 20px"
+        background="#ff9030"
+        shadow="rgb(249 217 189) 0px 8px 16px 0px"
+        title="메뉴 저장"
+        onClick={firstTry ? () => saveMenuList(date) : () => editMenuList(date)}
+      />
     </FlexBox>
   );
 };
 
-const MenuList = ({ isLoading, menuList }) => {
+const MenuList = ({ isLoading, menuList, date }) => {
   const [editState, setEditState] = useState({
     name: "",
   });
@@ -109,7 +122,7 @@ const MenuList = ({ isLoading, menuList }) => {
             return <SkeletonList key={i} />;
           })
         ) : menuList ? (
-          menuList.map(({ provide_at, menus }, index, item) => {
+          menuList.map((item, index) => {
             return (
               <Li
                 key={index}
@@ -126,14 +139,14 @@ const MenuList = ({ isLoading, menuList }) => {
                 align="center"
               >
                 <FlexBox width="20%" just="center" height="16px" align="center">
-                  {moment(provide_at).format("L")}
+                  {moment(date).format("L")}
                 </FlexBox>
                 <Input
                   width="60%"
                   maxW="259px"
                   margin="0"
-                  placeholder={menus}
-                  value={isClicked === index ? editState.name : menus}
+                  placeholder={item}
+                  value={isClicked === index ? editState.name : item}
                   id="name"
                   disabled={isClicked === index ? false : true}
                   onChange={editOnChange}
@@ -164,7 +177,14 @@ const MenuList = ({ isLoading, menuList }) => {
             );
           })
         ) : (
-          <FlexBox padding="24px">등록된 리스트가 없습니다.</FlexBox>
+          <StyledBody
+            padding="24px"
+            textAlign="center"
+            color="rgb(33, 43, 54)"
+            fontSize="14px"
+          >
+            등록된 리스트가 없습니다.
+          </StyledBody>
         )}
       </Ul>
     </FlexBox>
@@ -235,7 +255,16 @@ const DateContainer = styled("div")`
   }
 `;
 
-const Menu = ({ isLoading, menuList, selectedDate }) => {
+const Menu = ({
+  isLoading,
+  selectedDate,
+  menuData,
+  showMenuList,
+  addMenuList,
+  saveMenuList,
+  firstTry,
+  editMenuList,
+}) => {
   const [date, setDate] = useState(null);
 
   const [state, setState] = useState({
@@ -252,13 +281,11 @@ const Menu = ({ isLoading, menuList, selectedDate }) => {
 
   const addList = async () => {
     if (state.name !== "") {
-      return;
+      addMenuList(state.name);
     } else {
       alert("메뉴를 입력해주세요");
     }
   };
-
-  const [test, setTest] = useState(false);
 
   return (
     <>
@@ -305,13 +332,17 @@ const Menu = ({ isLoading, menuList, selectedDate }) => {
           ></Button>
         </DateContainer>
       </FlexBox>
-      {test && (
+      {showMenuList && (
         <MenuListContainer
           state={state}
           handleChange={handleChange}
           addList={addList}
           isLoading={isLoading}
-          menuList={menuList}
+          menuList={menuData}
+          date={date}
+          saveMenuList={saveMenuList}
+          firstTry={firstTry}
+          editMenuList={editMenuList}
         />
       )}
     </>

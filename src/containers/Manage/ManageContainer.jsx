@@ -21,10 +21,13 @@ const ManageContainer = observer(() => {
   const [isLoading, setIsLoading] = useState(false);
   const [isNoticeLoading, setIsNoticeLoading] = useState(false);
   const [showMenuList, setShowMenuList] = useState(false);
+  const [firstTry, setFirstTry] = useState(false);
 
   const [noticeData, setNoticeData] = useState("");
 
   const [menuData, setMenuData] = useState(null);
+
+  const [menuId, setMenuId] = useState("");
 
   const [facilityList, setFacilityList] = useState({
     facility: {
@@ -92,11 +95,6 @@ const ManageContainer = observer(() => {
       })
       .catch((err) => console.log(err));
   };
-
-  useEffect(() => {
-    getSelectedFacilityList();
-    callNotice();
-  }, [AuthStore]);
 
   const onDragEnd = ({ source, destination }) => {
     console.log(source);
@@ -168,6 +166,77 @@ const ManageContainer = observer(() => {
     }
   };
 
+  // 편의시설 저장
+  const sendFacility = () => {
+    ManageStore.addUserFacilityList(
+      AuthStore.getUser.userId,
+      facilityList.userFacility.list
+    );
+  };
+
+  // 메뉴날짜선정
+  const selectedDate = (date) => {
+    setIsMenuLoading(true);
+    if (date === null) {
+      alert("날짜를 선택해주세요.");
+      setIsMenuLoading(false);
+    } else {
+      setShowMenuList(true);
+      const finalDate = moment(date).format("YYYY-MM-DD");
+      ManageStore.callMenu(AuthStore.getUser.userId, finalDate)
+        .then((res) => {
+          if (res[0]?.id) {
+            setMenuData(res[0].menus);
+            setMenuId(res[0].id);
+            setIsMenuLoading(false);
+            setFirstTry(false);
+          } else {
+            setMenuData("");
+            setIsMenuLoading(false);
+            setFirstTry(true);
+          }
+        })
+        .catch((err) => {
+          alert("메뉴리스트를 불러올수없습니다.");
+          setShowMenuList(false);
+        })
+        .finally(() => setIsMenuLoading(false));
+    }
+  };
+
+  // 메뉴 리스트 추가
+  const addMenuList = (date) => {
+    setMenuData((prev) => [...prev, date]);
+  };
+
+  // 메뉴 리스트 저장
+  const saveMenuList = (date) => {
+    const selectedDate = moment(date).format();
+    ManageStore.addMenu(menuData, selectedDate, AuthStore.getUser.userId)
+      .then((res) => alert("메뉴가 등록되었습니다."))
+      .catch((err) =>
+        alert("메뉴등록에 실패했습니다. 잠시후 다시 시도해주세요.")
+      );
+  };
+
+  // 메뉴 리스트 수정
+  const editMenuList = (date) => {
+    const selectedDate = moment(date).format();
+    ManageStore.editMenu(
+      menuData,
+      selectedDate,
+      AuthStore.getUser.userId,
+      menuId
+    )
+      .then((res) => alert("메뉴가 등록되었습니다."))
+      .catch((err) =>
+        alert("메뉴등록에 실패했습니다. 잠시후 다시 시도해주세요.")
+      );
+  };
+
+  // 메뉴리스트 수정
+  const editList = () => {};
+
   // 공지사항 저장
   const sendNotice = (result) => {
     ManageStore.postNotice(result, AuthStore.getUser.userId)
@@ -190,37 +259,10 @@ const ManageContainer = observer(() => {
     });
   };
 
-  // 편의시설 저장
-  const sendFacility = () => {};
-
-  // 메뉴날짜선정
-  const selectedDate = (date) => {
-    setIsMenuLoading(true);
-    if (date === "") {
-      alert("날짜를 선택해주세요.");
-      setIsMenuLoading(false);
-    } else {
-      const finalDate = moment(date).format("YYYY-MM-DD");
-      ManageStore.callMenu(AuthStore.getUser.userId, finalDate)
-        .then((res) => {
-          setMenuData(res[0].menus);
-          setIsMenuLoading(false);
-        })
-        .catch((err) => alert("메뉴리스트를 불러올수없습니다."))
-        .finally(() => setIsMenuLoading(false));
-    }
-  };
-
-  const menuList = [
-    {
-      provide_at: "2022-05-03T03:19:33.575000Z",
-      menus: ["후에에"],
-    },
-    {
-      provide_at: "2022-05-03T03:19:33.575000Z",
-      menus: ["후에sss에"],
-    },
-  ];
+  useEffect(() => {
+    getSelectedFacilityList();
+    callNotice();
+  }, [AuthStore]);
 
   return (
     <FlexBox padding="30px 70px" direction="column" width="100%">
@@ -235,12 +277,15 @@ const ManageContainer = observer(() => {
       >
         <Menu
           isLoading={isMenuLoading}
-          menuList={menuList}
           selectedDate={selectedDate}
           menuData={menuData}
+          showMenuList={showMenuList}
+          addMenuList={addMenuList}
+          saveMenuList={saveMenuList}
+          firstTry={firstTry}
+          editMenuList={editMenuList}
         />
       </FlexBox>
-
       <FlexBox
         width="100%"
         margin="24px 0 0"

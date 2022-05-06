@@ -140,16 +140,14 @@ export class ManageStore {
   };
 
   //메뉴 수정
-  editMenu = async (id, category, name) => {
+  editMenu = async (menu, time, id, menuId) => {
     try {
-      const response = await axios.patch(`/api/facility/${id}`, {
-        category,
-        name,
+      const response = await axios.patch(`/api/menu/${id}/${menuId}`, {
+        menus: menu,
+        provide_at: time,
       });
-      alert("편의시설이 변경되었습니다.");
       return response;
     } catch (error) {
-      alert("편의시설이 이미 등록되있거나 잘못된 입력입니다.");
       throw error;
     }
   };
@@ -199,7 +197,8 @@ export class ManageStore {
 
       return response.data;
     } catch (error) {
-      return console.log(error.response);
+      console.log(error.response);
+      throw error;
     }
   };
   //메뉴불러오기
