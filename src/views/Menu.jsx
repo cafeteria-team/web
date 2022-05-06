@@ -25,6 +25,11 @@ const MenuListContainer = ({
   saveMenuList,
   firstTry,
   editMenuList,
+  editList,
+  deleteList,
+  isClicked,
+  editListDone,
+  selctedList,
 }) => {
   return (
     <FlexBox padding="24px" direction="column">
@@ -51,7 +56,16 @@ const MenuListContainer = ({
           />
         </FlexBox>
       </FlexBox>
-      <MenuList isLoading={isLoading} menuList={menuList} date={date} />
+      <MenuList
+        isLoading={isLoading}
+        menuList={menuList}
+        date={date}
+        editList={editList}
+        deleteList={deleteList}
+        isClicked={isClicked}
+        editListDone={editListDone}
+        selctedList={selctedList}
+      />
       <Button
         width="120px"
         margin="40px auto 10px"
@@ -65,49 +79,16 @@ const MenuListContainer = ({
   );
 };
 
-const MenuList = ({ isLoading, menuList, date }) => {
-  const [editState, setEditState] = useState({
-    name: "",
-  });
-
-  const [isClicked, setIsClicked] = useState("");
-
-  const editOnChange = (e) => {
-    const { id, value } = e.target;
-    setEditState((prev) => ({
-      ...prev,
-      [id]: value,
-    }));
-  };
-
-  const editList = (id, category) => {
-    if (editState.name !== "") {
-      //   ManageStore.editFacilityList(id, category, editState.name)
-      //     .then((res) => {
-      //       getFacilityList();
-      //       setIsClicked(false);
-      //       setEditState({
-      //         name: "",
-      //       });
-      //     })
-      //     .catch((err) =>
-      //       alert("편의시설이 이미 등록되있거나 잘못된 입력입니다.")
-      //     );
-      return;
-    } else {
-      return setIsClicked(false);
-    }
-  };
-
-  const deleteList = async () => {
-    // await ManageStore.deleteFacilityList(id);
-    // getFacilityList();
-  };
-
-  const selctedList = (index) => {
-    setIsClicked(index);
-  };
-
+const MenuList = ({
+  isLoading,
+  menuList,
+  date,
+  editList,
+  deleteList,
+  isClicked,
+  editListDone,
+  selctedList,
+}) => {
   return (
     <FlexBox
       background="rgba(145,158,171,0.12)"
@@ -146,10 +127,10 @@ const MenuList = ({ isLoading, menuList, date }) => {
                   maxW="259px"
                   margin="0"
                   placeholder={item}
-                  value={isClicked === index ? editState.name : item}
+                  value={item}
                   id="name"
                   disabled={isClicked === index ? false : true}
-                  onChange={editOnChange}
+                  onChange={(e) => editList(e, index)}
                 />
                 <FlexBox width="20%" just="center" height="16px" align="center">
                   <Button
@@ -160,7 +141,7 @@ const MenuList = ({ isLoading, menuList, date }) => {
                     background="rgb(24, 144, 255)"
                     onClick={
                       isClicked === index
-                        ? (e) => editList()
+                        ? editListDone
                         : (e) => selctedList(index)
                     }
                   />
@@ -170,7 +151,7 @@ const MenuList = ({ isLoading, menuList, date }) => {
                     padding="6px 8px"
                     width="40px"
                     background="rgb(255, 72, 66)"
-                    onClick={() => deleteList()}
+                    onClick={() => deleteList(index)}
                   />
                 </FlexBox>
               </Li>
@@ -264,12 +245,16 @@ const Menu = ({
   saveMenuList,
   firstTry,
   editMenuList,
+  editList,
+  deleteList,
 }) => {
   const [date, setDate] = useState(null);
 
   const [state, setState] = useState({
     name: "",
   });
+
+  const [isClicked, setIsClicked] = useState("");
 
   const handleChange = (e) => {
     const { id, value } = e.target;
@@ -286,6 +271,23 @@ const Menu = ({
       alert("메뉴를 입력해주세요");
     }
   };
+
+  const pickedDate = (date) => {
+    selectedDate(date);
+    setIsClicked(null);
+  };
+
+  const selctedList = (index) => {
+    setIsClicked(index);
+  };
+
+  const editListDone = () => {
+    setIsClicked(null);
+  };
+
+  useEffect(() => {
+    return () => setIsClicked(null);
+  }, []);
 
   return (
     <>
@@ -328,7 +330,7 @@ const Menu = ({
             background="#ff9030"
             shadow="rgb(249 217 189) 0px 8px 16px 0px"
             title="선택"
-            onClick={() => selectedDate(date)}
+            onClick={() => pickedDate(date)}
           ></Button>
         </DateContainer>
       </FlexBox>
@@ -343,6 +345,11 @@ const Menu = ({
           saveMenuList={saveMenuList}
           firstTry={firstTry}
           editMenuList={editMenuList}
+          editList={editList}
+          deleteList={deleteList}
+          isClicked={isClicked}
+          editListDone={editListDone}
+          selctedList={selctedList}
         />
       )}
     </>

@@ -234,8 +234,16 @@ const ManageContainer = observer(() => {
       );
   };
 
-  // 메뉴리스트 수정
-  const editList = () => {};
+  // 메뉴리스트 변경
+  const editList = (e, index) => {
+    const { value } = e.target;
+    setMenuData((prev) => prev.map((item, i) => (i === index ? value : item)));
+  };
+
+  //메뉴 리스트 삭제
+  const deleteList = (index) => {
+    setMenuData((prev) => prev.filter((item, i) => i !== index));
+  };
 
   // 공지사항 저장
   const sendNotice = (result) => {
@@ -284,6 +292,8 @@ const ManageContainer = observer(() => {
           saveMenuList={saveMenuList}
           firstTry={firstTry}
           editMenuList={editMenuList}
+          editList={editList}
+          deleteList={deleteList}
         />
       </FlexBox>
       <FlexBox
