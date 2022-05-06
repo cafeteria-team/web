@@ -209,7 +209,8 @@ export class ManageStore {
       `);
       return response.data;
     } catch (error) {
-      return console.log(error.response);
+      console.log(error.response);
+      throw error;
     }
   };
 

@@ -20,8 +20,11 @@ const ManageContainer = observer(() => {
   const [isMenuLoading, setIsMenuLoading] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [isNoticeLoading, setIsNoticeLoading] = useState(false);
+  const [showMenuList, setShowMenuList] = useState(false);
 
   const [noticeData, setNoticeData] = useState("");
+
+  const [menuData, setMenuData] = useState(null);
 
   const [facilityList, setFacilityList] = useState({
     facility: {
@@ -192,13 +195,19 @@ const ManageContainer = observer(() => {
 
   // 메뉴날짜선정
   const selectedDate = (date) => {
+    setIsMenuLoading(true);
     if (date === "") {
       alert("날짜를 선택해주세요.");
+      setIsMenuLoading(false);
     } else {
       const finalDate = moment(date).format("YYYY-MM-DD");
-      ManageStore.callMenu(AuthStore.getUser.userId, finalDate).then((res) =>
-        console.log(res)
-      );
+      ManageStore.callMenu(AuthStore.getUser.userId, finalDate)
+        .then((res) => {
+          setMenuData(res[0].menus);
+          setIsMenuLoading(false);
+        })
+        .catch((err) => alert("메뉴리스트를 불러올수없습니다."))
+        .finally(() => setIsMenuLoading(false));
     }
   };
 
@@ -228,6 +237,7 @@ const ManageContainer = observer(() => {
           isLoading={isMenuLoading}
           menuList={menuList}
           selectedDate={selectedDate}
+          menuData={menuData}
         />
       </FlexBox>
 
