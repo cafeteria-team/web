@@ -154,24 +154,16 @@ const SkeletonList = () => {
   );
 };
 
-const Price = ({ isLoading, priceList, editList, deleteList }) => {
+const Price = ({
+  isLoading,
+  priceList,
+  editList,
+  deleteList,
+  firstTry,
+  savePriceList,
+  editPriceList,
+}) => {
   const [isClicked, setIsClicked] = useState("");
-
-  //   const handleChange = (e) => {
-  //     const { id, value } = e.target;
-  //     setState((prev) => ({
-  //       ...prev,
-  //       [id]: value,
-  //     }));
-  //   };
-
-  //   const addList = async () => {
-  //     if (state.name !== "") {
-  //       addMenuList(state.name);
-  //     } else {
-  //       alert("메뉴를 입력해주세요");
-  //     }
-  //   };
 
   const selctedList = (index) => {
     setIsClicked(index);
@@ -210,7 +202,7 @@ const Price = ({ isLoading, priceList, editList, deleteList }) => {
           background="#ff9030"
           shadow="rgb(249 217 189) 0px 8px 16px 0px"
           title="가격정보 저장"
-          // onClick={firstTry ? () => saveMenuList(date) : () => editMenuList(date)}
+          onClick={firstTry ? savePriceList : editPriceList}
         />
       </FlexBox>
     </>

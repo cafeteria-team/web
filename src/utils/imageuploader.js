@@ -20,6 +20,7 @@ class ImageUploader {
       return response.data.secure_url;
     } catch (error) {
       console.log(error.response);
+      throw error;
     }
   }
 }

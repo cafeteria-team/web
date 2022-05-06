@@ -27,6 +27,9 @@ const ManageContainer = observer(() => {
   const [showMenuList, setShowMenuList] = useState(false);
   const [firstTry, setFirstTry] = useState(false);
 
+  // 가격리스트 체크
+  const [pirceFirst, setPriceFirst] = useState(false);
+
   // 데이터셋
   const [noticeData, setNoticeData] = useState("");
 
@@ -264,8 +267,14 @@ const ManageContainer = observer(() => {
       .then((res) => {
         ManageStore.callPrice(res.user.userId)
           .then((res) => {
-            setPriceData(res.data.price);
-            setIsPriceLoadging(false);
+            if (res.data.price !== null) {
+              setPriceData(res.data.price);
+              setIsPriceLoadging(false);
+              setPriceFirst(false);
+            } else {
+              setIsMenuLoading(false);
+              setFirstTry(true);
+            }
           })
           .catch((err) => {
             alert("가격정보를 불러올수없습니다. 잠시후 다시 시도해주세요.");
@@ -279,7 +288,22 @@ const ManageContainer = observer(() => {
 
   // 가격 리스트 추가
   // 가격 리스트 저장
+  const savePriceList = () => {
+    ManageStore.savePrice(AuthStore.getUser.userId, priceData)
+      .then((res) => alert("가격정보가 등록되었습니다."))
+      .catch((err) =>
+        alert("가격정보를 등록할수없습니다. 잠시후 다시 시도해주세요.")
+      );
+  };
   // 가격 리스트 수정
+  const patchPriceList = () => {
+    ManageStore.editPrice(AuthStore.getUser.userId, priceData)
+      .then((res) => alert("가격정보가 등록되었습니다."))
+      .catch((err) =>
+        alert("가격정보를 등록할수없습니다. 잠시후 다시 시도해주세요.")
+      );
+  };
+
   // 가격 리스트 변경
   const editPriceList = (e, index) => {
     const { id, value } = e.target;
@@ -289,7 +313,6 @@ const ManageContainer = observer(() => {
   };
   // 가격 리스트 삭제
   const deletePriceList = (index, _id) => {
-    console.log(_id);
     setPriceData((prev) =>
       prev.map((item, i) => (i === index ? { [_id]: "" } : item))
     );
@@ -377,6 +400,9 @@ const ManageContainer = observer(() => {
           priceList={priceData}
           editList={editPriceList}
           deleteList={deletePriceList}
+          firstTry={pirceFirst}
+          savePriceList={savePriceList}
+          editPriceList={patchPriceList}
         />
       </FlexBox>
       <FlexBox

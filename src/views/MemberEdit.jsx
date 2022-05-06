@@ -229,22 +229,28 @@ const MemberEdit = observer(() => {
   };
 
   // 이미지업로드
-  const onFileChange = async (e) => {
+  const onFileChange = (e) => {
     const maxSize = 10 * 1024 * 1024;
     const imgSize = e.target.files[0].size;
     if (imgSize > maxSize) {
       alert("이미지 용량은 10MB 이내로 등록가능합니다.");
     } else {
       setLoading(true);
-      const uploaded = await imageUploader.upload(e.target.files[0]);
-      setSelectedUser((prev) => ({
-        ...prev,
-        store: {
-          ...prev.store,
-          busi_num_img: uploaded,
-        },
-      }));
-      setLoading(false);
+      imageUploader
+        .upload(e.target.files[0])
+        .then((res) => {
+          setSelectedUser((prev) => ({
+            ...prev,
+            store: {
+              ...prev.store,
+              busi_num_img: res,
+            },
+          }));
+          setLoading(false);
+        })
+        .catch((err) =>
+          alert("이미지를 등록할수없습니다. 잠시후 다시 시도해주세요.")
+        );
     }
   };
 
