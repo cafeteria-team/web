@@ -104,12 +104,11 @@ export class ManageStore {
   };
 
   // 사용자 편의시설 삭제
-  deleteUserFacilityList = async (storeId, id) => {
+  deleteUserFacilityList = async (id, storeId) => {
     try {
       const response = await axios.delete(
         `/api/facility/join/${storeId}/${id}`
       );
-      alert("편의시설이 삭제되었습니다.");
       return response;
     } catch (error) {
       throw error;
@@ -180,14 +179,13 @@ export class ManageStore {
       const response = await axios.post(`/api/facility/join/${user}`, {
         facility: id,
       });
-      alert("편의시설이 추가되었습니다.");
       return response;
     } catch (error) {
       if (error.response.status === 409) {
         return alert("이미등록된 편의시설입니다.");
       }
       // console.log(error.response);
-      return false;
+      throw error;
     }
   };
 

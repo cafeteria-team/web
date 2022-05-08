@@ -50,6 +50,8 @@ const ManageContainer = observer(() => {
     },
   });
 
+  const [adminFacility, setAdminFacility] = useState("");
+
   const [priceData, setPriceData] = useState([
     { 1: "" },
     { 5: "" },
@@ -73,6 +75,7 @@ const ManageContainer = observer(() => {
             list: intersection,
           },
         }));
+        setAdminFacility(res.data);
         setIsLoading(false);
       })
       .catch((err) => {
@@ -111,7 +114,6 @@ const ManageContainer = observer(() => {
   };
 
   const onDragEnd = ({ source, destination }) => {
-    console.log(source);
     // Make sure we have a valid destination
     if (destination === undefined || destination === null) return null;
 
@@ -176,6 +178,30 @@ const ManageContainer = observer(() => {
         [newStartCol.id]: newStartCol,
         [newEndCol.id]: newEndCol,
       }));
+
+      if (end?.id === "userFacility") {
+        const target = facilityList.facility.list[source.index];
+        const checkId = adminFacility.filter((item) => item.name === target);
+
+        ManageStore.addUserFacilityList(checkId[0].id, AuthStore.getUser.userId)
+          .then((res) => alert("편의시설이 추가되었습니다."))
+          .catch((err) =>
+            alert("편의시설을 등록할수 없습니다. 잠시후 다시 시도해주세요.")
+          );
+      } else {
+        const target = facilityList.facility.list[source.index];
+        const checkId = adminFacility.filter((item) => item.name === target);
+
+        ManageStore.deleteUserFacilityList(
+          checkId[0].id,
+          AuthStore.getUser.userId
+        )
+          .then((res) => alert("편의시설이 삭제되었습니다."))
+          .catch((err) =>
+            alert("편의시설을 삭제할수 없습니다. 잠시후 다시 시도해주세요.")
+          );
+      }
+
       return null;
     }
   };

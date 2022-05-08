@@ -60,7 +60,6 @@ const MenuList = ({
               return <SkeletonList key={i} />;
             })
           : priceList.map((item, index, arr) => {
-              console.log(arr);
               return (
                 <Li
                   key={index}
