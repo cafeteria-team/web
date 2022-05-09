@@ -104,7 +104,7 @@ const ManageContainer = observer(() => {
                 list: nameLists,
               },
             }));
-            setUserFacility(res.dat);
+            setUserFacility(res.data);
 
             getFacilityList(nameLists);
           })
@@ -188,21 +188,26 @@ const ManageContainer = observer(() => {
 
         ManageStore.addUserFacilityList(checkId[0].id, AuthStore.getUser.userId)
           .then((res) => {
+            getSelectedFacilityList();
             alert("편의시설이 추가되었습니다.");
           })
           .catch((err) =>
             alert("편의시설을 등록할수 없습니다. 잠시후 다시 시도해주세요.")
           );
       } else {
-        console.log(userFacility);
         const target = facilityList.facility.list[source.index];
-        const checkId = adminFacility.filter((item) => item.name === target);
+        const checkId = userFacility.store_facility.filter(
+          (item) => item.facility.name === target
+        );
 
         ManageStore.deleteUserFacilityList(
-          checkId[0].id,
+          checkId[0]?.id,
           AuthStore.getUser.userId
         )
-          .then((res) => alert("편의시설이 삭제되었습니다."))
+          .then((res) => {
+            getSelectedFacilityList();
+            alert("편의시설이 삭제되었습니다.");
+          })
           .catch((err) =>
             alert("편의시설을 삭제할수 없습니다. 잠시후 다시 시도해주세요.")
           );
@@ -322,7 +327,9 @@ const ManageContainer = observer(() => {
   // 가격 리스트 수정
   const patchPriceList = () => {
     ManageStore.editPrice(AuthStore.getUser.userId, priceData)
-      .then((res) => alert("가격정보가 등록되었습니다."))
+      .then((res) => {
+        alert("가격정보가 등록되었습니다.");
+      })
       .catch((err) =>
         alert("가격정보를 등록할수없습니다. 잠시후 다시 시도해주세요.")
       );
