@@ -104,7 +104,7 @@ const Item = ({ text, index, last, id }) => {
   );
 };
 
-const Facility = ({ isLoading, columns, onDragEnd, sendFacility }) => {
+const Facility = ({ isLoading, columns, onDragEnd }) => {
   return (
     <>
       <FlexBox
@@ -138,17 +138,7 @@ const Facility = ({ isLoading, columns, onDragEnd, sendFacility }) => {
           )}
         </DragDropContext>
       </FlexBox>
-      <FlexBox just="center" padding="0 24px 50px">
-        <Button
-          type="button"
-          width="240px"
-          title="편의시설 저장"
-          onClick={sendFacility}
-          margin="32px 0 0 0"
-          background="#ff9030"
-          shadow="rgb(249 217 189) 0px 8px 16px 0px"
-        />
-      </FlexBox>
+      <FlexBox just="center" padding="0 24px 50px"></FlexBox>
     </>
   );
 };

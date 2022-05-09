@@ -50,6 +50,7 @@ const ManageContainer = observer(() => {
     },
   });
 
+  const [userFacility, setUserFacility] = useState("");
   const [adminFacility, setAdminFacility] = useState("");
 
   const [priceData, setPriceData] = useState([
@@ -103,6 +104,8 @@ const ManageContainer = observer(() => {
                 list: nameLists,
               },
             }));
+            setUserFacility(res.dat);
+
             getFacilityList(nameLists);
           })
           .catch((err) => {
@@ -184,11 +187,14 @@ const ManageContainer = observer(() => {
         const checkId = adminFacility.filter((item) => item.name === target);
 
         ManageStore.addUserFacilityList(checkId[0].id, AuthStore.getUser.userId)
-          .then((res) => alert("편의시설이 추가되었습니다."))
+          .then((res) => {
+            alert("편의시설이 추가되었습니다.");
+          })
           .catch((err) =>
             alert("편의시설을 등록할수 없습니다. 잠시후 다시 시도해주세요.")
           );
       } else {
+        console.log(userFacility);
         const target = facilityList.facility.list[source.index];
         const checkId = adminFacility.filter((item) => item.name === target);
 
@@ -204,14 +210,6 @@ const ManageContainer = observer(() => {
 
       return null;
     }
-  };
-
-  // 편의시설 저장
-  const sendFacility = () => {
-    ManageStore.addUserFacilityList(
-      AuthStore.getUser.userId,
-      facilityList.userFacility.list
-    );
   };
 
   // 메뉴날짜선정
@@ -409,7 +407,6 @@ const ManageContainer = observer(() => {
           isLoading={isLoading}
           columns={facilityList}
           onDragEnd={onDragEnd}
-          sendFacility={sendFacility}
         />
       </FlexBox>
       <FlexBox

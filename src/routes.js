@@ -11,65 +11,12 @@ import {
   ManageAdmin,
   LogoContainer,
   ManageContainer,
+  NoticeContainer,
 } from "./containers";
 
 import { NotFound, Password, MemberEdit } from "./views";
 
 const Router = () => {
-  const [role, setRole] = useState("");
-
-  // useEffect(() => {
-  //   const decode = new Decode();
-  //   const access = localStorage.getItem("access");
-  //   if (access) {
-  //     const data = decode.getUserId(access);
-  //     setRole(data.user_role);
-  //   } else if (check.access) {
-  //     const data = decode.getUserId(check.access);
-  //     setRole(data.user_role);
-  //   }
-  // }, [check]);
-
-  const admin = [
-    { path: "/main", element: <Navigate to="/main/overview" /> },
-    { path: "overview", element: <Overview /> },
-    { path: "member", element: <Member /> },
-    { path: "member/:name", element: <MemberEdit /> },
-    { path: "manage", element: <ManageContainer /> },
-    { path: "manageAdmin", element: <ManageAdmin /> },
-    { path: "password", element: <Password /> },
-    { path: "404", element: <NotFound /> },
-    { path: "*", element: <Navigate to="/404" /> },
-  ];
-
-  // { path: "/main", element: <Navigate to="/main/overview" /> },
-  // { path: "overview", element: <Overview /> },
-  // {
-  //   path: "member",
-  //   element: role === "ADMIN" ? <Member /> : <Navigate to="/404" />,
-  // },
-  // {
-  //   path: "member/:name",
-  //   element: role === "ADMIN" ? <MemberEdit /> : <Navigate to="/404" />,
-  // },
-  // { path: "manage", element: <ManageContainer /> },
-  // {
-  //   path: "manageAdmin",
-  //   element: role === "ADMIN" ? <ManageAdmin /> : <Navigate to="/404" />,
-  // },
-  // { path: "password", element: <Password /> },
-  // { path: "404", element: <NotFound /> },
-  // { path: "*", element: <Navigate to="/404" /> },
-
-  const user = [
-    { path: "/main", element: <Navigate to="/main/overview" /> },
-    { path: "overview", element: <Overview /> },
-    { path: "manage", element: <ManageContainer /> },
-    { path: "password", element: <Password /> },
-    { path: "404", element: <NotFound /> },
-    { path: "*", element: <Navigate to="/404" /> },
-  ];
-
   return useRoutes([
     {
       path: "/main",
@@ -86,6 +33,7 @@ const Router = () => {
         { path: "manage", element: <ManageContainer /> },
         { path: "manageAdmin", element: <ManageAdmin /> },
         { path: "password", element: <Password /> },
+        { path: "notice", element: <NoticeContainer /> },
         { path: "404", element: <NotFound /> },
         { path: "*", element: <Navigate to="/404" /> },
       ],
