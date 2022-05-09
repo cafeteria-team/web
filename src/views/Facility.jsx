@@ -1,4 +1,4 @@
-import React from "react";
+import React, { memo } from "react";
 import {
   FlexBox,
   StyledBody,
@@ -10,7 +10,7 @@ import { Button } from "../components";
 import uuid from "react-uuid";
 import { DragDropContext, Draggable, Droppable } from "react-beautiful-dnd";
 
-const Column = ({ col: { list, id, title } }) => {
+const Column = memo(({ col: { list, id, title } }) => {
   return (
     <Droppable droppableId={id}>
       {(provided) => {
@@ -70,7 +70,7 @@ const Column = ({ col: { list, id, title } }) => {
       }}
     </Droppable>
   );
-};
+});
 
 const Item = ({ text, index, last, id }) => {
   return (

@@ -145,6 +145,7 @@ export class AuthStore {
           refresh: data,
         });
         this.onLoginSucess(res.data.access, res.data.refresh, username);
+
         return res;
       } catch (error) {
         console.log(error.response);

@@ -12,6 +12,7 @@ import ManageAdmin from "./Manage/ManageAdmin";
 import LogoContainer from "./LogoContainer";
 import ManageContainer from "./Manage/ManageContainer";
 import NoticeContainer from "./Notice/NoticeContainer";
+import NoticeAdd from "./Notice/NoticeAdd";
 
 export {
   RegisterContainer,
@@ -28,4 +29,5 @@ export {
   Menu,
   ManageContainer,
   NoticeContainer,
+  NoticeAdd,
 };

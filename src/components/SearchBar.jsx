@@ -4,7 +4,7 @@ import { FlexBox } from "../components/StyledElements";
 
 import { FaSearch } from "react-icons/fa";
 
-const SearchBar = ({ handleChange, search }) => {
+const SearchBar = ({ handleChange, search, margin }) => {
   return (
     <FlexBox align="center" position="relative">
       <FaSearch
@@ -23,6 +23,7 @@ const SearchBar = ({ handleChange, search }) => {
         width="200px"
         padding="14px 20px 14px 36px"
         placeholder="Search User..."
+        margin={margin}
       />
     </FlexBox>
   );

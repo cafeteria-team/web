@@ -12,6 +12,7 @@ import {
   LogoContainer,
   ManageContainer,
   NoticeContainer,
+  NoticeAdd,
 } from "./containers";
 
 import { NotFound, Password, MemberEdit } from "./views";
@@ -34,6 +35,7 @@ const Router = () => {
         { path: "manageAdmin", element: <ManageAdmin /> },
         { path: "password", element: <Password /> },
         { path: "notice", element: <NoticeContainer /> },
+        { path: "notice/add", element: <NoticeAdd /> },
         { path: "404", element: <NotFound /> },
         { path: "*", element: <Navigate to="/404" /> },
       ],

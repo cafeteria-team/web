@@ -129,8 +129,6 @@ const ManageContainer = observer(() => {
       .catch((err) => console.log(err));
   };
 
-  console.log(facilityList);
-
   const onDragEnd = ({ source, destination }) => {
     // Make sure we have a valid destination
     if (destination === undefined || destination === null) return null;

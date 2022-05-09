@@ -1,4 +1,4 @@
-import React, { memo, useState } from "react";
+import React, { memo, useState, useEffect } from "react";
 import {
   FlexBox,
   StyledTitle,
@@ -43,13 +43,85 @@ const ListTitle = memo(() => {
   );
 });
 
+const Items = ({
+  results,
+  offset,
+  limit,
+  askDeleteUser,
+  selectUser,
+  changeToggled,
+}) => {
+  return (
+    <Ul direction="column">
+      {results ? (
+        results
+          .slice(offset, offset + limit)
+          .map(({ date_joined, id, is_active, store, username }) => (
+            <Li
+              key={id}
+              height="68px"
+              width="100%"
+              border="1px solid #e2e6e7"
+              align="center"
+            >
+              <Ul
+                width="100%"
+                padding="14px 24px"
+                boxSizing="border-box"
+                just="space-around"
+              >
+                {/* <Li just="center" width="16.6666666667%" align="center">
+                  {id}
+                </Li>
+                <Li just="center" width="16.6666666667%" align="center">
+                  {moment(date_joined).format("L")}
+                </Li>
+                <Li just="center" width="16.6666666667%" align="center">
+                  {username}
+                </Li>
+                <Li just="center" width="16.6666666667%" align="center">
+                  <Button
+                    title="수정"
+                    margin="0 10px 0 0"
+                    padding="6px 8px"
+                    width="40px"
+                    background="rgb(24, 144, 255)"
+                    onClick={() => selectUser(id)}
+                  />
+                  <Button
+                    title="탈퇴"
+                    margin="0"
+                    padding="6px 8px"
+                    width="40px"
+                    background="rgb(255, 72, 66)"
+                    onClick={() => askDeleteUser(id)}
+                  />
+                </Li> */}
+              </Ul>
+            </Li>
+          ))
+      ) : (
+        <></>
+      )}
+    </Ul>
+  );
+};
+
 const NoticeContainer = () => {
   const { NoticeStore } = useStores();
-
+  const navigate = useNavigate();
   // state
   const [state, setState] = useState({
     search: "",
   });
+  const [isLoading, setIsLoading] = useState(false);
+  const [noticeList, setNoticeList] = useState("");
+
+  // for pagination
+  const [limit, setLimit] = useState(10);
+  const [page, setPage] = useState(1);
+  const offset = (page - 1) * limit;
+  const [total, setTotal] = useState("");
 
   const handleChange = (e) => {
     const { id, value } = e.target;
@@ -58,6 +130,11 @@ const NoticeContainer = () => {
       [id]: value,
     }));
     // onSearchList(e.target.value);
+  };
+
+  // 공지사항 추가
+  const addList = () => {
+    navigate("add");
   };
 
   // const onSearchList = (title) => {
@@ -71,6 +148,26 @@ const NoticeContainer = () => {
   //     _callUserList(AuthStore.accessToken);
   //   }
   // };
+
+  const getNotice = () => {
+    setIsLoading(true);
+    NoticeStore.callNotice()
+      .then((res) => {
+        setNoticeList(res.data);
+        setIsLoading(false);
+      })
+      .catch((err) => {
+        alert("공지사항을 불러올수없습니다.");
+      })
+      .finally(() => {
+        setIsLoading(false);
+      });
+  };
+
+  useEffect(() => {
+    getNotice();
+  }, []);
+
   return (
     <FlexBox padding="30px 70px" direction="column" width="100%">
       <StyledTitle margin="0 0 30px 0">공지사항 관리</StyledTitle>
@@ -91,12 +188,80 @@ const NoticeContainer = () => {
           <StyledBody color="color rgb(33, 43, 54)" fontSize="18px" fontW="600">
             공지사항
           </StyledBody>
-          <SearchBar search={state.search} handleChange={handleChange} />
+          <FlexBox align="center">
+            <SearchBar
+              search={state.search}
+              handleChange={handleChange}
+              margin="0"
+            />
+            <Button
+              title="공지사항 추가"
+              margin="0 0 0 20px"
+              padding="13px 16px"
+              width="100%"
+              background="rgb(24, 144, 255)"
+              onClick={addList}
+            />
+          </FlexBox>
         </FlexBox>
         <ListTitle />
+        {isLoading ? (
+          new Array(5).fill(1).map((_, i) => {
+            return <SkeletonList key={i} />;
+          })
+        ) : noticeList.length !== 0 ? (
+          <>
+            <Items
+              results={noticeList}
+              limit={limit}
+              offset={offset}
+              // askDeleteUser={askDeleteUser}
+              // selectUser={selectUser}
+              // changeToggled={changeToggled}
+            />
+            <Pagination
+              total={total}
+              limit={limit}
+              page={page}
+              setPage={setPage}
+            />
+          </>
+        ) : (
+          <Li
+            height="68px"
+            width="100%"
+            border="1px solid #e2e6e7"
+            align="center"
+            just="center"
+          >
+            <StyledBody color="rgb(33, 43, 54)" fontSize="14px">
+              등록된 리스트가없습니다.
+            </StyledBody>
+          </Li>
+        )}
       </FlexBox>
     </FlexBox>
   );
 };
 
 export default NoticeContainer;
+
+const SkeletonList = () => {
+  return (
+    <Li height="68px" width="100%" border="1px solid #e2e6e7" align="center">
+      <Ul
+        width="100%"
+        padding="14px 24px"
+        boxSizing="border-box"
+        just="space-around"
+      >
+        <LoadingLi></LoadingLi>
+        <LoadingLi></LoadingLi>
+        <LoadingLi></LoadingLi>
+        <LoadingLi></LoadingLi>
+        <LoadingLi></LoadingLi>
+        <LoadingLi></LoadingLi>
+      </Ul>
+    </Li>
+  );
+};

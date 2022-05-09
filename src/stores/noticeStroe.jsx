@@ -17,8 +17,13 @@ export class NoticeStore {
 
   //공지사항 불러오기
   callNotice = () => {
+    const access = localStorage.getItem("access");
     try {
-      const response = axios.get("/api/notice/admin");
+      const response = axios.get("/api/notice/admin", {
+        headers: {
+          Authorization: `Bearer ${access}`,
+        },
+      });
       return response;
     } catch (error) {
       throw error;
