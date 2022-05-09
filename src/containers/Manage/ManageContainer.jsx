@@ -53,9 +53,6 @@ const ManageContainer = observer(() => {
     },
   });
 
-  const [userFacility, setUserFacility] = useState("");
-  const [adminFacility, setAdminFacility] = useState("");
-
   const [priceData, setPriceData] = useState([
     { 1: "" },
     { 5: "" },
@@ -86,7 +83,7 @@ const ManageContainer = observer(() => {
             listId: idIntersection,
           },
         }));
-        setAdminFacility(res.data);
+
         setIsLoading(false);
       })
       .catch((err) => {
@@ -95,8 +92,6 @@ const ManageContainer = observer(() => {
       })
       .finally(() => setIsLoading(false));
   };
-
-  console.log(facilityList);
 
   // 선택된 편의시설 리스트
   const getSelectedFacilityList = () => {
@@ -123,7 +118,6 @@ const ManageContainer = observer(() => {
                 joinId: targetId,
               },
             }));
-            setUserFacility(res.data);
 
             getFacilityList(nameLists, idLists);
           })
@@ -134,6 +128,8 @@ const ManageContainer = observer(() => {
       })
       .catch((err) => console.log(err));
   };
+
+  console.log(facilityList);
 
   const onDragEnd = ({ source, destination }) => {
     // Make sure we have a valid destination
@@ -177,63 +173,29 @@ const ManageContainer = observer(() => {
       return null;
     } else {
       if (end?.id === "userFacility") {
-        // If start is different from end, we need to update multiple columns
-        // Filter the start list like before
-        // const newStartList = start.list.filter(
-        //   (_, idx) => idx !== source.index
-        // );
-
-        // Create a new start column
-        // const newStartCol = {
-        //   id: start.id,
-        //   list: newStartList,
-        //   title: start.title,
-        //   listId: start.listId,
-        // };
-
-        // Make a new end list array
-        // const newEndList = end.list;
-        // const newEndListId = end.listId;
-
-        // Insert the item into the end list
-        // newEndList.splice(destination.index, 0, start.list[source.index]);
-        // newEndListId.splice(destination.index, 0, start.listId[source.index]);
-
-        // Create a new end column
-        // const newEndCol = {
-        //   id: end.id,
-        //   list: newEndList,
-        //   title: end.title,
-        //   listId: newEndListId,
-        // };
-
-        // Update the state
-        // setFacilityList((state) => ({
-        //   ...state,
-        //   [newStartCol.id]: newStartCol,
-        //   [newEndCol.id]: newEndCol,
-        // }));
-
         ManageStore.addUserFacilityList(
           facilityList.facility.listId[source.index],
           AuthStore.getUser.userId
         )
           .then((res) => {
+            const newStartList = start.list.filter(
+              (_, idx) => idx !== source.index
+            );
+            const newStartListId = start.listId.filter(
+              (_, idx) => idx !== source.index
+            );
+
             setFacilityList((prev) => ({
               facility: {
                 ...prev.facility,
-                list: prev.userFacility.list.filter(
-                  (_, idx) => idx !== source.index
-                ),
-                listId: prev.userFacility.listId.filter(
-                  (_, idx) => idx !== source.index
-                ),
+                list: newStartList,
+                listId: newStartListId,
               },
               userFacility: {
                 ...prev.userFacility,
                 list: [...prev.userFacility.list, res.data.facility.name],
-                listId: [...prev.userFacility.listId, res.data.id],
-                joinId: [...prev.userFacility.joinId, res.data.facility.id],
+                listId: [...prev.userFacility.listId, res.data.facility.id],
+                joinId: [...prev.userFacility.joinId, res.data.id],
               },
             }));
             alert("편의시설이 추가되었습니다.");
