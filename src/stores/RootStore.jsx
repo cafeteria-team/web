@@ -1,6 +1,7 @@
 import { AuthStore } from "./authStore.jsx";
 import { ListStore } from "./listStore.jsx";
 import { ManageStore } from "./manageStore.jsx";
+import { NoticeStore } from "./noticeStroe";
 
 export class RootStore {
   AuthStore;
@@ -10,5 +11,6 @@ export class RootStore {
     this.AuthStore = new AuthStore(this);
     this.ListStore = new ListStore(this);
     this.ManageStore = new ManageStore(this);
+    this.NoticeStore = new NoticeStore(this);
   }
 }
