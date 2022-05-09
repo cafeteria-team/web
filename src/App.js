@@ -13,13 +13,21 @@ import Router from "./routes";
 const App = observer(() => {
   const { AuthStore } = useStores();
 
-  const initializeUserInfo = useCallback(async () => {
+  // const initializeUserInfo = useCallback(async () => {
+  //   await AuthStore.onSilentRefresh();
+  // }, [AuthStore]);
+
+  // useEffect(() => {
+  //   initializeUserInfo();
+  // }, [initializeUserInfo, AuthStore]);
+
+  const initializeUserInfo = async () => {
     await AuthStore.onSilentRefresh();
-  }, [AuthStore]);
+  };
 
   useEffect(() => {
     initializeUserInfo();
-  }, [initializeUserInfo, AuthStore]);
+  }, []);
 
   return (
     <ThemeProvider theme={theme}>

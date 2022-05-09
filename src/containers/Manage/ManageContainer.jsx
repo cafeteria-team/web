@@ -42,11 +42,14 @@ const ManageContainer = observer(() => {
       id: "facility",
       list: [],
       title: "등록가능한 시설목록",
+      listId: [],
     },
     userFacility: {
       id: "userFacility",
       list: [],
       title: "우리 업체 시설목록",
+      listId: [],
+      joinId: [],
     },
   });
 
@@ -60,20 +63,27 @@ const ManageContainer = observer(() => {
   ]);
 
   // 편의시설 리스트 받아오기
-  const getFacilityList = (userLists) => {
+  const getFacilityList = (userLists, listId) => {
     setIsLoading(true);
     ManageStore.callFacilityList()
       .then((res) => {
         const nameLists = res.data.map((item) => item.name);
+        const idLists = res.data.map((item) => item.id);
 
-        var intersection = nameLists.filter(
+        let intersection = nameLists.filter(
           (value) => userLists.indexOf(value) === -1
         );
+
+        let idIntersection = idLists.filter(
+          (value) => listId.indexOf(value) === -1
+        );
+
         setFacilityList((prev) => ({
           ...prev,
           facility: {
             ...prev.facility,
             list: intersection,
+            listId: idIntersection,
           },
         }));
         setAdminFacility(res.data);
@@ -86,6 +96,8 @@ const ManageContainer = observer(() => {
       .finally(() => setIsLoading(false));
   };
 
+  console.log(facilityList);
+
   // 선택된 편의시설 리스트
   const getSelectedFacilityList = () => {
     setIsLoading(true);
@@ -97,16 +109,23 @@ const ManageContainer = observer(() => {
             const nameLists = res.data.store_facility.map(
               (item) => item.facility.name
             );
+            const idLists = res.data.store_facility.map(
+              (item) => item.facility.id
+            );
+            const targetId = res.data.store_facility.map((item) => item.id);
+
             setFacilityList((prev) => ({
               ...prev,
               userFacility: {
                 ...prev.userFacility,
                 list: nameLists,
+                listId: idLists,
+                joinId: targetId,
               },
             }));
             setUserFacility(res.data);
 
-            getFacilityList(nameLists);
+            getFacilityList(nameLists, idLists);
           })
           .catch((err) => {
             alert("편의시설 정보를 불러올수없습니다.");
@@ -136,83 +155,131 @@ const ManageContainer = observer(() => {
       // Move the item within the list
       // Start by making a new list without the dragged item
       const newList = start.list.filter((_, idx) => idx !== source.index);
+      const newListId = start.listId.filter((_, idx) => idx !== source.index);
+      const newJoinId = start.joinId?.filter((_, idx) => idx !== source.index);
 
       // Then insert the item at the right location
       newList.splice(destination.index, 0, start.list[source.index]);
+      newListId.splice(destination.index, 0, start.listId[source.index]);
+      newJoinId?.splice(destination.index, 0, start.joinId[source.index]);
 
       // Then create a new copy of the column object
       const newCol = {
         id: start.id,
         list: newList,
         title: start.title,
+        listId: newListId,
+        joinId: newJoinId,
       };
 
       // Update the state
       setFacilityList((state) => ({ ...state, [newCol.id]: newCol }));
       return null;
     } else {
-      // If start is different from end, we need to update multiple columns
-      // Filter the start list like before
-      const newStartList = start.list.filter((_, idx) => idx !== source.index);
-
-      // Create a new start column
-      const newStartCol = {
-        id: start.id,
-        list: newStartList,
-        title: start.title,
-      };
-
-      // Make a new end list array
-      const newEndList = end.list;
-
-      // Insert the item into the end list
-      newEndList.splice(destination.index, 0, start.list[source.index]);
-
-      // Create a new end column
-      const newEndCol = {
-        id: end.id,
-        list: newEndList,
-        title: end.title,
-      };
-
-      // Update the state
-      setFacilityList((state) => ({
-        ...state,
-        [newStartCol.id]: newStartCol,
-        [newEndCol.id]: newEndCol,
-      }));
-
       if (end?.id === "userFacility") {
-        const target = facilityList.facility.list[source.index];
-        const checkId = adminFacility.filter((item) => item.name === target);
+        // If start is different from end, we need to update multiple columns
+        // Filter the start list like before
+        // const newStartList = start.list.filter(
+        //   (_, idx) => idx !== source.index
+        // );
 
-        ManageStore.addUserFacilityList(checkId[0].id, AuthStore.getUser.userId)
+        // Create a new start column
+        // const newStartCol = {
+        //   id: start.id,
+        //   list: newStartList,
+        //   title: start.title,
+        //   listId: start.listId,
+        // };
+
+        // Make a new end list array
+        // const newEndList = end.list;
+        // const newEndListId = end.listId;
+
+        // Insert the item into the end list
+        // newEndList.splice(destination.index, 0, start.list[source.index]);
+        // newEndListId.splice(destination.index, 0, start.listId[source.index]);
+
+        // Create a new end column
+        // const newEndCol = {
+        //   id: end.id,
+        //   list: newEndList,
+        //   title: end.title,
+        //   listId: newEndListId,
+        // };
+
+        // Update the state
+        // setFacilityList((state) => ({
+        //   ...state,
+        //   [newStartCol.id]: newStartCol,
+        //   [newEndCol.id]: newEndCol,
+        // }));
+
+        ManageStore.addUserFacilityList(
+          facilityList.facility.listId[source.index],
+          AuthStore.getUser.userId
+        )
           .then((res) => {
-            getSelectedFacilityList();
+            setFacilityList((prev) => ({
+              facility: {
+                ...prev.facility,
+                list: prev.userFacility.list.filter(
+                  (_, idx) => idx !== source.index
+                ),
+                listId: prev.userFacility.listId.filter(
+                  (_, idx) => idx !== source.index
+                ),
+              },
+              userFacility: {
+                ...prev.userFacility,
+                list: [...prev.userFacility.list, res.data.facility.name],
+                listId: [...prev.userFacility.listId, res.data.id],
+                joinId: [...prev.userFacility.joinId, res.data.facility.id],
+              },
+            }));
             alert("편의시설이 추가되었습니다.");
           })
           .catch((err) =>
             alert("편의시설을 등록할수 없습니다. 잠시후 다시 시도해주세요.")
           );
       } else {
-        const target = facilityList.facility.list[source.index];
-        const checkId = userFacility.store_facility.filter(
-          (item) => item.facility.name === target
-        );
+        const targetId = facilityList.userFacility.joinId[source.index];
 
-        ManageStore.deleteUserFacilityList(
-          checkId[0]?.id,
-          AuthStore.getUser.userId
-        )
+        ManageStore.deleteUserFacilityList(targetId, AuthStore.getUser.userId)
           .then((res) => {
-            getSelectedFacilityList();
+            const newEndList = end.list;
+            const newEndListId = end.listId;
+            newEndList.splice(destination.index, 0, start.list[source.index]);
+            newEndListId.splice(
+              destination.index,
+              0,
+              start.listId[source.index]
+            );
+
+            setFacilityList((prev) => ({
+              facility: {
+                ...prev.facility,
+                list: newEndList,
+                listId: newEndListId,
+              },
+              userFacility: {
+                ...prev.userFacility,
+                list: prev.userFacility.list.filter(
+                  (_, idx) => idx !== source.index
+                ),
+                listId: prev.userFacility.listId.filter(
+                  (_, idx) => idx !== source.index
+                ),
+                joinId: prev.userFacility.joinId.filter(
+                  (_, idx) => idx !== source.index
+                ),
+              },
+            }));
             alert("편의시설이 삭제되었습니다.");
           })
           .catch((err) =>
             alert("편의시설을 삭제할수 없습니다. 잠시후 다시 시도해주세요.")
           );
       }
-
       return null;
     }
   };

@@ -8,9 +8,7 @@ import {
 import { Button, Input, SearchBar, Pagination } from "../../components";
 import { Ul, Li } from "../../components/StyledElements";
 import { useStores } from "../../stores/Context";
-import { observer } from "mobx-react";
 import { useNavigate } from "react-router-dom";
-import Decode from "../../utils/decode";
 
 const ListTitle = memo(() => {
   return (
@@ -46,6 +44,8 @@ const ListTitle = memo(() => {
 });
 
 const NoticeContainer = () => {
+  const { NoticeStore } = useStores();
+
   // state
   const [state, setState] = useState({
     search: "",
