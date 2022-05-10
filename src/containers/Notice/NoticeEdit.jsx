@@ -31,7 +31,7 @@ const NoticeEdit = observer(() => {
 
   // 공지사항 저장
   const sendNotice = (result, title) => {
-    NoticeStore.postNotice(result, title, toggle)
+    NoticeStore.editNotice(title, result, toggle, params.id)
       .then((res) => {
         alert("공지사항이 등록되었습니다.");
         navigate("/main/notice");
@@ -54,7 +54,8 @@ const NoticeEdit = observer(() => {
         const clickedNotice = res.data.filter((item) => item.id !== params.id);
         console.log(clickedNotice);
         setNoticeData(clickedNotice[0].content);
-        setNoticeSub(clickedNotice[0]);
+        setTitle(clickedNotice[0].subject);
+        setToggle(clickedNotice[0].view);
         setIsLoading(false);
       })
       .catch((err) => {

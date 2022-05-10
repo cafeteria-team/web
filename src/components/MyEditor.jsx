@@ -184,7 +184,7 @@ const MyEditor = ({
             <Input
               margin="0"
               width="100%"
-              value={noticeSub ? noticeSub.subject : title}
+              value={title}
               onChange={handleChange}
             />
           </FlexBox>
@@ -288,7 +288,7 @@ const MyEditor = ({
               공개여부
             </StyledBody>
             <Toggle
-              defaultChecked={noticeSub ? noticeSub.view : toggle}
+              defaultChecked={toggle}
               aria-label="No label tag"
               onChange={changeToggled}
             />
