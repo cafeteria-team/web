@@ -51,8 +51,10 @@ const NoticeEdit = observer(() => {
     setIsLoading(true);
     NoticeStore.callNotice()
       .then((res) => {
-        const clickedNotice = res.data.filter((item) => item.id !== params.id);
-        console.log(clickedNotice);
+        const clickedNotice = res.data.filter(
+          (item) => item.id === Number(params.id)
+        );
+
         setNoticeData(clickedNotice[0].content);
         setTitle(clickedNotice[0].subject);
         setToggle(clickedNotice[0].view);
@@ -73,6 +75,8 @@ const NoticeEdit = observer(() => {
   useEffect(() => {
     getNotice();
   }, []);
+
+  console.log(noticeData);
 
   return (
     <FlexBox padding="30px 70px" direction="column" width="100%">
