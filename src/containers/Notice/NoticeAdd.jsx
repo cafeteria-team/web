@@ -26,7 +26,7 @@ const NoticeAdd = () => {
 
   // 공지사항 저장
   const sendNotice = (result, title) => {
-    NoticeStore.postNotice(result, title, toggle)
+    NoticeStore.postNotice(title, result, toggle)
       .then((res) => {
         alert("공지사항이 등록되었습니다.");
         navigate("/main/notice");

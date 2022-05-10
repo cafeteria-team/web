@@ -11,6 +11,7 @@ const TextEditor = ({
   changeToggled,
   handleChange,
   title,
+  noticeSub,
 }) => {
   return (
     <>
@@ -38,6 +39,7 @@ const TextEditor = ({
           changeToggled={changeToggled}
           handleChange={handleChange}
           title={title}
+          noticeSub={noticeSub}
         />
       )}
     </>

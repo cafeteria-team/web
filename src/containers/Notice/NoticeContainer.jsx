@@ -11,6 +11,7 @@ import { useStores } from "../../stores/Context";
 import { useNavigate } from "react-router-dom";
 import moment from "moment";
 import Modal from "react-modal";
+import { observer } from "mobx-react";
 
 const modalStyle = {
   content: {
@@ -78,7 +79,7 @@ const Items = ({ results, offset, limit, selectNotice, askDeleteNotice }) => {
       {results ? (
         results
           .slice(offset, offset + limit)
-          .map(({ created, id, content, view }) => {
+          .map(({ created, id, subject, view }) => {
             return (
               <Li
                 key={id}
@@ -97,7 +98,7 @@ const Items = ({ results, offset, limit, selectNotice, askDeleteNotice }) => {
                     {id}
                   </Li>
                   <Li just="center" width="40%" align="center">
-                    {content}
+                    {subject}
                   </Li>
                   <Li just="center" width="16.6666666667%" align="center">
                     {view.toString()}
@@ -134,7 +135,7 @@ const Items = ({ results, offset, limit, selectNotice, askDeleteNotice }) => {
   );
 };
 
-const NoticeContainer = () => {
+const NoticeContainer = observer(() => {
   const { NoticeStore } = useStores();
   const navigate = useNavigate();
   // state
@@ -179,6 +180,8 @@ const NoticeContainer = () => {
   // };
 
   const selectNotice = (id) => {
+    // const clickedNotice = noticeList.filter((item) => item.id === id);
+    // NoticeStore.setNoticeList(clickedNotice);
     navigate(`${id}`);
   };
 
@@ -349,7 +352,7 @@ const NoticeContainer = () => {
       </FlexBox>
     </FlexBox>
   );
-};
+});
 
 export default NoticeContainer;
 

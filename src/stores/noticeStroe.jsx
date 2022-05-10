@@ -1,11 +1,16 @@
-import { action, makeObservable } from "mobx";
+import { action, makeObservable, observable, toJS, computed } from "mobx";
 import axios from "../utils/axios";
 
 export class NoticeStore {
   rootStore;
 
+  noticeList = [];
+
   constructor(root) {
     makeObservable(this, {
+      noticeList: observable,
+      getNoticeList: computed,
+      setNoticeList: action,
       callNotice: action,
       postNotice: action,
       editNotice: action,
@@ -14,6 +19,14 @@ export class NoticeStore {
 
     this.rootStore = root;
   }
+  get getNoticeList() {
+    return toJS(this.noticeList);
+  }
+
+  // 유저 정보 설정
+  setNoticeList = (data) => {
+    this.noticeList = data;
+  };
 
   //공지사항 불러오기
   callNotice = () => {
