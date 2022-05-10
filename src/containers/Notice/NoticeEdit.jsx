@@ -10,7 +10,7 @@ import {
 import { useStores } from "../../stores/Context";
 import { useNavigate } from "react-router-dom";
 
-const NoticeAdd = () => {
+const NoticeEdit = () => {
   const navigate = useNavigate();
   const { AuthStore, NoticeStore } = useStores();
   const [noticeData, setNoticeData] = useState("");
@@ -43,7 +43,7 @@ const NoticeAdd = () => {
 
   return (
     <FlexBox padding="30px 70px" direction="column" width="100%">
-      <StyledTitle margin="0 0 30px 0">공지사항 작성하기</StyledTitle>
+      <StyledTitle margin="0 0 30px 0">공지사항 수정하기</StyledTitle>
       <FlexBox
         width="100%"
         margin="24px 0 0"
@@ -67,4 +67,4 @@ const NoticeAdd = () => {
   );
 };
 
-export default NoticeAdd;
+export default NoticeEdit;

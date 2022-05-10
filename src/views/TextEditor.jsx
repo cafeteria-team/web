@@ -1,14 +1,17 @@
 import React from "react";
-import {
-  FlexBox,
-  StyledBody,
-  Ul,
-  Li,
-  StyledSpan,
-} from "../components/StyledElements";
+import { FlexBox, StyledBody } from "../components/StyledElements";
 import { MyEditor } from "../components";
 
-const TextEditor = ({ isLoading, sendNotice, noticeData }) => {
+const TextEditor = ({
+  isLoading,
+  sendNotice,
+  noticeData,
+  showToggle,
+  toggle,
+  changeToggled,
+  handleChange,
+  title,
+}) => {
   return (
     <>
       <FlexBox
@@ -27,7 +30,15 @@ const TextEditor = ({ isLoading, sendNotice, noticeData }) => {
           공지사항을 불러오는중입니다.
         </FlexBox>
       ) : (
-        <MyEditor sendNotice={sendNotice} noticeData={noticeData} />
+        <MyEditor
+          sendNotice={sendNotice}
+          noticeData={noticeData}
+          showToggle={showToggle}
+          toggle={toggle}
+          changeToggled={changeToggled}
+          handleChange={handleChange}
+          title={title}
+        />
       )}
     </>
   );

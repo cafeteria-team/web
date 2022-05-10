@@ -13,6 +13,7 @@ import LogoContainer from "./LogoContainer";
 import ManageContainer from "./Manage/ManageContainer";
 import NoticeContainer from "./Notice/NoticeContainer";
 import NoticeAdd from "./Notice/NoticeAdd";
+import NoticeEdit from "./Notice/NoticeEdit";
 
 export {
   RegisterContainer,
@@ -30,4 +31,5 @@ export {
   ManageContainer,
   NoticeContainer,
   NoticeAdd,
+  NoticeEdit,
 };

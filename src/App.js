@@ -21,8 +21,14 @@ const App = observer(() => {
   //   initializeUserInfo();
   // }, [initializeUserInfo, AuthStore]);
 
-  const initializeUserInfo = async () => {
-    await AuthStore.onSilentRefresh();
+  const initializeUserInfo = () => {
+    AuthStore.onSilentRefresh().then((res) => {
+      // accessToken 저장
+      localStorage.setItem("access", res.data.access);
+
+      // refresh 값 쿠키로 저장
+      localStorage.setItem("refresh", res.data.refresh);
+    });
   };
 
   useEffect(() => {

@@ -4,9 +4,10 @@ import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
 import styled from "styled-components";
 import { EditorState, ContentState } from "draft-js";
 import { convertToHTML } from "draft-convert";
-import { Button } from "../components";
-import { FlexBox } from "../components/StyledElements";
+import { Button, Input } from "../components";
+import { FlexBox, StyledBody } from "../components/StyledElements";
 import htmlToDraft from "html-to-draftjs";
+import Toggle from "react-toggle";
 
 const MyBlock = styled.div`
   width: 100%;
@@ -15,6 +16,7 @@ const MyBlock = styled.div`
   box-sizing: border-box;
   .wrapper-class {
     background: #fff;
+    width: 100% !important;
   }
   .editor {
     height: 500px !important;
@@ -24,7 +26,15 @@ const MyBlock = styled.div`
   }
 `;
 
-const MyEditor = ({ sendNotice, noticeData }) => {
+const MyEditor = ({
+  sendNotice,
+  noticeData,
+  showToggle,
+  toggle,
+  changeToggled,
+  handleChange,
+  title,
+}) => {
   const htmlToEditor = noticeData;
 
   // console.log(noticeData);
@@ -41,7 +51,7 @@ const MyEditor = ({ sendNotice, noticeData }) => {
   const convertContentToHTML = (editorState) => {
     let currentContentAsHTML = convertToHTML(editorState.getCurrentContent());
 
-    sendNotice(currentContentAsHTML);
+    sendNotice(currentContentAsHTML, title);
   };
 
   useEffect(() => {}, [editorState]);
@@ -69,85 +79,232 @@ const MyEditor = ({ sendNotice, noticeData }) => {
 
   return (
     <MyBlock>
-      <Editor
-        // 에디터와 툴바 모두에 적용되는 클래스
-        wrapperClassName="wrapper-class"
-        // 에디터 주변에 적용된 클래스
-        editorClassName="editor"
-        // 툴바 주위에 적용된 클래스
-        toolbarClassName="toolbar-class"
-        // 툴바 설정
-        toolbar={{
-          // toolbar options
-          options: [
-            "inline",
-            "blockType",
-            "fontSize",
-            "list",
-            "textAlign",
-            "colorPicker",
-            "emoji",
-            // "history",
-          ],
-          inline: {
-            options: [
-              "bold",
-              "italic",
-              "underline",
-              "strikethrough",
-              // "monospace",
-              // "superscript",
-              // "subscript",
-            ],
-          },
-          blockType: {
-            inDropdown: true,
-            options: ["Normal", "H1", "H2"],
-            displayNames: [
-              { label: "Normal", displayName: "Normal", style: "unstyled" },
-              { label: "H1", displayName: "Heading 1", style: "header-one" },
-              { label: "H2", displayName: "Heading 2", style: "header-two" },
-              // { label: "H3", displayName: "Heading 3", style: "header-three" },
-              // { label: "H4", displayName: "Heading 4", style: "header-four" },
-              // { label: "H5", displayName: "Heading 5", style: "header-five" },
-              // { label: "H6", displayName: "Heading 6", style: "header-six" },
-              {
-                label: "Blockquote",
-                displayName: "Blockquote",
-                style: "blockquote",
+      {!showToggle ? (
+        <>
+          <Editor
+            // 에디터와 툴바 모두에 적용되는 클래스
+            wrapperClassName="wrapper-class"
+            // 에디터 주변에 적용된 클래스
+            editorClassName="editor"
+            // 툴바 주위에 적용된 클래스
+            toolbarClassName="toolbar-class"
+            // 툴바 설정
+            toolbar={{
+              // toolbar options
+              options: [
+                "inline",
+                "blockType",
+                "fontSize",
+                "list",
+                "textAlign",
+                "colorPicker",
+                "emoji",
+                // "history",
+              ],
+              inline: {
+                options: [
+                  "bold",
+                  "italic",
+                  "underline",
+                  "strikethrough",
+                  // "monospace",
+                  // "superscript",
+                  // "subscript",
+                ],
               },
-            ],
-            className: undefined,
-            component: undefined,
-          },
-          // inDropdown: 해당 항목과 관련된 항목을 드롭다운으로 나타낼것인지
-          list: { inDropdown: true },
-          textAlign: { inDropdown: true },
-          link: { inDropdown: true },
-          history: { inDropdown: false },
-        }}
-        placeholder="내용을 작성해주세요."
-        // 한국어 설정
-        localization={{
-          locale: "ko",
-          // translations: editorLabels,
-        }}
-        // 초기값 설정
-        editorState={editorState}
-        // defaultEditorState={noticeData}
-        onEditorStateChange={handleEditorChange}
-      />
-      <FlexBox width="100%" just="center" padding="0 0 26px">
-        <Button
-          type="button"
-          width="240px"
-          title="공지사항 저장"
-          onClick={sendText}
-          margin="32px 0 0 0"
-          background="#ff9030"
-          shadow="rgb(249 217 189) 0px 8px 16px 0px"
-        />
-      </FlexBox>
+              blockType: {
+                inDropdown: true,
+                options: ["Normal", "H1", "H2"],
+                displayNames: [
+                  { label: "Normal", displayName: "Normal", style: "unstyled" },
+                  {
+                    label: "H1",
+                    displayName: "Heading 1",
+                    style: "header-one",
+                  },
+                  {
+                    label: "H2",
+                    displayName: "Heading 2",
+                    style: "header-two",
+                  },
+                  // { label: "H3", displayName: "Heading 3", style: "header-three" },
+                  // { label: "H4", displayName: "Heading 4", style: "header-four" },
+                  // { label: "H5", displayName: "Heading 5", style: "header-five" },
+                  // { label: "H6", displayName: "Heading 6", style: "header-six" },
+                  {
+                    label: "Blockquote",
+                    displayName: "Blockquote",
+                    style: "blockquote",
+                  },
+                ],
+                className: undefined,
+                component: undefined,
+              },
+              // inDropdown: 해당 항목과 관련된 항목을 드롭다운으로 나타낼것인지
+              list: { inDropdown: true },
+              textAlign: { inDropdown: true },
+              link: { inDropdown: true },
+              history: { inDropdown: false },
+            }}
+            placeholder="내용을 작성해주세요."
+            // 한국어 설정
+            localization={{
+              locale: "ko",
+              // translations: editorLabels,
+            }}
+            // 초기값 설정
+            editorState={editorState}
+            // defaultEditorState={noticeData}
+            onEditorStateChange={handleEditorChange}
+          />
+          <FlexBox width="100%" just="center" padding="0 0 26px">
+            <Button
+              type="button"
+              width="240px"
+              title="공지사항 저장"
+              onClick={sendText}
+              margin="32px 0 0 0"
+              background="#ff9030"
+              shadow="rgb(249 217 189) 0px 8px 16px 0px"
+            />
+          </FlexBox>
+        </>
+      ) : (
+        <>
+          <FlexBox align="center" margin="40px 0 0 0">
+            <StyledBody
+              color="color rgb(33, 43, 54)"
+              fontSize="16px"
+              fontW="600"
+              margin="0 60px 0px 0"
+            >
+              제목
+            </StyledBody>
+            <Input
+              margin="0"
+              width="100%"
+              value={title}
+              onChange={handleChange}
+            />
+          </FlexBox>
+          <FlexBox margin="30px 0 0 0" width="100%">
+            <StyledBody
+              color="color rgb(33, 43, 54)"
+              fontSize="16px"
+              fontW="600"
+              margin="0 60px 0px 0"
+            >
+              내용
+            </StyledBody>
+            <Editor
+              // 에디터와 툴바 모두에 적용되는 클래스
+              wrapperClassName="wrapper-class"
+              // 에디터 주변에 적용된 클래스
+              editorClassName="editor"
+              // 툴바 주위에 적용된 클래스
+              toolbarClassName="toolbar-class"
+              // 툴바 설정
+              toolbar={{
+                // toolbar options
+                options: [
+                  "inline",
+                  "blockType",
+                  "fontSize",
+                  "list",
+                  "textAlign",
+                  "colorPicker",
+                  "emoji",
+                  // "history",
+                ],
+                inline: {
+                  options: [
+                    "bold",
+                    "italic",
+                    "underline",
+                    "strikethrough",
+                    // "monospace",
+                    // "superscript",
+                    // "subscript",
+                  ],
+                },
+                blockType: {
+                  inDropdown: true,
+                  options: ["Normal", "H1", "H2"],
+                  displayNames: [
+                    {
+                      label: "Normal",
+                      displayName: "Normal",
+                      style: "unstyled",
+                    },
+                    {
+                      label: "H1",
+                      displayName: "Heading 1",
+                      style: "header-one",
+                    },
+                    {
+                      label: "H2",
+                      displayName: "Heading 2",
+                      style: "header-two",
+                    },
+                    // { label: "H3", displayName: "Heading 3", style: "header-three" },
+                    // { label: "H4", displayName: "Heading 4", style: "header-four" },
+                    // { label: "H5", displayName: "Heading 5", style: "header-five" },
+                    // { label: "H6", displayName: "Heading 6", style: "header-six" },
+                    {
+                      label: "Blockquote",
+                      displayName: "Blockquote",
+                      style: "blockquote",
+                    },
+                  ],
+                  className: undefined,
+                  component: undefined,
+                },
+                // inDropdown: 해당 항목과 관련된 항목을 드롭다운으로 나타낼것인지
+                list: { inDropdown: true },
+                textAlign: { inDropdown: true },
+                link: { inDropdown: true },
+                history: { inDropdown: false },
+              }}
+              placeholder="내용을 작성해주세요."
+              // 한국어 설정
+              localization={{
+                locale: "ko",
+                // translations: editorLabels,
+              }}
+              // 초기값 설정
+              editorState={editorState}
+              // defaultEditorState={noticeData}
+              onEditorStateChange={handleEditorChange}
+            />
+          </FlexBox>
+          <FlexBox align="center" margin="40px 0 0 0">
+            <StyledBody
+              color="color rgb(33, 43, 54)"
+              fontSize="16px"
+              fontW="600"
+              margin="0 30px 0px 0"
+            >
+              공개여부
+            </StyledBody>
+            <Toggle
+              defaultChecked={toggle}
+              aria-label="No label tag"
+              onChange={changeToggled}
+            />
+          </FlexBox>
+          <FlexBox width="100%" just="center" padding="0 0 26px">
+            <Button
+              type="button"
+              width="240px"
+              title="공지사항 저장"
+              onClick={sendText}
+              margin="32px 0 0 0"
+              background="#ff9030"
+              shadow="rgb(249 217 189) 0px 8px 16px 0px"
+            />
+          </FlexBox>
+        </>
+      )}
     </MyBlock>
   );
 };

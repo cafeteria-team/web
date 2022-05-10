@@ -115,11 +115,11 @@ export class AuthStore {
     // user상태 저장
     this.setUser(access, refresh, true);
 
-    // accessToken 저장
-    localStorage.setItem("access", access);
+    // // accessToken 저장
+    // localStorage.setItem("access", access);
 
-    // refresh 값 쿠키로 저장
-    localStorage.setItem("refresh", refresh);
+    // // refresh 값 쿠키로 저장
+    // localStorage.setItem("refresh", refresh);
 
     // username 저장
     setCookie("username", username, {

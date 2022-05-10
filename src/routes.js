@@ -13,6 +13,7 @@ import {
   ManageContainer,
   NoticeContainer,
   NoticeAdd,
+  NoticeEdit,
 } from "./containers";
 
 import { NotFound, Password, MemberEdit } from "./views";
@@ -36,6 +37,7 @@ const Router = () => {
         { path: "password", element: <Password /> },
         { path: "notice", element: <NoticeContainer /> },
         { path: "notice/add", element: <NoticeAdd /> },
+        { path: "notice/:id", element: <NoticeEdit /> },
         { path: "404", element: <NotFound /> },
         { path: "*", element: <Navigate to="/404" /> },
       ],
