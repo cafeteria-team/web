@@ -1,6 +1,5 @@
 import { observable, action, computed, makeObservable, toJS } from "mobx";
 import axios from "../utils/axios";
-import { setCookie, getCookie, removeCookie } from "../utils/cookie";
 import Decode from "../utils/decode";
 
 class User {
@@ -39,18 +38,13 @@ export class AuthStore {
         // observable 값들의 변경을 위한 액션
         login: action,
         setUser: action,
-        setMan: action,
-
         onLoginSucess: action,
         // onSilentRefresh: action,
         logout: action,
         getUserName: action,
+        initializeUser: action,
       }
     );
-
-    // 토큰 기본시간
-    this.JWT_EXPIRY_TIME = 3600 * 1000;
-
     // rootStore를 받는다.
     this.rootStore = root;
 
@@ -63,9 +57,9 @@ export class AuthStore {
     return toJS(this.user);
   }
 
-  setMan = (id, role) => {
-    this.user = new User(id, "", role);
-  };
+  initializeUser(id, name, role) {
+    this.user = new User(id, name, role);
+  }
 
   getUserName = (userId) => {
     try {
@@ -80,15 +74,8 @@ export class AuthStore {
   setUser = (access) => {
     const { user_id } = this.decode.getUserId(access);
     const { user_role } = this.decode.getUserId(access);
-    this.user = new User(user_id, "", user_role);
-    // const ss = this.decode.getUserId(access);
-    // return ss;
-
-    // this.user = new User(user_id, res.data.username, user_role);
-    // this.getUserName(user_id).then((res) => {
-    //   this.user = new User(user_id, res.data.username, user_role);
-    //   return this.getUser();
-    // });
+    const { user_name } = this.decode.getUserId(access);
+    this.user = new User(user_id, user_name, user_role);
   };
 
   // 로그인 시도
@@ -120,8 +107,7 @@ export class AuthStore {
   };
 
   logout = () => {
-    this.setUser("", false);
-    removeCookie("username", { path: "/" });
+    this.initializeUser("", "", "");
     localStorage.clear();
   };
 }
