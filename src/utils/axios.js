@@ -1,56 +1,12 @@
 import axios from "axios";
-
-// const PROXY = window.location.hostname === "localhost" ? "" : "/proxy";
+import { checkToken, refreshErrorHandle } from "./refreshToken";
 
 const instance = axios.create({
   baseURL: process.env.REACT_APP_SERVER,
-  // baseURL: PROXY,
-  //proxy 설정후 빈칸
   timeout: 2000,
+  headers: {},
 });
 
-// const access = localStorage.getItem("access");
-// instance.defaults.headers.common["Authorization"] = `Bearer ${access}`;
-
-// axios.interceptors.request.use(async (config) => {
-//   if (!config.headers["Authorization"]) {
-//     config.headers[
-//       "Authorization"
-//     ] = `Bearer ${process.env.REACT_APP_KEY}`;
-//   }
-//   config.headers["Content-Type"] = "application/json";
-
-//   return config;
-// });
-
-// let isTokenRefreshing = false;
-
-// instance.interceptors.response.use(
-//   (res) => {
-//     return res;
-//   },
-//   async (error) => {
-//     // const {
-//     //   config,
-//     //   response: { status },
-//     // } = error;
-//     // const originalRequest = error.config;
-//     // if (error.response?.status === 401) {
-//     //   if (error.response?.data.detail === "Token is invalid or expired") {
-//     //     localStorage.removeItem("refresh");
-//     //     removeCookie("username");
-//     //     alert("세션이 만료되었습니다. 다시 로그인해주세요.");
-//     //     window.location.replace("/");
-//     //   } else if (
-//     //     error.response?.data.detail ===
-//     //     "Authorization header must contain two space-delimited values"
-//     //   ) {
-//     //     return axios(originalRequest);
-//     //   }
-//     //   return Promise.reject(error);
-//     // }
-//     // return Promise.reject(error);
-//   }
-// );
+instance.interceptors.request.use(checkToken, refreshErrorHandle);
 
 export default instance;

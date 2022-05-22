@@ -1,6 +1,4 @@
 import { Navigate, useRoutes } from "react-router-dom";
-import { useEffect, useState } from "react";
-import Decode from "./utils/decode";
 import {
   RegisterContainer,
   LoginContainer,
@@ -47,7 +45,7 @@ const Router = () => {
       element: !localStorage.getItem("refresh") ? (
         <LogoContainer />
       ) : (
-        <Navigate to="/main" />
+        <Navigate to="/main/overview" />
       ),
       children: [
         { path: "/", element: <Navigate to="/login" /> },

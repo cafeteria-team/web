@@ -60,7 +60,7 @@ const ListHeader = memo(() => {
 const UserList = ({ userList, isLoading }) => {
   return (
     <FlexBox
-      width="calc(70% - 30px)"
+      width="100%"
       background="#fff"
       boxSizing="border-box"
       direction="column"

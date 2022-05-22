@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect, useState } from "react";
 import { FlexBox, StyledTitle } from "../../components/StyledElements";
-import { UserList, StoreProductList } from "../../views";
+import { UserList } from "../../views";
 import { observer } from "mobx-react";
 import { useStores } from "../../stores/Context";
 import Decode from "../../utils/decode";
@@ -38,7 +38,6 @@ const Overview = observer(() => {
         {role === "ADMIN" ? (
           <>
             <UserList userList={ListStore.getUserList} isLoading={isLoading} />
-            <StoreProductList />
           </>
         ) : (
           <FlexBox>설명</FlexBox>

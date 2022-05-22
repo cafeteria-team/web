@@ -2,24 +2,16 @@ import { observable, action, computed, makeObservable, toJS } from "mobx";
 import axios from "../utils/axios";
 import { setCookie, getCookie, removeCookie } from "../utils/cookie";
 import Decode from "../utils/decode";
-import {
-  makePersistable,
-  getPersistedStore,
-  stopPersisting,
-  PersistStoreMap,
-} from "mobx-persist-store";
 
 class User {
   userId;
-  authorization;
-  access;
-  refresh;
+  userName;
+  userRole;
 
-  constructor(userId, authorization, access, refresh) {
+  constructor(userId, userName, userRole) {
     this.userId = userId;
-    this.authorization = authorization;
-    this.access = access;
-    this.refresh = refresh;
+    this.userName = userName;
+    this.userRole = userRole;
   }
 }
 
@@ -47,21 +39,14 @@ export class AuthStore {
         // observable 값들의 변경을 위한 액션
         login: action,
         setUser: action,
+        setMan: action,
+
         onLoginSucess: action,
-        onSilentRefresh: action,
+        // onSilentRefresh: action,
         logout: action,
+        getUserName: action,
       }
     );
-
-    this.checkStorage = Array.from(PersistStoreMap.values())
-      .map((persistStore) => persistStore.storageName)
-      .includes("AuthStore");
-
-    makePersistable(this, {
-      name: "AuthStore",
-      properties: ["user"],
-      storage: window.localStorage,
-    });
 
     // 토큰 기본시간
     this.JWT_EXPIRY_TIME = 3600 * 1000;
@@ -69,32 +54,41 @@ export class AuthStore {
     // rootStore를 받는다.
     this.rootStore = root;
 
-    this.user = new User("", false, "");
+    this.user = new User("", "", "");
 
     this.decode = new Decode();
-  }
-
-  getPersistedAuth() {
-    try {
-      const res = getPersistedStore(this);
-      return toJS(res);
-    } catch (err) {
-      throw err;
-    }
   }
 
   get getUser() {
     return toJS(this.user);
   }
 
-  // 업체명 설정
-  setUser = (access, refresh, state) => {
-    if (access) {
-      const userId = this.decode.getUserId(access).user_id;
-      this.user = new User(userId, state, access, refresh);
-    } else {
-      this.user = new User("", state, "");
+  setMan = (id, role) => {
+    this.user = new User(id, "", role);
+  };
+
+  getUserName = (userId) => {
+    try {
+      const response = axios.get(`/api/user/${userId}`);
+      return response;
+    } catch (error) {
+      throw error;
     }
+  };
+
+  // 업체명 설정
+  setUser = (access) => {
+    const { user_id } = this.decode.getUserId(access);
+    const { user_role } = this.decode.getUserId(access);
+    this.user = new User(user_id, "", user_role);
+    // const ss = this.decode.getUserId(access);
+    // return ss;
+
+    // this.user = new User(user_id, res.data.username, user_role);
+    // this.getUserName(user_id).then((res) => {
+    //   this.user = new User(user_id, res.data.username, user_role);
+    //   return this.getUser();
+    // });
   };
 
   // 로그인 시도
@@ -111,54 +105,19 @@ export class AuthStore {
     }
   }
 
-  onLoginSucess = (access, refresh, username) => {
-    // user상태 저장
-    this.setUser(access, refresh, true);
+  onLoginSucess = (access, refresh) => {
+    // accessToken 저장
+    localStorage.setItem("access", access);
 
-    // // accessToken 저장
-    // localStorage.setItem("access", access);
+    // refresh 값 쿠키로 저장
+    localStorage.setItem("refresh", refresh);
 
-    // // refresh 값 쿠키로 저장
-    // localStorage.setItem("refresh", refresh);
+    const { exp } = this.decode.getUserId(access);
 
-    // username 저장
-    setCookie("username", username, {
-      path: "/",
-      secure: true,
-      samSite: "none",
-    });
+    localStorage.setItem("expireAt", exp);
 
-    // accessToken 설정
-    axios.defaults.headers.common["Authorization"] = `Bearer ${access}`;
-
-    // accessToken 만료하기 1분전에 로그인 연장
-    setTimeout(this.onSilentRefresh, this.JWT_EXPIRY_TIME - 60000);
+    axios.headers["Authorization"] = `Bearer ${access}`;
   };
-
-  onSilentRefresh = async () => {
-    const data = localStorage.getItem("refresh");
-    const username = getCookie("username");
-
-    if (data) {
-      try {
-        const res = await axios.post("/api/user/token/refresh/", {
-          refresh: data,
-        });
-        this.onLoginSucess(res.data.access, res.data.refresh, username);
-
-        return res;
-      } catch (error) {
-        console.log(error.response);
-        return;
-      }
-    } else {
-      return;
-    }
-  };
-
-  stopStore() {
-    stopPersisting(this);
-  }
 
   logout = () => {
     this.setUser("", false);

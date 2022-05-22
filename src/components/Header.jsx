@@ -7,7 +7,7 @@ import Img from "../assets/chef.png";
 
 function Header({ name, logout }) {
   const navigate = useNavigate();
-  // console.log(name);
+
   const [box, setBox] = useState(false);
 
   const _onClick = () => {

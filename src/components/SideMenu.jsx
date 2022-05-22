@@ -6,11 +6,7 @@ import {
   SideLi,
   StyledBody,
 } from "./StyledElements";
-
-import Decode from "../utils/decode";
-
 import { NavLink } from "react-router-dom";
-
 import {
   FaHome,
   FaUserFriends,
@@ -21,9 +17,7 @@ import {
   FaMinus,
   FaExpandAlt,
 } from "react-icons/fa";
-
 import Img from "../assets/side_img.png";
-
 // 아코디언 컴포넌트에 사용 될 데이터
 const menuData = [
   {
@@ -310,26 +304,12 @@ const menuData = [
   },
 ];
 
-const SideMenu = ({ check }) => {
+const SideMenu = ({ role }) => {
   const [menuList] = useState(menuData);
   const [menuState, setMenuState] = useState(false);
-
   const menuHide = () => {
     setMenuState((prev) => !prev);
   };
-  const [role, setRole] = useState("");
-
-  useEffect(() => {
-    const decode = new Decode();
-    const access = localStorage.getItem("access");
-    if (access) {
-      const data = decode.getUserId(access);
-      setRole(data.user_role);
-    } else if (check.access) {
-      const data = decode.getUserId(check.access);
-      setRole(data.user_role);
-    }
-  }, [check]);
 
   return (
     <FlexBox

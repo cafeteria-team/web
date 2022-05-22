@@ -9,7 +9,6 @@ import {
   StyledLink,
   StyledFiled,
 } from "../../components/StyledElements";
-
 //router & serivce
 import { useNavigate } from "react-router-dom";
 import { useStores } from "../../stores/Context";
@@ -34,30 +33,11 @@ const Login = observer(() => {
     return () => setLoading(false);
   });
 
-  // const _login = async (profile) => {
-  //   try {
-  //     setLoading(true);
-  //     const response = await AuthStore.login(profile);
-  //     let { data } = response;
-  //     AuthStore.onLoginSucess(data.access, data.refresh, profile.username);
-  //     setLoading(false);
-  //     navigate("/main");
-  //   } catch (error) {
-  //     return alert("아이디 또는 비밀번호를 확인해주세요.");
-  //   } finally {
-  //     setLoading(false);
-  //   }
-  // };
-
   const _login = (profile) => {
     setLoading(true);
     AuthStore.login(profile)
       .then((res) => {
-        AuthStore.onLoginSucess(
-          res.data.access,
-          res.data.refresh,
-          profile.username
-        );
+        AuthStore.onLoginSucess(res.data.access, res.data.refresh);
         setLoading(false);
         navigate("/main");
       })
