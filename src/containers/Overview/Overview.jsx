@@ -21,15 +21,9 @@ const Overview = observer(() => {
   }, [ListStore]);
 
   useEffect(() => {
-    const decode = new Decode();
-    const access = localStorage.getItem("access");
-    if (access) {
-      const data = decode.getUserId(access);
-      setRole(data.user_role);
-
-      data.user_role === "ADMIN" && _callUserList();
-    }
-  }, [AuthStore.user.accessT, _callUserList]);
+    setRole(AuthStore.getUser.userRole);
+    role === "ADMIN" && _callUserList();
+  }, [AuthStore.getUser.userRole]);
 
   return (
     <FlexBox padding="30px 70px" direction="column" width="100%">

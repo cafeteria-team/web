@@ -18,16 +18,14 @@ const Main = observer(() => {
     callUser();
   }, []);
 
-  console.log(AuthStore.getUser);
-
   return (
     <FlexBox width="100%" height="100%" minHeight="100vh" background="#F9FAFB">
       <SideMenu role={AuthStore.getUser.userRole}></SideMenu>
       <FlexBox direction="column" width="100%" height="100%">
         <Header name={AuthStore.getUser.userName} logout={AuthStore.logout} />
-        {/* <FlexBox height="100%">
+        <FlexBox height="100%">
           <Outlet />
-        </FlexBox> */}
+        </FlexBox>
       </FlexBox>
     </FlexBox>
   );
