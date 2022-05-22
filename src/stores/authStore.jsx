@@ -74,8 +74,8 @@ export class AuthStore {
   setUser = (access) => {
     const { user_id } = this.decode.getUserId(access);
     const { user_role } = this.decode.getUserId(access);
-    const { user_name } = this.decode.getUserId(access);
-    this.user = new User(user_id, user_name, user_role);
+    const { username } = this.decode.getUserId(access);
+    this.user = new User(user_id, username, user_role);
   };
 
   // 로그인 시도
@@ -103,7 +103,7 @@ export class AuthStore {
 
     localStorage.setItem("expireAt", exp);
 
-    axios.headers["Authorization"] = `Bearer ${access}`;
+    // axios.headers["Authorization"] = `Bearer ${access}`;
   };
 
   logout = () => {
