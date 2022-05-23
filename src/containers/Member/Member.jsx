@@ -175,13 +175,14 @@ const Member = observer(() => {
       setIsLoading(true);
       ListStore.callUserList(access)
         .then((res) => {
-          setUserList(res.data);
+          ListStore.setUserList(res.data);
+          // setUserList(res.data);
           setTotal(res.data.length);
           setIsLoading(false);
         })
         .catch((err) => {
           console.log(err.response);
-          alert("토큰값이 만료되었습니다. 새로고침 해주세요.");
+          alert("리스트를 불러올수없습니다. 새로고침 해주세요.");
           setIsLoading(false);
         })
         .finally(() => setIsLoading(false));
@@ -330,10 +331,10 @@ const Member = observer(() => {
             new Array(5).fill(1).map((_, i) => {
               return <SkeletonList key={i} />;
             })
-          ) : userList !== null ? (
+          ) : ListStore.getUserList !== null ? (
             <>
               <MemberList
-                results={userList}
+                results={ListStore.getUserList}
                 limit={limit}
                 offset={offset}
                 askDeleteUser={askDeleteUser}

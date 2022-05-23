@@ -29,7 +29,6 @@ const Login = observer(() => {
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
-    // AuthStore.user.authorization && navigate("/main");
     return () => setLoading(false);
   });
 

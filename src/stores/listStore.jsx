@@ -32,13 +32,7 @@ export class ListStore {
   // 유저 정보 API 불러오기
   callUserList = async () => {
     try {
-      const access = localStorage.getItem("access");
-      const response = await axios.get(`/api/user`, {
-        headers: {
-          Authorization: `Bearer ${access}`,
-        },
-      });
-      this.setUserList(response.data);
+      const response = await axios.get(`/api/user`);
       return response;
     } catch (error) {
       throw error;

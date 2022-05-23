@@ -8,7 +8,6 @@ import {
   LoadingLi,
 } from "../components/StyledElements";
 import moment from "moment";
-
 import { FaAngleRight } from "react-icons/fa";
 
 const ListHeader = memo(() => {
@@ -58,6 +57,7 @@ const ListHeader = memo(() => {
 });
 
 const UserList = ({ userList, isLoading }) => {
+  console.log(userList);
   return (
     <FlexBox
       width="100%"
