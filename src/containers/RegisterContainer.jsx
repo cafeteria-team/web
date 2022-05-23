@@ -1,5 +1,5 @@
 import React, { useState, memo, useEffect } from "react";
-import axios from "../utils/axios";
+import { instance } from "../utils/axios";
 import Post from "../utils/Post";
 import ImageUploader from "../utils/imageuploader";
 import { useNavigate } from "react-router-dom";
@@ -323,7 +323,7 @@ const Register = (props) => {
   const getPhoneAuth = async (number, error) => {
     if (!error) {
       try {
-        const response = await axios.post("/api/phone/auth", {
+        const response = await instance.post("/api/phone/auth", {
           phone_num: number,
         });
         setState((prev) => ({
@@ -350,7 +350,7 @@ const Register = (props) => {
     const { phone, auth_phone } = state;
 
     try {
-      const response = await axios.get(
+      const response = await instance.get(
         `/api/phone/auth?phone_num=${phone}&auth_num=${auth_phone}&purpose=AUTH`
       );
       setResendCode(false);
@@ -497,7 +497,7 @@ const Register = (props) => {
       const { busi_num_img, zip_code, addr } = state;
 
       try {
-        const response = await axios.post("/api/user/register", {
+        const response = await instance.post("/api/user/register", {
           username,
           password,
           confirm_password,

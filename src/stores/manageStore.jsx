@@ -1,5 +1,5 @@
 import { observable, makeObservable, toJS, computed, action } from "mobx";
-import axios from "../utils/axios";
+import { instance } from "../utils/axios";
 
 export class ManageStore {
   // 편의시설 리스트
@@ -71,7 +71,7 @@ export class ManageStore {
   // 편의시설 불러오기 api
   callFacilityList = async () => {
     try {
-      const response = await axios.get(`/api/facility
+      const response = await instance.get(`/api/facility
         `);
       this.setFacilityList(response.data);
       return response;
@@ -83,7 +83,7 @@ export class ManageStore {
   // 유저 편의시설 불러오기 api
   callUserFacilityList = async (user) => {
     try {
-      const response = await axios.get(`/api/facility/join/${user}`);
+      const response = await instance.get(`/api/facility/join/${user}`);
       this.setUserFacilityList(response.data.store_facility);
       return response;
     } catch (error) {
@@ -95,7 +95,7 @@ export class ManageStore {
   // 편의시설 삭제
   deleteFacilityList = async (id) => {
     try {
-      const response = await axios.delete(`/api/facility/${id}`);
+      const response = await instance.delete(`/api/facility/${id}`);
       alert("편의시설이 삭제되었습니다.");
       return response;
     } catch (error) {
@@ -106,7 +106,7 @@ export class ManageStore {
   // 사용자 편의시설 삭제
   deleteUserFacilityList = async (id, storeId) => {
     try {
-      const response = await axios.delete(
+      const response = await instance.delete(
         `/api/facility/join/${storeId}/${id}`
       );
       return response;
@@ -118,7 +118,7 @@ export class ManageStore {
   //메뉴삭제
   deleteMenu = async (storeId, id) => {
     try {
-      const response = await axios.delete(
+      const response = await instance.delete(
         `/api/facility/join/${storeId}/${id}`
       );
       alert("편의시설이 삭제되었습니다.");
@@ -131,7 +131,7 @@ export class ManageStore {
   // 편의시설 수정
   editFacilityList = async (id, category, name) => {
     try {
-      const response = await axios.patch(`/api/facility/${id}`, {
+      const response = await instance.patch(`/api/facility/${id}`, {
         category,
         name,
       });
@@ -145,7 +145,7 @@ export class ManageStore {
   //메뉴 수정
   editMenu = async (menu, time, id, menuId) => {
     try {
-      const response = await axios.patch(`/api/menu/${id}/${menuId}`, {
+      const response = await instance.patch(`/api/menu/${id}/${menuId}`, {
         menus: menu,
         provide_at: time,
       });
@@ -158,7 +158,7 @@ export class ManageStore {
   //편의시설 추가
   addFacilityList = async (category, name) => {
     try {
-      const response = await axios.post(`/api/facility`, {
+      const response = await instance.post(`/api/facility`, {
         category,
         name,
       });
@@ -176,7 +176,7 @@ export class ManageStore {
   // 사용자 편의시설 추가
   addUserFacilityList = async (id, user) => {
     try {
-      const response = await axios.post(`/api/facility/join/${user}`, {
+      const response = await instance.post(`/api/facility/join/${user}`, {
         facility: id,
       });
       return response;
@@ -192,7 +192,7 @@ export class ManageStore {
   //메뉴추가
   addMenu = async (menu, time, id) => {
     try {
-      const response = await axios.post(`/api/menu/${id}`, {
+      const response = await instance.post(`/api/menu/${id}`, {
         menus: menu,
         provide_at: time,
       });
@@ -206,7 +206,7 @@ export class ManageStore {
   //메뉴불러오기
   callMenu = async (id, date) => {
     try {
-      const response = await axios.get(`/api/menu/${id}?provide_at=${date}
+      const response = await instance.get(`/api/menu/${id}?provide_at=${date}
       `);
       return response.data;
     } catch (error) {
@@ -218,7 +218,7 @@ export class ManageStore {
   //공지사항 등록
   postNotice = async (content, id) => {
     try {
-      const response = await axios.post(`/api/notice/${id}`, {
+      const response = await instance.post(`/api/notice/${id}`, {
         subject: "title",
         content,
         view: true,
@@ -232,7 +232,7 @@ export class ManageStore {
   callNotice = async (id) => {
     try {
       const access = localStorage.getItem("access");
-      const response = await axios.get(`/api/notice/${id}`, {
+      const response = await instance.get(`/api/notice/${id}`, {
         headers: {
           Authorization: `Bearer ${access}`,
         },
@@ -247,7 +247,7 @@ export class ManageStore {
   callPrice = async (id) => {
     try {
       const access = localStorage.getItem("access");
-      const response = await axios.get(`/api/store/${id}/price`, {
+      const response = await instance.get(`/api/store/${id}/price`, {
         headers: {
           Authorization: `Bearer ${access}`,
         },
@@ -260,7 +260,7 @@ export class ManageStore {
   // 가격 리스트 저장
   savePrice = async (id, price) => {
     try {
-      const response = await axios.post(`/api/store/${id}/price`, {
+      const response = await instance.post(`/api/store/${id}/price`, {
         price,
       });
       return response;
@@ -271,7 +271,7 @@ export class ManageStore {
   // 가격 리스트 수정
   editPrice = async (id, price) => {
     try {
-      const response = await axios.patch(`/api/store/${id}/price`, {
+      const response = await instance.patch(`/api/store/${id}/price`, {
         price,
       });
       return response;
@@ -282,7 +282,7 @@ export class ManageStore {
   // 가격 리스트 삭제
   deletePrice = async (id, price) => {
     try {
-      const response = await axios.delete(`/api/store/${id}/price`);
+      const response = await instance.delete(`/api/store/${id}/price`);
       return response;
     } catch (err) {
       throw err;

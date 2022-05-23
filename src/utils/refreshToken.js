@@ -1,15 +1,15 @@
-import axios from "./axios";
+import { requestInstance } from "./axios";
 import Decode from "./decode";
 
 const checkToken = async (config) => {
   const refreshToken = localStorage.getItem("refresh");
   const expireAt = localStorage.getItem("expireAt");
-  let access = localStorage.getItem("access");
+  const access = localStorage.getItem("access");
   let currentTime = Date.now() / 1000;
 
   // 토큰이 만료되고, refreshToken이 저장되어 있을때
   if (currentTime >= expireAt && refreshToken) {
-    const { data } = await axios.get("/api/user/token/refresh/", {
+    const { data } = await requestInstance.post("/api/user/token/refresh/", {
       refresh: refreshToken,
     });
 
@@ -20,15 +20,19 @@ const checkToken = async (config) => {
     localStorage.setItem("access", access);
     localStorage.setItem("refresh", refresh);
     localStorage.setItem("expireAt", exp);
-  }
-  // axios.defaults.headers.common["Authorization"] = `Bearer ${access}`;
 
-  config.headers["Authorization"] = `Bearer ${access}`;
+    config.headers["Authorization"] = `Bearer ${access}`;
+
+    return config;
+  } else if (currentTime < expireAt && refreshToken) {
+    config.headers["Authorization"] = `Bearer ${access}`;
+  }
 
   return config;
 };
 
 const refreshErrorHandle = (err) => {
+  console.log(err);
   alert("세션이 만료되었습니다. 다시 로그인 해주십시오.");
   localStorage.clear();
 };

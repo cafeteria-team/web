@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { FlexBox, StyledBody, StyledTitle } from "../components/StyledElements";
 import { Button, Input, PasswordModal, NewPassword } from "../components";
-import axios from "../utils/axios";
+import { instance } from "../utils/axios";
 import jwt_decode from "jwt-decode";
 import { useNavigate } from "react-router-dom";
 
@@ -28,7 +28,7 @@ const Password = (props) => {
     openModal();
     if (phone && phone.length === 11) {
       try {
-        const response = await axios.post("/api/phone/auth/password", {
+        const response = await instance.post("/api/phone/auth/password", {
           phone_num: phone,
         });
         openModal();
@@ -48,7 +48,7 @@ const Password = (props) => {
     const { phone } = state;
 
     try {
-      const response = await axios.get(
+      const response = await instance.get(
         `/api/phone/auth?phone_num=${phone}&auth_num=${auth}&purpose=PASSWORD`
       );
       setResendCode(false);
@@ -111,7 +111,7 @@ const Password = (props) => {
     let decoded = jwt_decode(token);
 
     try {
-      const response = await axios.patch(
+      const response = await instance.patch(
         `/api/user/${decoded.user_id}/password`,
         {
           password,

@@ -1,5 +1,5 @@
 import { observable, action, makeObservable, toJS, computed } from "mobx";
-import axios from "../utils/axios";
+import { instance } from "../utils/axios";
 export class ListStore {
   rootStore;
 
@@ -32,7 +32,7 @@ export class ListStore {
   // 유저 정보 API 불러오기
   callUserList = async () => {
     try {
-      const response = await axios.get(`/api/user`);
+      const response = await instance.get(`/api/user`);
       return response;
     } catch (error) {
       throw error;
@@ -43,7 +43,7 @@ export class ListStore {
   deleteUser = async (userId) => {
     try {
       const access = localStorage.getItem("access");
-      const response = await axios.delete(`/api/user/${userId}`, {
+      const response = await instance.delete(`/api/user/${userId}`, {
         headers: {
           Authorization: `Bearer ${access}`,
         },
@@ -59,7 +59,7 @@ export class ListStore {
   // 선택 유저 정보 수정
   getEditUser = async (userId, accessToken) => {
     try {
-      const response = await axios.get(`/api/user/${userId}`, {
+      const response = await instance.get(`/api/user/${userId}`, {
         headers: {
           Authorization: `Bearer ${accessToken}`,
         },
@@ -75,7 +75,7 @@ export class ListStore {
     try {
       const access = localStorage.getItem("access");
       // const { email, name, busi_num, busi_num_img } = data;
-      const response = await axios.patch(
+      const response = await instance.patch(
         `/api/user/${userId}`,
         {
           email: data.email,
@@ -100,9 +100,12 @@ export class ListStore {
   // 유저 승인
   approveUser = async (userId, data) => {
     try {
-      const response = await axios.patch("/api/user/" + userId + "/approve", {
-        is_active: data,
-      });
+      const response = await instance.patch(
+        "/api/user/" + userId + "/approve",
+        {
+          is_active: data,
+        }
+      );
       return response;
     } catch (error) {
       console.log(error.response);

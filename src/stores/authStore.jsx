@@ -1,5 +1,5 @@
 import { observable, action, computed, makeObservable, toJS } from "mobx";
-import axios from "../utils/axios";
+import { instance } from "../utils/axios";
 import Decode from "../utils/decode";
 
 class User {
@@ -63,7 +63,7 @@ export class AuthStore {
 
   getUserName = (userId) => {
     try {
-      const response = axios.get(`/api/user/${userId}`);
+      const response = instance.get(`/api/user/${userId}`);
       return response;
     } catch (error) {
       throw error;
@@ -82,7 +82,7 @@ export class AuthStore {
   login(profile) {
     const { username, password } = profile;
     try {
-      const response = axios.post("/api/user/login", {
+      const response = instance.post("/api/user/login", {
         username,
         password,
       });

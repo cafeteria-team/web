@@ -1,5 +1,5 @@
 import { action, makeObservable, observable, toJS, computed } from "mobx";
-import axios from "../utils/axios";
+import { instance } from "../utils/axios";
 
 export class NoticeStore {
   rootStore;
@@ -32,7 +32,7 @@ export class NoticeStore {
   callNotice = () => {
     const access = localStorage.getItem("access");
     try {
-      const response = axios.get("/api/notice/admin", {
+      const response = instance.get("/api/notice/admin", {
         headers: {
           Authorization: `Bearer ${access}`,
         },
@@ -46,7 +46,7 @@ export class NoticeStore {
   //공지사항 등록
   postNotice = (subject, content, view) => {
     try {
-      const response = axios.post("/api/notice/admin", {
+      const response = instance.post("/api/notice/admin", {
         subject,
         content,
         view,
@@ -60,7 +60,7 @@ export class NoticeStore {
   //공지사항 수정
   editNotice = (subject, content, view, noticeId) => {
     try {
-      const response = axios.patch(`/api/notice/admin/${noticeId}`, {
+      const response = instance.patch(`/api/notice/admin/${noticeId}`, {
         subject,
         content,
         view,
@@ -74,7 +74,7 @@ export class NoticeStore {
   //공지사항 삭제
   deleteNotice = (noticeId) => {
     try {
-      const response = axios.delete(`/api/notice/admin/${noticeId}`);
+      const response = instance.delete(`/api/notice/admin/${noticeId}`);
       return response;
     } catch (error) {
       throw error;

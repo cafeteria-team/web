@@ -7,6 +7,7 @@ import { observer } from "mobx-react";
 import Router from "./routes";
 
 const App = observer(() => {
+  console.log("렌더링되ㅏㅁ");
   return (
     <ThemeProvider theme={theme}>
       <BrowserRouter className="App">
