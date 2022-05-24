@@ -1,23 +1,17 @@
 import React, { useState, useEffect } from "react";
 import { Facility, TextEditor, Menu, Price } from "../../views";
-import {
-  FlexBox,
-  StyledTitle,
-  StyledBody,
-  Ul,
-  Li,
-  LoadingLi,
-} from "../../components/StyledElements";
+import { FlexBox, StyledTitle } from "../../components/StyledElements";
 import moment from "moment";
 
-import uuid from "react-uuid";
 import { useStores } from "../../stores/Context";
 import { observer } from "mobx-react";
+import Spinner from "../../components/Spinner";
 
 const ManageContainer = observer(() => {
   const { AuthStore, ManageStore } = useStores();
 
   // 리스트 로딩
+  const [userLoading, setUserLoading] = useState(false);
   const [isMenuLoading, setIsMenuLoading] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [isNoticeLoading, setIsNoticeLoading] = useState(false);
@@ -59,9 +53,69 @@ const ManageContainer = observer(() => {
     { 10: "" },
   ]);
 
+  // // 편의시설 리스트 받아오기
+  // const getFacilityList = (userLists, listId) => {
+  //   ManageStore.callFacilityList()
+  //     .then((res) => {
+  //       const nameLists = res.data.map((item) => item.name);
+  //       const idLists = res.data.map((item) => item.id);
+
+  //       let intersection = nameLists.filter(
+  //         (value) => userLists.indexOf(value) === -1
+  //       );
+
+  //       let idIntersection = idLists.filter(
+  //         (value) => listId.indexOf(value) === -1
+  //       );
+
+  //       setFacilityList((prev) => ({
+  //         ...prev,
+  //         facility: {
+  //           ...prev.facility,
+  //           list: intersection,
+  //           listId: idIntersection,
+  //         },
+  //       }));
+
+  //       setIsLoading(false);
+  //     })
+  //     .catch((err) => {
+  //       alert("편의시설 정보를 불러올수없습니다.");
+  //       setIsLoading(false);
+  //     })
+  //     .finally(() => setIsLoading(false));
+  // };
+
+  // // 선택된 편의시설 리스트
+  // const getSelectedFacilityList = () => {
+  //   setIsLoading(true);
+  //   ManageStore.callUserFacilityList(AuthStore.getUser.userId)
+  //     .then((res) => {
+  //       const nameLists = res.data.store_facility.map(
+  //         (item) => item.facility.name
+  //       );
+  //       const idLists = res.data.store_facility.map((item) => item.facility.id);
+  //       const targetId = res.data.store_facility.map((item) => item.id);
+
+  //       setFacilityList((prev) => ({
+  //         ...prev,
+  //         userFacility: {
+  //           ...prev.userFacility,
+  //           list: nameLists,
+  //           listId: idLists,
+  //           joinId: targetId,
+  //         },
+  //       }));
+
+  //       getFacilityList(nameLists, idLists);
+  //     })
+  //     .catch((err) => {
+  //       alert("편의시설 정보를 불러올수없습니다.");
+  //       setIsLoading(false);
+  //     });
+  // };
   // 편의시설 리스트 받아오기
-  const getFacilityList = (userLists, listId) => {
-    setIsLoading(true);
+  const getFacilityList = (userLists, listId, targetId) => {
     ManageStore.callFacilityList()
       .then((res) => {
         const nameLists = res.data.map((item) => item.name);
@@ -82,6 +136,12 @@ const ManageContainer = observer(() => {
             list: intersection,
             listId: idIntersection,
           },
+          userFacility: {
+            ...prev.userFacility,
+            list: userLists,
+            listId: listId,
+            joinId: targetId,
+          },
         }));
 
         setIsLoading(false);
@@ -96,39 +156,33 @@ const ManageContainer = observer(() => {
   // 선택된 편의시설 리스트
   const getSelectedFacilityList = () => {
     setIsLoading(true);
-
-    AuthStore.getPersistedAuth()
+    ManageStore.callUserFacilityList(AuthStore.getUser.userId)
       .then((res) => {
-        ManageStore.callUserFacilityList(res.user.userId)
-          .then((res) => {
-            const nameLists = res.data.store_facility.map(
-              (item) => item.facility.name
-            );
-            const idLists = res.data.store_facility.map(
-              (item) => item.facility.id
-            );
-            const targetId = res.data.store_facility.map((item) => item.id);
+        const nameLists = res.data.store_facility.map(
+          (item) => item.facility.name
+        );
+        const idLists = res.data.store_facility.map((item) => item.facility.id);
+        const targetId = res.data.store_facility.map((item) => item.id);
 
-            setFacilityList((prev) => ({
-              ...prev,
-              userFacility: {
-                ...prev.userFacility,
-                list: nameLists,
-                listId: idLists,
-                joinId: targetId,
-              },
-            }));
+        // setFacilityList((prev) => ({
+        //   ...prev,
+        //   userFacility: {
+        //     ...prev.userFacility,
+        //     list: nameLists,
+        //     listId: idLists,
+        //     joinId: targetId,
+        //   },
+        // }));
 
-            getFacilityList(nameLists, idLists);
-          })
-          .catch((err) => {
-            alert("편의시설 정보를 불러올수없습니다.");
-            setIsLoading(false);
-          });
+        getFacilityList(nameLists, idLists, targetId);
       })
-      .catch((err) => console.log(err));
+      .catch((err) => {
+        alert("편의시설 정보를 불러올수없습니다.");
+        setIsLoading(false);
+      });
   };
 
+  // 편의시설 드래그
   const onDragEnd = ({ source, destination }) => {
     // Make sure we have a valid destination
     if (destination === undefined || destination === null) return null;
@@ -319,27 +373,23 @@ const ManageContainer = observer(() => {
   const getPriceList = () => {
     setIsPriceLoadging(true);
 
-    AuthStore.getPersistedAuth()
+    ManageStore.callPrice(AuthStore.getUser.userId)
       .then((res) => {
-        ManageStore.callPrice(res.user.userId)
-          .then((res) => {
-            if (res.data.price !== null) {
-              setPriceData(res.data.price);
-              setIsPriceLoadging(false);
-              setPriceFirst(false);
-            } else {
-              setIsMenuLoading(false);
-              setFirstTry(true);
-            }
-          })
-          .catch((err) => {
-            alert("가격정보를 불러올수없습니다. 잠시후 다시 시도해주세요.");
-          })
-          .finally(() => {
-            setIsPriceLoadging(false);
-          });
+        if (res.data.price !== null) {
+          setPriceData(res.data.price);
+          setIsPriceLoadging(false);
+          setPriceFirst(false);
+        } else {
+          setIsMenuLoading(false);
+          setFirstTry(true);
+        }
       })
-      .catch((err) => console.log(err));
+      .catch((err) => {
+        alert("가격정보를 불러올수없습니다. 잠시후 다시 시도해주세요.");
+      })
+      .finally(() => {
+        setIsPriceLoadging(false);
+      });
   };
 
   // 가격 리스트 추가
@@ -388,24 +438,34 @@ const ManageContainer = observer(() => {
   // 공지사항 불러오기
   const callNotice = () => {
     setIsNoticeLoading(true);
-    AuthStore.getPersistedAuth().then((res) => {
-      ManageStore.callNotice(res.user.userId)
-        .then((res) => {
-          setNoticeData(res.data.content);
-          setIsNoticeLoading(false);
-        })
-        .catch((err) => alert("공지사항을 불러올수없습니다."));
-    });
+    ManageStore.callNotice(AuthStore.getUser.userId)
+      .then((res) => {
+        setNoticeData(res.data.content);
+        setIsNoticeLoading(false);
+      })
+      .catch((err) => alert("공지사항을 불러올수없습니다."));
+  };
+
+  const checkUserId = () => {
+    if (!AuthStore.getUser.userId) {
+      setUserLoading(true);
+    } else {
+      setUserLoading(false);
+      getSelectedFacilityList();
+      // callNotice();
+      // getPriceList();
+    }
   };
 
   useEffect(() => {
-    getSelectedFacilityList();
-    callNotice();
-    getPriceList();
-  }, [AuthStore]);
+    checkUserId();
+  }, [AuthStore.getUser.userId]);
+
+  console.log("렌더링 몇번?");
 
   return (
     <FlexBox padding="30px 70px" direction="column" width="100%">
+      <Spinner loading={userLoading} />
       <StyledTitle margin="0 0 30px 0">업체관리</StyledTitle>
       <FlexBox
         width="100%"

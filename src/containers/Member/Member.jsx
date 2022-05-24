@@ -176,7 +176,7 @@ const Member = observer(() => {
       ListStore.callUserList(access)
         .then((res) => {
           ListStore.setUserList(res.data);
-          // setUserList(res.data);
+          setUserList(res.data);
           setTotal(res.data.length);
           setIsLoading(false);
         })
@@ -331,10 +331,10 @@ const Member = observer(() => {
             new Array(5).fill(1).map((_, i) => {
               return <SkeletonList key={i} />;
             })
-          ) : ListStore.getUserList !== null ? (
+          ) : userList !== null ? (
             <>
               <MemberList
-                results={ListStore.getUserList}
+                results={userList}
                 limit={limit}
                 offset={offset}
                 askDeleteUser={askDeleteUser}

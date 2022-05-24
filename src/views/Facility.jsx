@@ -143,4 +143,4 @@ const Facility = ({ isLoading, columns, onDragEnd }) => {
   );
 };
 
-export default Facility;
+export default memo(Facility);
