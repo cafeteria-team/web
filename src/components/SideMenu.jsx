@@ -16,6 +16,7 @@ import {
   FaCog,
   FaMinus,
   FaExpandAlt,
+  FaImage,
 } from "react-icons/fa";
 import Img from "../assets/side_img.png";
 // 아코디언 컴포넌트에 사용 될 데이터
@@ -202,6 +203,53 @@ const menuData = [
                 fontSize="15px"
               >
                 업체관리
+              </StyledBody>
+            </FlexBox>
+          </FlexBox>
+        )}
+      </NavLink>
+    ),
+  },
+  {
+    header: (menuState, role) => (
+      <NavLink
+        to="/main/image"
+        style={{
+          padding: "0 10px",
+          boxSizing: "border-box",
+          width: "100%",
+          display: role === "ADMIN" ? "flex" : "none",
+        }}
+      >
+        {({ isActive }) => (
+          <FlexBox
+            padding={menuState ? "0 10px" : "0 20px"}
+            width="100%"
+            boxSizing="border-box"
+            background={isActive ? "#ffe4ce6e" : "unset"}
+            rad="8px"
+            just="space-between"
+            align="center"
+            minHeight="48px"
+            hoverBg="rgba(145,158,171,0.12)"
+          >
+            <FlexBox align="center">
+              <FaImage
+                style={{
+                  color: isActive ? "#ff9030" : "rgb(99, 115, 129)",
+                  width: "1.3em",
+                  height: "1.3em",
+                  marginRight: "10px",
+                }}
+              />
+              <StyledBody
+                margin="0 0 0 10px"
+                color={isActive ? "#ff9030" : "rgb(99, 115, 129)"}
+                weight="600"
+                display={menuState ? "none" : ""}
+                fontSize="15px"
+              >
+                업체 이미지 관리
               </StyledBody>
             </FlexBox>
           </FlexBox>

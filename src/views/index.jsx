@@ -15,6 +15,7 @@ import Facility from "./Facility";
 import TextEditor from "./TextEditor";
 import Menu from "./Menu";
 import Price from "./Price";
+import DragDrop from "./DragDrop";
 
 export {
   Overview,
@@ -34,4 +35,5 @@ export {
   TextEditor,
   Menu,
   Price,
+  DragDrop,
 };

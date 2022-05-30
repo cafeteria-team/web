@@ -10,6 +10,7 @@ import {
   LogoContainer,
   ManageContainer,
   NoticeContainer,
+  StoreImageContainer,
   NoticeAdd,
   NoticeEdit,
 } from "./containers";
@@ -33,6 +34,7 @@ const Router = () => {
         { path: "manage", element: <ManageContainer /> },
         { path: "manageAdmin", element: <ManageAdmin /> },
         { path: "password", element: <Password /> },
+        { path: "image", element: <StoreImageContainer /> },
         { path: "notice", element: <NoticeContainer /> },
         { path: "notice/add", element: <NoticeAdd /> },
         { path: "notice/:id", element: <NoticeEdit /> },

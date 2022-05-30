@@ -1,4 +1,4 @@
-import React from "react";
+import React, { memo } from "react";
 import { FlexBox, StyledBody } from "../components/StyledElements";
 import { MyEditor } from "../components";
 
@@ -46,4 +46,4 @@ const TextEditor = ({
   );
 };
 
-export default TextEditor;
+export default memo(TextEditor);

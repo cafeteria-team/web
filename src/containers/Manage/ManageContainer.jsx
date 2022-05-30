@@ -163,17 +163,6 @@ const ManageContainer = observer(() => {
         );
         const idLists = res.data.store_facility.map((item) => item.facility.id);
         const targetId = res.data.store_facility.map((item) => item.id);
-
-        // setFacilityList((prev) => ({
-        //   ...prev,
-        //   userFacility: {
-        //     ...prev.userFacility,
-        //     list: nameLists,
-        //     listId: idLists,
-        //     joinId: targetId,
-        //   },
-        // }));
-
         getFacilityList(nameLists, idLists, targetId);
       })
       .catch((err) => {
@@ -250,6 +239,7 @@ const ManageContainer = observer(() => {
                 joinId: [...prev.userFacility.joinId, res.data.id],
               },
             }));
+
             alert("편의시설이 추가되었습니다.");
           })
           .catch((err) =>
@@ -452,16 +442,14 @@ const ManageContainer = observer(() => {
     } else {
       setUserLoading(false);
       getSelectedFacilityList();
-      // callNotice();
-      // getPriceList();
+      callNotice();
+      getPriceList();
     }
   };
 
   useEffect(() => {
     checkUserId();
   }, [AuthStore.getUser.userId]);
-
-  console.log("렌더링 몇번?");
 
   return (
     <FlexBox padding="30px 70px" direction="column" width="100%">
