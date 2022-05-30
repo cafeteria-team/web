@@ -1,57 +1,14 @@
-import React, {
-  useState,
-  useCallback,
-  useEffect,
-  ChangeEvent,
-  useRef,
-} from "react";
+import React, { useState, useCallback, useEffect, useRef } from "react";
 import { FlexBox } from "../components/StyledElements";
 import { FaFileImage, FaTrashAlt } from "react-icons/fa";
 import { Button } from "../components";
 
-const DragDrop = () => {
+const DragDrop = ({ files, onChangeFiles, handleFilterFile }) => {
   // 드래그 중일때와 아닐때의 스타일을 구분하기 위한 state 변수
   const [isDragging, setIsDragging] = useState(false);
-  const [files, setFiles] = useState([]);
-
-  // 각 선택했던 파일들의 고유값 id
-  const fileId = useRef(0);
 
   // 드래그 이벤트를 감지하는 ref 참조변수 (label 태그에 들어갈 예정)
   const dragRef = useRef(null);
-
-  const onChangeFiles = useCallback(
-    (e) => {
-      let selectFiles = [];
-      let tempFiles = files;
-
-      if (e.type === "drop") {
-        selectFiles = e.dataTransfer.files;
-      } else {
-        selectFiles = e.target.files;
-      }
-
-      for (const file of selectFiles) {
-        tempFiles = [
-          ...tempFiles,
-          {
-            id: fileId.current++,
-            object: file,
-          },
-        ];
-      }
-
-      setFiles(tempFiles);
-    },
-    [files]
-  );
-
-  const handleFilterFile = useCallback(
-    (id) => {
-      setFiles(files.filter((file) => file.id !== id));
-    },
-    [files]
-  );
 
   const handleDragIn = useCallback((e) => {
     e.preventDefault();
@@ -116,7 +73,9 @@ const DragDrop = () => {
   return (
     <>
       <FlexBox
-        background="rgba(145, 158, 171, 0.12)"
+        background={
+          isDragging ? "rgb(209,233,252)" : "rgba(145, 158, 171, 0.12)"
+        }
         height="400px"
         rad="16px"
         just="center"
@@ -133,12 +92,12 @@ const DragDrop = () => {
         />
 
         <label
-          className={isDragging ? "DragDrop-File-Dragging" : "DragDrop-File"}
           htmlFor="fileUpload"
           ref={dragRef}
           style={{
             width: "100%",
             height: "100%",
+            cursor: "pointer",
           }}
         >
           <FlexBox
@@ -185,10 +144,7 @@ const DragDrop = () => {
                 background="rgba(145, 158, 171, 0.12)"
               >
                 <FlexBox color="rgb(99, 115, 129)">{name}</FlexBox>
-                <div
-                  className="DragDrop-Files-Filter"
-                  onClick={() => handleFilterFile(id)}
-                >
+                <div onClick={() => handleFilterFile(id)}>
                   <FaTrashAlt
                     style={{
                       color: "rgb(99, 115, 129)",
