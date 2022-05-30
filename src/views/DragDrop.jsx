@@ -5,6 +5,9 @@ import React, {
   ChangeEvent,
   useRef,
 } from "react";
+import { FlexBox } from "../components/StyledElements";
+import { FaFileImage, FaTrashAlt } from "react-icons/fa";
+import { Button } from "../components";
 
 const DragDrop = () => {
   // 드래그 중일때와 아닐때의 스타일을 구분하기 위한 state 변수
@@ -111,24 +114,58 @@ const DragDrop = () => {
   }, [initDragEvents, resetDragEvents]);
 
   return (
-    <div className="DragDrop">
-      <input
-        type="file"
-        id="fileUpload"
-        style={{ display: "none" }}
-        multiple={true}
-        onChange={onChangeFiles}
-      />
-
-      <label
-        className={isDragging ? "DragDrop-File-Dragging" : "DragDrop-File"}
-        htmlFor="fileUpload"
-        ref={dragRef}
+    <>
+      <FlexBox
+        background="rgba(145, 158, 171, 0.12)"
+        height="400px"
+        rad="16px"
+        just="center"
+        align="center"
+        border="1px dashed rgb(99, 115, 129)"
+        margin="0 0 20px 0"
       >
-        <div>파일 첨부</div>
-      </label>
+        <input
+          type="file"
+          id="fileUpload"
+          style={{ display: "none" }}
+          multiple={true}
+          onChange={onChangeFiles}
+        />
 
-      <div className="DragDrop-Files">
+        <label
+          className={isDragging ? "DragDrop-File-Dragging" : "DragDrop-File"}
+          htmlFor="fileUpload"
+          ref={dragRef}
+          style={{
+            width: "100%",
+            height: "100%",
+          }}
+        >
+          <FlexBox
+            direction="column"
+            align="center"
+            just="center"
+            height="100%"
+          >
+            <FaFileImage
+              style={{
+                color: "rgb(99, 115, 129)",
+                width: "36px",
+                height: "36px",
+                marginRight: "0px",
+              }}
+            />
+            <FlexBox margin="20px 0 0 0" color="rgb(99, 115, 129)">
+              이미지를
+            </FlexBox>
+            <FlexBox margin="6px 0 0 0" color="rgb(99, 115, 129)">
+              등록해주세요.
+            </FlexBox>
+          </FlexBox>
+        </label>
+      </FlexBox>
+
+      <FlexBox direction="column">
         {files.length > 0 &&
           files.map((file) => {
             const {
@@ -137,19 +174,44 @@ const DragDrop = () => {
             } = file;
 
             return (
-              <div key={id}>
-                <div>{name}</div>
+              <FlexBox
+                key={id}
+                just="space-between"
+                align="center"
+                height="40px"
+                rad="8px"
+                padding="0 20px"
+                margin="0 0 20px 0"
+                background="rgba(145, 158, 171, 0.12)"
+              >
+                <FlexBox color="rgb(99, 115, 129)">{name}</FlexBox>
                 <div
                   className="DragDrop-Files-Filter"
                   onClick={() => handleFilterFile(id)}
                 >
-                  X
+                  <FaTrashAlt
+                    style={{
+                      color: "rgb(99, 115, 129)",
+                      width: "18px",
+                      height: "18px",
+                      marginRight: "0px",
+                      cursor: "pointer",
+                    }}
+                  />
                 </div>
-              </div>
+              </FlexBox>
             );
           })}
-      </div>
-    </div>
+      </FlexBox>
+      <Button
+        width="120px"
+        margin="0px auto 10px"
+        padding="18.25px 20px"
+        background="#ff9030"
+        shadow="rgb(249 217 189) 0px 8px 16px 0px"
+        title="이미지 등록"
+      />
+    </>
   );
 };
 
