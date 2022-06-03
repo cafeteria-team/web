@@ -62,16 +62,19 @@ const MyEditor = ({
   useEffect(() => {
     if (rendered.current) return;
     rendered.current = true;
-    const blocksFromHtml = htmlToDraft(htmlToEditor);
-    if (blocksFromHtml) {
-      const { contentBlocks, entityMap } = blocksFromHtml;
-      const contentState = ContentState.createFromBlockArray(
-        contentBlocks,
-        entityMap
-      );
-      const editorState = EditorState.createWithContent(contentState);
-      setEditorState(editorState);
-    }
+
+    // console.log(htmlToDraft(htmlToEditor));
+
+    // const blocksFromHtml = htmlToDraft(htmlToEditor);
+    // if (blocksFromHtml) {
+    //   const { contentBlocks, entityMap } = blocksFromHtml;
+    //   const contentState = ContentState.createFromBlockArray(
+    //     contentBlocks,
+    //     entityMap
+    //   );
+    //   const editorState = EditorState.createWithContent(contentState);
+    //   setEditorState(editorState);
+    // }
   }, [htmlToEditor, noticeData]);
 
   const sendText = () => {

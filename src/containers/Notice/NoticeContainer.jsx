@@ -5,7 +5,7 @@ import {
   StyledBody,
   LoadingLi,
 } from "../../components/StyledElements";
-import { Button, Input, SearchBar, Pagination } from "../../components";
+import { Button, SearchBar, Pagination } from "../../components";
 import { Ul, Li } from "../../components/StyledElements";
 import { useStores } from "../../stores/Context";
 import { useNavigate } from "react-router-dom";

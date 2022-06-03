@@ -433,7 +433,10 @@ const ManageContainer = observer(() => {
         setNoticeData(res.data.content);
         setIsNoticeLoading(false);
       })
-      .catch((err) => alert("공지사항을 불러올수없습니다."));
+      .catch((err) => {
+        console.log(err);
+        alert("공지사항을 불러올수없습니다.");
+      });
   };
 
   const checkUserId = () => {
