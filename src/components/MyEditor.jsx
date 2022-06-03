@@ -63,18 +63,20 @@ const MyEditor = ({
     if (rendered.current) return;
     rendered.current = true;
 
-    // console.log(htmlToDraft(htmlToEditor));
-
-    // const blocksFromHtml = htmlToDraft(htmlToEditor);
-    // if (blocksFromHtml) {
-    //   const { contentBlocks, entityMap } = blocksFromHtml;
-    //   const contentState = ContentState.createFromBlockArray(
-    //     contentBlocks,
-    //     entityMap
-    //   );
-    //   const editorState = EditorState.createWithContent(contentState);
-    //   setEditorState(editorState);
-    // }
+    if (htmlToEditor) {
+      const blocksFromHtml = htmlToDraft(htmlToEditor);
+      if (blocksFromHtml) {
+        const { contentBlocks, entityMap } = blocksFromHtml;
+        const contentState = ContentState.createFromBlockArray(
+          contentBlocks,
+          entityMap
+        );
+        const editorState = EditorState.createWithContent(contentState);
+        setEditorState(editorState);
+      }
+    } else {
+      return;
+    }
   }, [htmlToEditor, noticeData]);
 
   const sendText = () => {
