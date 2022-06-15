@@ -9,6 +9,7 @@ const StoreImageContainer = () => {
 
   const onChangeFiles = useCallback(
     (e) => {
+      const maxSize = 3 * 1024 * 1024;
       let selectFiles = [];
       let tempFiles = files;
 
@@ -19,13 +20,17 @@ const StoreImageContainer = () => {
       }
 
       for (const file of selectFiles) {
-        tempFiles = [
-          ...tempFiles,
-          {
-            id: fileId.current++,
-            object: file,
-          },
-        ];
+        if (maxSize < file.size) {
+          alert("이미지 용량은 3MB 이내로 등록가능합니다.");
+        } else {
+          tempFiles = [
+            ...tempFiles,
+            {
+              id: fileId.current++,
+              object: file,
+            },
+          ];
+        }
       }
 
       setFiles(tempFiles);
@@ -39,6 +44,22 @@ const StoreImageContainer = () => {
     },
     [files]
   );
+
+  // 이미지업로드
+  // const onFileChange = async (e) => {
+  //   const maxSize = 10 * 1024 * 1024;
+  //   const imgSize = e.target.files[0].size;
+
+  //   if (imgSize > maxSize) {
+  //     alert("이미지 용량은 10MB 이내로 등록가능합니다.");
+  //   } else {
+  //     const uploaded = await imageUploader.upload(e.target.files[0]);
+  //     setState((prev) => ({
+  //       ...prev,
+  //       busi_num_img: uploaded,
+  //     }));
+  //     alert("사업자등록증이 등록되었습니다.");
+  //   }
 
   return (
     <FlexBox padding="30px 70px" direction="column" width="100%">
