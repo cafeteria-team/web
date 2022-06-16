@@ -3,8 +3,8 @@ import DaumPostcode from "react-daum-postcode";
 import Geocode from "react-geocode";
 
 Geocode.setApiKey(process.env.REACT_APP_GOOGLE_API_KEY);
-Geocode.setLanguage("kr");
-Geocode.setRegion("kr");
+Geocode.setLanguage("ko");
+Geocode.setRegion("ko");
 Geocode.enableDebug();
 
 const Post = (props) => {
@@ -18,6 +18,7 @@ const Post = (props) => {
   };
 
   const setGeoLocation = async (address) => {
+    console.log(address);
     const currentAddr = address;
     if (currentAddr) {
       const { lat, lng } = await GoogleMap(currentAddr);

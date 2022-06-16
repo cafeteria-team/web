@@ -306,6 +306,8 @@ const Register = (props) => {
 
   const [point, setPoint] = useState(null);
 
+  console.log(point);
+
   const [agreement, setAgreement] = useState(false);
   const [isPopup, setIsPopup] = useState(false);
 
