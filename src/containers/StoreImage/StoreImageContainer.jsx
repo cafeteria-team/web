@@ -8,6 +8,7 @@ const StoreImageContainer = () => {
   const { ListStore } = useStores();
 
   const [files, setFiles] = useState([]);
+  const [userData, setUserData] = useState(null);
   const [user, setUser] = useState(null);
 
   const fileId = useRef(0);
@@ -51,7 +52,14 @@ const StoreImageContainer = () => {
   );
 
   const submitImage = () => {
-    ListStore.editUser(user, files)
+    setUserData((prev) => ({
+      ...prev,
+      store: {
+        ...prev.stroe,
+        store_img: files,
+      },
+    }));
+    ListStore.editUser(user, userData)
       .then((res) => {
         console.log(res);
       })
@@ -62,18 +70,13 @@ const StoreImageContainer = () => {
 
   const getImageFiles = ({ user_id }) => {
     ListStore.getEditUser(user_id)
-      .then(
-        ({
-          data: {
-            store: { store_img },
-          },
-        }) => {
-          if (store_img) {
-            setFiles(store_img);
-          }
-          return;
+      .then(({ data }) => {
+        setUserData(data);
+        if (data.store.store_img) {
+          setFiles(data.store.store_img);
         }
-      )
+        return;
+      })
       .catch((err) =>
         alert("등록된 이미지를 불러올수없습니다. 잠시후 다시 시도해주십시오.")
       );
