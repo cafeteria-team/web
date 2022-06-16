@@ -57,13 +57,9 @@ export class ListStore {
   };
 
   // 선택 유저 정보 수정
-  getEditUser = async (userId, accessToken) => {
+  getEditUser = async (userId) => {
     try {
-      const response = await instance.get(`/api/user/${userId}`, {
-        headers: {
-          Authorization: `Bearer ${accessToken}`,
-        },
-      });
+      const response = await instance.get(`/api/user/${userId}`);
       return response;
     } catch (error) {
       throw error;
@@ -72,25 +68,18 @@ export class ListStore {
 
   // 유저 정보 수정
   editUser = async (userId, data) => {
+    console.log(data);
     try {
-      const access = localStorage.getItem("access");
       // const { email, name, busi_num, busi_num_img } = data;
-      const response = await instance.patch(
-        `/api/user/${userId}`,
-        {
-          email: data.email,
-          store: {
-            name: data.store.name,
-            busi_num: data.store.busi_num,
-            busi_num_img: data.store.busi_num_img,
-          },
+      const response = await instance.patch(`/api/user/${userId}`, {
+        email: data.email,
+        store: {
+          name: data.store.name,
+          busi_num: data.store.busi_num,
+          busi_num_img: data.store.busi_num_img,
+          store_img: data.store.store_img,
         },
-        {
-          headers: {
-            Authorization: `Bearer ${access}`,
-          },
-        }
-      );
+      });
       return response;
     } catch (error) {
       throw error;

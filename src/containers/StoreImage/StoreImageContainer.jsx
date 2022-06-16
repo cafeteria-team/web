@@ -1,9 +1,14 @@
-import React, { useState, useCallback, useRef } from "react";
+import React, { useState, useCallback, useRef, useEffect } from "react";
 import { FlexBox, StyledTitle } from "../../components/StyledElements";
 import { DragDrop } from "../../views";
+import { useStores } from "../../stores/Context";
+import Decode from "../../utils/decode";
 
 const StoreImageContainer = () => {
+  const { ListStore } = useStores();
+
   const [files, setFiles] = useState([]);
+  const [user, setUser] = useState(null);
 
   const fileId = useRef(0);
 
@@ -45,21 +50,42 @@ const StoreImageContainer = () => {
     [files]
   );
 
-  // 이미지업로드
-  // const onFileChange = async (e) => {
-  //   const maxSize = 10 * 1024 * 1024;
-  //   const imgSize = e.target.files[0].size;
+  const submitImage = () => {
+    ListStore.editUser(user, files)
+      .then((res) => {
+        console.log(res);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
 
-  //   if (imgSize > maxSize) {
-  //     alert("이미지 용량은 10MB 이내로 등록가능합니다.");
-  //   } else {
-  //     const uploaded = await imageUploader.upload(e.target.files[0]);
-  //     setState((prev) => ({
-  //       ...prev,
-  //       busi_num_img: uploaded,
-  //     }));
-  //     alert("사업자등록증이 등록되었습니다.");
-  //   }
+  const getImageFiles = ({ user_id }) => {
+    ListStore.getEditUser(user_id)
+      .then(
+        ({
+          data: {
+            store: { store_img },
+          },
+        }) => {
+          if (store_img) {
+            setFiles(store_img);
+          }
+          return;
+        }
+      )
+      .catch((err) =>
+        alert("등록된 이미지를 불러올수없습니다. 잠시후 다시 시도해주십시오.")
+      );
+  };
+
+  useEffect(() => {
+    const decode = new Decode();
+    const access = localStorage.getItem("access");
+    const data = decode.getUserId(access);
+    setUser(data.user_id);
+    getImageFiles(data);
+  }, []);
 
   return (
     <FlexBox padding="30px 70px" direction="column" width="100%">
@@ -78,6 +104,7 @@ const StoreImageContainer = () => {
           files={files}
           onChangeFiles={onChangeFiles}
           handleFilterFile={handleFilterFile}
+          onClick={submitImage}
         />
       </FlexBox>
     </FlexBox>

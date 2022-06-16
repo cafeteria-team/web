@@ -1,8 +1,32 @@
 import React from "react";
 import DaumPostcode from "react-daum-postcode";
+import Geocode from "react-geocode";
+
+Geocode.setApiKey(process.env.REACT_APP_GOOGLE_API_KEY);
+Geocode.setLanguage("kr");
+Geocode.setRegion("kr");
+Geocode.enableDebug();
 
 const Post = (props) => {
+  const GoogleMap = async (currentAddr) => {
+    return Geocode.fromAddress(currentAddr)
+      .then((response) => {
+        const { lat, lng } = response.results[0].geometry.location;
+        return { lat, lng };
+      })
+      .catch((err) => console.log(err));
+  };
+
+  const setGeoLocation = async (address) => {
+    const currentAddr = address;
+    if (currentAddr) {
+      const { lat, lng } = await GoogleMap(currentAddr);
+      setPoint({ lat: lat, lng: lng });
+    }
+  };
+
   const setAddress = props.setAddress;
+  const setPoint = props.setPoint;
 
   const handleComplete = (data) => {
     let fullAddress = data.address;
@@ -24,6 +48,7 @@ const Post = (props) => {
       addr: fullAddress,
       zip_code: data.zonecode,
     }));
+    setGeoLocation(fullAddress);
     props.popupOn();
   };
 

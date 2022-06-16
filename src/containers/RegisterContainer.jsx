@@ -304,6 +304,8 @@ const Register = (props) => {
     auth_phone: "",
   });
 
+  const [point, setPoint] = useState(null);
+
   const [agreement, setAgreement] = useState(false);
   const [isPopup, setIsPopup] = useState(false);
 
@@ -566,7 +568,11 @@ const Register = (props) => {
         onRequestClose={popupOn}
         className="postContainer"
       >
-        <Post popupOn={popupOn} setAddress={setState}></Post>
+        <Post
+          popupOn={popupOn}
+          setAddress={setState}
+          setPoint={setPoint}
+        ></Post>
       </Modal>
       <Modal
         isOpen={privacyModal}

@@ -191,8 +191,7 @@ const MemberEdit = observer(() => {
   const _getEditUser = useCallback(
     (userId) => {
       setLoading(true);
-      const access = localStorage.getItem("access");
-      ListStore.getEditUser(userId, access).then((res) => {
+      ListStore.getEditUser(userId).then((res) => {
         setSelectedUser(res.data);
         setLoading(false);
       });

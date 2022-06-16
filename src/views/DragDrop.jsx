@@ -3,7 +3,7 @@ import { FlexBox } from "../components/StyledElements";
 import { FaFileImage, FaTrashAlt } from "react-icons/fa";
 import { Button } from "../components";
 
-const DragDrop = ({ files, onChangeFiles, handleFilterFile }) => {
+const DragDrop = ({ files, onChangeFiles, handleFilterFile, onClick }) => {
   // 드래그 중일때와 아닐때의 스타일을 구분하기 위한 state 변수
   const [isDragging, setIsDragging] = useState(false);
 
@@ -166,6 +166,7 @@ const DragDrop = ({ files, onChangeFiles, handleFilterFile }) => {
         background="#ff9030"
         shadow="rgb(249 217 189) 0px 8px 16px 0px"
         title="이미지 등록"
+        onClick={onClick}
       />
     </>
   );
