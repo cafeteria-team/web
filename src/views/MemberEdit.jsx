@@ -100,6 +100,7 @@ const InputData = [
 ];
 
 const UploadedImage = ({ onFileChange, editImage, selectedUser }) => {
+  console.log(selectedUser);
   return (
     <FlexBox width="50%" direction="column" overflow="hidden">
       <FlexBox margin="0 10px 0 0" minW="100px" align="center">
@@ -120,7 +121,8 @@ const UploadedImage = ({ onFileChange, editImage, selectedUser }) => {
         />
       </FlexBox>
       <div style={imageStyle.wrap}>
-        {selectedUser.store.busi_num_img !== "" ? (
+        {selectedUser.store.busi_num_img !== "" &&
+        selectedUser.store.busi_num_img !== "string" ? (
           <div style={imageStyle.div}>
             <img
               src={selectedUser.store.busi_num_img}
@@ -174,17 +176,23 @@ const MemberEdit = observer(() => {
 
   // 유저수정 완료
   const editUser = async () => {
-    ListStore.editUser(params.name, selectedUser)
-      .then((res) => {
-        alert("회원정보가 수정되었습니다.");
-        return navigate("/main/member");
-      })
-      .catch((error) => {
-        alert(
-          "회원정보를 수정할수없습니다. 다시 시도해주세요. *사업자번호는 10자리입니다."
-        );
-        return error;
-      });
+    if (selectedUser.store.busi_num.length !== 10) {
+      alert(
+        "회원정보를 수정할수없습니다. 다시 시도해주세요. *사업자번호는 10자리입니다."
+      );
+    } else {
+      ListStore.editUser(params.name, selectedUser)
+        .then((res) => {
+          alert("회원정보가 수정되었습니다.");
+          return navigate("/main/member");
+        })
+        .catch((error) => {
+          alert(
+            "회원정보를 수정할수없습니다. 다시 시도해주세요. *사업자번호는 10자리입니다."
+          );
+          return error;
+        });
+    }
   };
 
   // 선택된 유저 불러오기

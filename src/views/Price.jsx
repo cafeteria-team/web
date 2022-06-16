@@ -93,6 +93,7 @@ const MenuList = ({
                       id={Object.keys(item)}
                       disabled={isClicked === index ? false : true}
                       onChange={(e) => editList(e, index)}
+                      type="number"
                     />
                     <StyledBody color="rgb(33, 43, 54)" fontSize="14">
                       원

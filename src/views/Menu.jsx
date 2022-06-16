@@ -37,7 +37,7 @@ const MenuListContainer = ({
         <StyledBody color="color rgb(33, 43, 54)" fontSize="14px" fontW="600">
           메뉴 리스트
         </StyledBody>
-        <FlexBox>
+        <form style={{ display: "flexf" }}>
           <Input
             placeholder="메뉴이름"
             width="300px"
@@ -54,7 +54,7 @@ const MenuListContainer = ({
             background="rgb(24, 144, 255)"
             onClick={addList}
           />
-        </FlexBox>
+        </form>
       </FlexBox>
       <MenuList
         isLoading={isLoading}
@@ -264,9 +264,11 @@ const Menu = ({
     }));
   };
 
-  const addList = async () => {
+  const addList = async (e) => {
+    e.preventDefault();
     if (state.name !== "") {
       addMenuList(state.name);
+      setState({ name: "" });
     } else {
       alert("메뉴를 입력해주세요");
     }
