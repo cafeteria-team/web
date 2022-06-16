@@ -43,6 +43,7 @@ export class AuthStore {
         logout: action,
         getUserName: action,
         initializeUser: action,
+        imageUpload: action,
       }
     );
     // rootStore를 받는다.
@@ -105,6 +106,18 @@ export class AuthStore {
 
     // axios.headers["Authorization"] = `Bearer ${access}`;
   };
+
+  // 이미지업로드
+  imageUpload(img) {
+    try {
+      const response = instance.post("/api/file/upload", {
+        files: img,
+      });
+      return response;
+    } catch (err) {
+      throw err;
+    }
+  }
 
   logout = () => {
     this.initializeUser("", "", "");

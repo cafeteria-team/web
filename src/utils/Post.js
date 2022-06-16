@@ -18,7 +18,6 @@ const Post = (props) => {
   };
 
   const setGeoLocation = async (address) => {
-    console.log(address);
     const currentAddr = address;
     if (currentAddr) {
       const { lat, lng } = await GoogleMap(currentAddr);

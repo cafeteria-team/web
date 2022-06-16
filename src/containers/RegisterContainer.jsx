@@ -3,7 +3,7 @@ import { instance } from "../utils/axios";
 import Post from "../utils/Post";
 import ImageUploader from "../utils/imageuploader";
 import { useNavigate } from "react-router-dom";
-
+import { useStores } from "../stores/Context";
 // components
 import { Button, Input, ImageInput, PrivacyInput } from "../components";
 import {
@@ -294,6 +294,7 @@ const SecondLists = ({
 };
 
 const Register = (props) => {
+  const { AuthStore } = useStores();
   const navigate = useNavigate();
 
   const [state, setState] = useState({
@@ -305,8 +306,6 @@ const Register = (props) => {
   });
 
   const [point, setPoint] = useState(null);
-
-  console.log(point);
 
   const [agreement, setAgreement] = useState(false);
   const [isPopup, setIsPopup] = useState(false);
@@ -499,6 +498,7 @@ const Register = (props) => {
         busi_num,
       } = data;
       const { busi_num_img, zip_code, addr } = state;
+      const { lat, lng } = point;
 
       try {
         const response = await instance.post("/api/user/register", {
@@ -514,6 +514,7 @@ const Register = (props) => {
           detail_addr,
           busi_num,
           busi_num_img,
+          location: `Point(${lat},${lng})`,
         });
         navigate("/complete");
         return response;
@@ -524,19 +525,38 @@ const Register = (props) => {
     }
   };
 
-  // 이미지업로드
+  // 이미지업로드 수정필요
   const onFileChange = async (e) => {
     const maxSize = 10 * 1024 * 1024;
     const imgSize = e.target.files[0].size;
+    const imgArr = [...e.target.files];
+
+    // const filesArray = Array.from(e.target.files).map((file) =>
+    //   URL.createObjectURL(file)
+    // );
+
+    const filesArray = Array.from(e.target.files).map((file) => file);
+
+    console.log(filesArray);
 
     if (imgSize > maxSize) {
       alert("이미지 용량은 10MB 이내로 등록가능합니다.");
     } else {
       const uploaded = await imageUploader.upload(e.target.files[0]);
-      setState((prev) => ({
-        ...prev,
-        busi_num_img: uploaded,
-      }));
+      console.log(uploaded);
+      // AuthStore.imageUpload(filesArray)
+      //   .then((res) => {
+      //     console.log(res);
+      //   })
+      //   .catch((err) => {
+      //     console.log(err);
+      //   });
+      // console.log(AuthStore.imageUpload());
+
+      // setState((prev) => ({
+      //   ...prev,
+      //   busi_num_img: uploaded,
+      // }));
       alert("사업자등록증이 등록되었습니다.");
     }
   };

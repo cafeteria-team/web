@@ -304,52 +304,6 @@ const menuData = [
       </NavLink>
     ),
   },
-  {
-    header: (menuState, role) => (
-      <NavLink
-        to="/main/setting"
-        style={{
-          padding: "0 10px",
-          boxSizing: "border-box",
-          width: "100%",
-        }}
-      >
-        {({ isActive }) => (
-          <FlexBox
-            padding={menuState ? "0 10px" : "0 20px"}
-            width="100%"
-            boxSizing="border-box"
-            background={isActive ? "#ffe4ce6e" : "unset"}
-            rad="8px"
-            just="space-between"
-            align="center"
-            minHeight="48px"
-            hoverBg="rgba(145,158,171,0.12)"
-          >
-            <FlexBox align="center">
-              <FaCog
-                style={{
-                  color: isActive ? "#ff9030" : "rgb(99, 115, 129)",
-                  width: "1.3em",
-                  height: "1.3em",
-                  marginRight: "10px",
-                }}
-              />
-              <StyledBody
-                margin="0 0 0 10px"
-                color={isActive ? "#ff9030" : "rgb(99, 115, 129)"}
-                weight="600"
-                display={menuState ? "none" : ""}
-                fontSize="15px"
-              >
-                설정
-              </StyledBody>
-            </FlexBox>
-          </FlexBox>
-        )}
-      </NavLink>
-    ),
-  },
 ];
 
 const SideMenu = ({ role }) => {
