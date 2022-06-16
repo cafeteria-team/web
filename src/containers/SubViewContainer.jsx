@@ -8,7 +8,6 @@ const SubViewContainer = (props) => {
   const menuLists = params.name;
 
   const contextData = useOutletContext();
-  console.log(contextData);
 
   return (
     <>

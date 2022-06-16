@@ -5,6 +5,7 @@ import Main from "./MainContainer/Main";
 import SubViewContainer from "./SubViewContainer";
 import Overview from "./Overview/Overview";
 import Member from "./Member/Member";
+import MemberUserEdit from "./Member/MemberUserEdit";
 import Manage from "./Manage/Manage";
 import Menu from "./Manage/Menu";
 import ManageAdmin from "./Manage/ManageAdmin";
@@ -24,6 +25,7 @@ export {
   Overview,
   ManageAdmin,
   Member,
+  MemberUserEdit,
   Manage,
   LogoContainer,
   Menu,
