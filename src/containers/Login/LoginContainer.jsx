@@ -41,6 +41,13 @@ const Login = observer(() => {
         navigate("/main");
       })
       .catch((err) => {
+        if (
+          err.response.data.detail ===
+          "사용자 계정이 활성화 되지 않았습니다. 관리자에게 문의하세요."
+        ) {
+          alert("사용자 계정이 활성화 되지 않았습니다. 관리자에게 문의하세요.");
+          return;
+        }
         return alert("아이디 또는 비밀번호를 확인해주세요.");
       })
       .finally(() => setLoading(false));

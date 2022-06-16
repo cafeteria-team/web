@@ -48,8 +48,9 @@ const Post = (props) => {
       addr: fullAddress,
       zip_code: data.zonecode,
     }));
-    setGeoLocation(fullAddress);
-    props.popupOn();
+    setGeoLocation(fullAddress).then((res) => {
+      props.popupOn();
+    });
   };
 
   const postCodeStyle = {
