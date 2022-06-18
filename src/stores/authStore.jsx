@@ -110,9 +110,7 @@ export class AuthStore {
   // 이미지업로드
   imageUpload(img) {
     try {
-      const response = instance.post("/api/file/upload", {
-        files: img,
-      });
+      const response = instance.post("/api/file/upload", img);
       return response;
     } catch (err) {
       throw err;

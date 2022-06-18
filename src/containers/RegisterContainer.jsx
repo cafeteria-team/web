@@ -534,29 +534,32 @@ const Register = (props) => {
     // const filesArray = Array.from(e.target.files).map((file) =>
     //   URL.createObjectURL(file)
     // );
+    const uploadFile = e.target.files[0];
+    const formData = new FormData();
+    formData.append("files", uploadFile);
 
-    const filesArray = Array.from(e.target.files).map((file) => file);
+    // const filesArray = Array.from(e.target.files).map((file) => file);
 
-    console.log(filesArray);
+    // console.log(filesArray);
 
     if (imgSize > maxSize) {
       alert("이미지 용량은 10MB 이내로 등록가능합니다.");
     } else {
-      const uploaded = await imageUploader.upload(e.target.files[0]);
-      console.log(uploaded);
-      // AuthStore.imageUpload(filesArray)
-      //   .then((res) => {
-      //     console.log(res);
-      //   })
-      //   .catch((err) => {
-      //     console.log(err);
-      //   });
-      // console.log(AuthStore.imageUpload());
+      // const uploaded = await imageUploader.upload(e.target.files[0]);
 
-      // setState((prev) => ({
-      //   ...prev,
-      //   busi_num_img: uploaded,
-      // }));
+      AuthStore.imageUpload(formData)
+        .then((res) => {
+          console.log(res);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+      console.log(AuthStore.imageUpload());
+
+      setState((prev) => ({
+        ...prev,
+        busi_num_img: uploadFile,
+      }));
       alert("사업자등록증이 등록되었습니다.");
     }
   };

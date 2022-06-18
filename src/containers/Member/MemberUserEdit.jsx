@@ -284,7 +284,7 @@ const MemberUserEdit = observer(() => {
           padding="20px 24px"
         >
           <StyledBody color="color rgb(33, 43, 54)" fontSize="18px" fontW="600">
-            "회원관리" 님의 정보수정
+            "{selectedUser?.username}"님의 정보수정
           </StyledBody>
         </FlexBox>
         <Form method="POST" direction="column">
