@@ -100,7 +100,6 @@ const InputData = [
 ];
 
 const UploadedImage = ({ onFileChange, editImage, selectedUser }) => {
-  console.log(selectedUser);
   return (
     <FlexBox width="50%" direction="column" overflow="hidden">
       <FlexBox margin="0 10px 0 0" minW="100px" align="center">
@@ -162,7 +161,7 @@ const UploadedImage = ({ onFileChange, editImage, selectedUser }) => {
 };
 
 const MemberEdit = observer(() => {
-  const { ListStore } = useStores();
+  const { ListStore, AuthStore } = useStores();
 
   const [selectedUser, setSelectedUser] = useState(null);
 
@@ -239,25 +238,33 @@ const MemberEdit = observer(() => {
   const onFileChange = (e) => {
     const maxSize = 10 * 1024 * 1024;
     const imgSize = e.target.files[0].size;
+
+    const uploadFile = e.target.files[0];
+    const formData = new FormData();
+    formData.append("files", uploadFile);
+
     if (imgSize > maxSize) {
       alert("이미지 용량은 10MB 이내로 등록가능합니다.");
     } else {
       setLoading(true);
-      imageUploader
-        .upload(e.target.files[0])
+      AuthStore.imageUpload(formData)
         .then((res) => {
           setSelectedUser((prev) => ({
             ...prev,
             store: {
               ...prev.store,
-              busi_num_img: res,
+              busi_num_img: res.data[0],
             },
           }));
           setLoading(false);
         })
-        .catch((err) =>
-          alert("이미지를 등록할수없습니다. 잠시후 다시 시도해주세요.")
-        );
+        .catch((err) => {
+          alert("이미지를 등록할수없습니다. 잠시후 다시 시도해주세요.");
+          setLoading(false);
+        })
+        .finally(() => {
+          setLoading(false);
+        });
     }
   };
 

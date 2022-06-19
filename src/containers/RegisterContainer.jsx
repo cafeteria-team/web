@@ -499,44 +499,28 @@ const Register = (props) => {
       const { busi_num_img, zip_code, addr } = state;
       const { lat, lng } = point;
 
-      console.log(
-        username,
-        password,
-        confirm_password,
-        email,
-        phone,
-
-        name,
-        addr,
-        zip_code,
-        detail_addr,
-        busi_num,
-        busi_num_img,
-        `Point(${lat},${lng})`
-      );
-
-      // try {
-      //   const response = await instance.post("/api/user/register", {
-      //     username,
-      //     password,
-      //     confirm_password,
-      //     email,
-      //     phone,
-      //     role: "STORE",
-      //     name,
-      //     addr,
-      //     zip_code,
-      //     detail_addr,
-      //     busi_num,
-      //     busi_num_img,
-      //     location: `Point(${lat},${lng})`,
-      //   });
-      //   navigate("/complete");
-      //   return response;
-      // } catch (error) {
-      //   console.log(error, error.response);
-      //   return false;
-      // }
+      try {
+        const response = await instance.post("/api/user/register", {
+          username,
+          password,
+          confirm_password,
+          email,
+          phone,
+          role: "STORE",
+          name,
+          addr,
+          zip_code,
+          detail_addr,
+          busi_num,
+          busi_num_img,
+          location: `POINT(${lat} ${lng})`,
+        });
+        navigate("/complete");
+        return response;
+      } catch (error) {
+        console.log(error, error.response);
+        return false;
+      }
     }
   };
 
