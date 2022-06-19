@@ -3,15 +3,19 @@ import { FlexBox, StyledTitle } from "../../components/StyledElements";
 import { DragDrop } from "../../views";
 import { useStores } from "../../stores/Context";
 import Decode from "../../utils/decode";
+import Spinner from "../../components/Spinner";
 
 const StoreImageContainer = () => {
-  const { ListStore } = useStores();
+  const { AuthStore, ListStore } = useStores();
 
   const [files, setFiles] = useState([]);
-  const [userData, setUserData] = useState(null);
+  const [userData, setUserData] = useState({});
   const [user, setUser] = useState(null);
 
   const fileId = useRef(0);
+  const [isLoading, setIsLoading] = useState(false);
+
+  const [test, setTest] = useState({});
 
   const onChangeFiles = useCallback(
     (e) => {
@@ -38,7 +42,6 @@ const StoreImageContainer = () => {
           ];
         }
       }
-
       setFiles(tempFiles);
     },
     [files]
@@ -52,19 +55,48 @@ const StoreImageContainer = () => {
   );
 
   const submitImage = () => {
-    setUserData((prev) => ({
-      ...prev,
-      store: {
-        ...prev.stroe,
-        store_img: files,
-      },
-    }));
-    ListStore.editUser(user, userData)
-      .then((res) => {
-        console.log(res);
+    if (files.length === 0) {
+      alert("이미지를 먼저 등록해주세요.");
+    } else {
+      const dataToSend = userData;
+      const formData = new FormData();
+      files.map((file) => {
+        formData.append("files", file.object);
+      });
+      setIsLoading(true);
+      AuthStore.imageUpload(formData)
+        .then((res) => {
+          dataToSend.store.store_img = res.data;
+          sendData(dataToSend);
+        })
+        .catch((err) => {
+          alert("이미지 파일을 등록할수없습니다. 잠시후 다시 시도해주십시오.");
+        });
+    }
+  };
+
+  const sendData = (data) => {
+    ListStore.editUser(user, data)
+      .then(({ data }) => {
+        let selectFiles = [];
+        setUserData(data);
+
+        // for(const file of data.store_img){
+        //   selectFiles = [
+        //     id:
+        //   ]
+        // }
+
+        setFiles();
+        alert("이미지 등록이완료되었습니다.");
+        setIsLoading(false);
       })
       .catch((err) => {
-        console.log(err);
+        alert("이미지 파일을 등록할수없습니다. 잠시후 다시 시도해주십시오.");
+        setIsLoading(false);
+      })
+      .finally(() => {
+        setIsLoading(false);
       });
   };
 
@@ -73,7 +105,19 @@ const StoreImageContainer = () => {
       .then(({ data }) => {
         setUserData(data);
         if (data.store.store_img) {
-          setFiles(data.store.store_img);
+          let selectFiles = [];
+          let startIndex = 0;
+          console.log(data.store.store_img.length);
+          data.store.store_img.map((image) => {
+            selectFiles = [
+              {
+                id: startIndex++,
+                object: image,
+              },
+            ];
+          });
+          console.log(selectFiles);
+          setFiles(selectFiles);
         }
         return;
       })
@@ -82,16 +126,21 @@ const StoreImageContainer = () => {
       );
   };
 
-  useEffect(() => {
+  const setUserId = () => {
     const decode = new Decode();
     const access = localStorage.getItem("access");
     const data = decode.getUserId(access);
     setUser(data.user_id);
     getImageFiles(data);
-  }, []);
+  };
+
+  useEffect(() => {
+    setUserId();
+  }, [test]);
 
   return (
     <FlexBox padding="30px 70px" direction="column" width="100%">
+      <Spinner loading={isLoading} />
       <StyledTitle margin="0 0 30px 0">업체 이미지 관리</StyledTitle>
       <FlexBox
         width="100%"

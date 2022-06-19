@@ -127,10 +127,7 @@ const DragDrop = ({ files, onChangeFiles, handleFilterFile, onClick }) => {
       <FlexBox direction="column">
         {files.length > 0 &&
           files.map((file) => {
-            const {
-              id,
-              object: { name },
-            } = file;
+            const { id, object } = file;
 
             return (
               <FlexBox
@@ -143,7 +140,9 @@ const DragDrop = ({ files, onChangeFiles, handleFilterFile, onClick }) => {
                 margin="0 0 20px 0"
                 background="rgba(145, 158, 171, 0.12)"
               >
-                <FlexBox color="rgb(99, 115, 129)">{name}</FlexBox>
+                <FlexBox color="rgb(99, 115, 129)">
+                  {object?.name || object}
+                </FlexBox>
                 <div onClick={() => handleFilterFile(id)}>
                   <FaTrashAlt
                     style={{
