@@ -54,12 +54,12 @@
     "yup": "^0.32.11"
   },
   "scripts": {
-    "start": "HTTPS=true SSL_CRT_FILE=localhost.pem SSL_KEY_FILE=localhost-key.pem react-app-rewired start",
+    "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-app-rewired test",
     "eject": "react-scripts eject",
     "deploy": "aws s3 sync ./build s3://goodcafeteria-admin --profile=goodcafeteriaAdmin",
-    "invalidate": "aws cloudfront create-invalidation --profile=goodcafeteriaAdmin --distribution-id E3ESSPGNM0DBXC --paths / /index.html /error.html /service-worker.js /manifest.json /favicon.ico"
+    "invalidate": "aws cloudfront create-invalidation --profile=goodcafeteriaAdmin --distribution-id E32FE00NN31P0K --paths / /index.html /error.html /service-worker.js /manifest.json /favicon.ico"
   },
   "eslintConfig": {
     "extends": [
@@ -107,6 +107,5 @@
         }
       ]
     ]
-  },
-  "proxy": "https://www.good-cafeteria.cf"
+  }
 }

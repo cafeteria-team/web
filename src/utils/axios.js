@@ -3,7 +3,7 @@ import { checkToken, refreshErrorHandle } from "./refreshToken";
 
 export const instance = axios.create({
   baseURL: process.env.REACT_APP_SERVER,
-  timeout: 2000,
+  timeout: 10000,
   headers: {},
 });
 

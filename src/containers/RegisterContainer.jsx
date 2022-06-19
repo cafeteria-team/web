@@ -1,7 +1,6 @@
 import React, { useState, memo, useEffect } from "react";
 import { instance } from "../utils/axios";
 import Post from "../utils/Post";
-import ImageUploader from "../utils/imageuploader";
 import { useNavigate } from "react-router-dom";
 import { useStores } from "../stores/Context";
 // components
@@ -21,15 +20,13 @@ import Modal from "react-modal";
 import * as Yup from "yup";
 import { Formik, useFormik } from "formik";
 import Img from "../assets/register_img.png";
+import Spinner from "../components/Spinner";
 
 // view
 import Tos from "../views/tos";
 
 // 모달
 Modal.setAppElement("#root");
-
-// 이미지 클라우드
-const imageUploader = new ImageUploader();
 
 // 인증 타이머
 const Timer = memo(({ timesUp, phoneAuthed, resendCode }) => {
@@ -317,6 +314,8 @@ const Register = (props) => {
   const [showModal, setShowModal] = useState(false);
   const [resendCode, setResendCode] = useState(false);
 
+  const [isLoading, setIsLoading] = useState(false);
+
   // 핸드폰번호 체크
 
   const mobileRegex = /^01([0|1|6|7|8|9])-?([0-9]{3,4})-?([0-9]{4})$/;
@@ -500,28 +499,44 @@ const Register = (props) => {
       const { busi_num_img, zip_code, addr } = state;
       const { lat, lng } = point;
 
-      try {
-        const response = await instance.post("/api/user/register", {
-          username,
-          password,
-          confirm_password,
-          email,
-          phone,
-          role: "STORE",
-          name,
-          addr,
-          zip_code,
-          detail_addr,
-          busi_num,
-          busi_num_img,
-          location: `Point(${lat},${lng})`,
-        });
-        navigate("/complete");
-        return response;
-      } catch (error) {
-        console.log(error, error.response);
-        return false;
-      }
+      console.log(
+        username,
+        password,
+        confirm_password,
+        email,
+        phone,
+
+        name,
+        addr,
+        zip_code,
+        detail_addr,
+        busi_num,
+        busi_num_img,
+        `Point(${lat},${lng})`
+      );
+
+      // try {
+      //   const response = await instance.post("/api/user/register", {
+      //     username,
+      //     password,
+      //     confirm_password,
+      //     email,
+      //     phone,
+      //     role: "STORE",
+      //     name,
+      //     addr,
+      //     zip_code,
+      //     detail_addr,
+      //     busi_num,
+      //     busi_num_img,
+      //     location: `Point(${lat},${lng})`,
+      //   });
+      //   navigate("/complete");
+      //   return response;
+      // } catch (error) {
+      //   console.log(error, error.response);
+      //   return false;
+      // }
     }
   };
 
@@ -529,38 +544,33 @@ const Register = (props) => {
   const onFileChange = async (e) => {
     const maxSize = 10 * 1024 * 1024;
     const imgSize = e.target.files[0].size;
-    const imgArr = [...e.target.files];
 
-    // const filesArray = Array.from(e.target.files).map((file) =>
-    //   URL.createObjectURL(file)
-    // );
     const uploadFile = e.target.files[0];
     const formData = new FormData();
     formData.append("files", uploadFile);
 
-    // const filesArray = Array.from(e.target.files).map((file) => file);
-
-    // console.log(filesArray);
-
     if (imgSize > maxSize) {
       alert("이미지 용량은 10MB 이내로 등록가능합니다.");
     } else {
-      // const uploaded = await imageUploader.upload(e.target.files[0]);
-
+      setIsLoading(true);
       AuthStore.imageUpload(formData)
         .then((res) => {
-          console.log(res);
+          setState((prev) => ({
+            ...prev,
+            busi_num_img: res.data[0],
+          }));
+          setIsLoading(false);
+          alert("사업자등록증이 등록되었습니다.");
         })
         .catch((err) => {
-          console.log(err);
+          alert(
+            "사업자등록증 등록에 실패하였습니다. 잠시후 다시 시도해주십시오."
+          );
+          setIsLoading(false);
+        })
+        .finally(() => {
+          setIsLoading(false);
         });
-      console.log(AuthStore.imageUpload());
-
-      setState((prev) => ({
-        ...prev,
-        busi_num_img: uploadFile,
-      }));
-      alert("사업자등록증이 등록되었습니다.");
     }
   };
 
@@ -587,6 +597,7 @@ const Register = (props) => {
 
   return (
     <MainContainer background="#F9FAFB">
+      <Spinner loading={isLoading} />
       <Modal
         isOpen={isPopup}
         contentLabel="phone check"

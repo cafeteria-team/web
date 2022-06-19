@@ -13,6 +13,7 @@ const Spinner = ({ loading }) => {
       background="#50505038"
       left="0"
       top="0"
+      zIndex="9999"
     >
       <ReactLoading type="bubbles" color="#ff9030" height={200} width={100} />
     </FlexBox>
