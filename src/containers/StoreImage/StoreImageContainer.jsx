@@ -1,5 +1,9 @@
 import React, { useState, useCallback, useRef, useEffect } from "react";
-import { FlexBox, StyledTitle } from "../../components/StyledElements";
+import {
+  FlexBox,
+  StyledTitle,
+  StyledSpan,
+} from "../../components/StyledElements";
 import { DragDrop } from "../../views";
 import { useStores } from "../../stores/Context";
 import Decode from "../../utils/decode";
@@ -20,6 +24,7 @@ const StoreImageContainer = () => {
   const onChangeFiles = useCallback(
     (e) => {
       const maxSize = 3 * 1024 * 1024;
+      const maxNum = 3;
       let selectFiles = [];
       let tempFiles = files;
 
@@ -55,39 +60,41 @@ const StoreImageContainer = () => {
   );
 
   const submitImage = () => {
-    if (files.length === 0) {
-      alert("이미지를 먼저 등록해주세요.");
-    } else {
-      const dataToSend = userData;
-      const formData = new FormData();
-      files.map((file) => {
-        formData.append("files", file.object);
-      });
-      setIsLoading(true);
-      AuthStore.imageUpload(formData)
-        .then((res) => {
-          dataToSend.store.store_img = res.data;
-          sendData(dataToSend);
-        })
-        .catch((err) => {
-          alert("이미지 파일을 등록할수없습니다. 잠시후 다시 시도해주십시오.");
-        });
+    const dataToSend = userData;
+    const formData = new FormData();
+
+    for (const file of files) {
+      formData.append("files", file.object);
     }
+    console.log(files);
+    setIsLoading(true);
+    AuthStore.imageUpload(formData)
+      .then((res) => {
+        dataToSend.store.store_img = res.data;
+        sendData(dataToSend);
+      })
+      .catch((err) => {
+        alert("이미지 파일을 등록할수없습니다. 잠시후 다시 시도해주십시오.");
+      });
   };
 
   const sendData = (data) => {
+    console.log(data);
     ListStore.editUser(user, data)
       .then(({ data }) => {
-        let selectFiles = [];
-        setUserData(data);
-
-        // for(const file of data.store_img){
+        // let selectFiles = [];
+        // let startIndex = 0;
+        // setUserData(data);
+        // for (const file of data.store.store_img) {
         //   selectFiles = [
-        //     id:
-        //   ]
+        //     {
+        //       id: startIndex++,
+        //       object: file,
+        //     },
+        //   ];
         // }
+        // setFiles(selectFiles);
 
-        setFiles();
         alert("이미지 등록이완료되었습니다.");
         setIsLoading(false);
       })
@@ -101,29 +108,34 @@ const StoreImageContainer = () => {
   };
 
   const getImageFiles = ({ user_id }) => {
+    setIsLoading(true);
     ListStore.getEditUser(user_id)
       .then(({ data }) => {
         setUserData(data);
         if (data.store.store_img) {
           let selectFiles = [];
           let startIndex = 0;
-          console.log(data.store.store_img.length);
-          data.store.store_img.map((image) => {
+
+          for (const file of data.store.store_img) {
             selectFiles = [
               {
                 id: startIndex++,
-                object: image,
+                object: file,
               },
             ];
-          });
-          console.log(selectFiles);
+          }
           setFiles(selectFiles);
+          setIsLoading(false);
         }
         return;
       })
-      .catch((err) =>
-        alert("등록된 이미지를 불러올수없습니다. 잠시후 다시 시도해주십시오.")
-      );
+      .catch((err) => {
+        alert("등록된 이미지를 불러올수없습니다. 잠시후 다시 시도해주십시오.");
+        setIsLoading(false);
+      })
+      .finally(() => {
+        setIsLoading(false);
+      });
   };
 
   const setUserId = () => {
@@ -158,6 +170,9 @@ const StoreImageContainer = () => {
           handleFilterFile={handleFilterFile}
           onClick={submitImage}
         />
+        <StyledSpan font="12px" color="#838383">
+          *이미지 등록 또는 삭제 후 "저장" 버튼을 꼭 눌러주세요.
+        </StyledSpan>
       </FlexBox>
     </FlexBox>
   );

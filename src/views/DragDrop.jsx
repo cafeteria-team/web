@@ -2,6 +2,7 @@ import React, { useState, useCallback, useEffect, useRef } from "react";
 import { FlexBox } from "../components/StyledElements";
 import { FaFileImage, FaTrashAlt } from "react-icons/fa";
 import { Button } from "../components";
+import { v4 as uuidv4 } from "uuid";
 
 const DragDrop = ({ files, onChangeFiles, handleFilterFile, onClick }) => {
   // 드래그 중일때와 아닐때의 스타일을 구분하기 위한 state 변수
@@ -131,7 +132,7 @@ const DragDrop = ({ files, onChangeFiles, handleFilterFile, onClick }) => {
 
             return (
               <FlexBox
-                key={id}
+                key={uuidv4()}
                 just="space-between"
                 align="center"
                 height="40px"
@@ -164,7 +165,7 @@ const DragDrop = ({ files, onChangeFiles, handleFilterFile, onClick }) => {
         padding="18.25px 20px"
         background="#ff9030"
         shadow="rgb(249 217 189) 0px 8px 16px 0px"
-        title="이미지 등록"
+        title="저장"
         onClick={onClick}
       />
     </>
