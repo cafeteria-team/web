@@ -13,6 +13,7 @@ const StoreImageContainer = () => {
   const { AuthStore, ListStore } = useStores();
 
   const [files, setFiles] = useState([]);
+  const [uploadImages, setUploadImages] = useState([]);
   const [userData, setUserData] = useState({});
   const [user, setUser] = useState(null);
 
@@ -66,11 +67,12 @@ const StoreImageContainer = () => {
     for (const file of files) {
       formData.append("files", file.object);
     }
-    console.log(files);
+
     setIsLoading(true);
     AuthStore.imageUpload(formData)
       .then((res) => {
-        dataToSend.store.store_img = res.data;
+        const combinedData = dataToSend.store.store_img.concat(res.data);
+        dataToSend.store.store_img = combinedData;
         sendData(dataToSend);
       })
       .catch((err) => {
@@ -79,7 +81,6 @@ const StoreImageContainer = () => {
   };
 
   const sendData = (data) => {
-    console.log(data);
     ListStore.editUser(user, data)
       .then(({ data }) => {
         // let selectFiles = [];
@@ -99,6 +100,7 @@ const StoreImageContainer = () => {
         setIsLoading(false);
       })
       .catch((err) => {
+        console.log(err);
         alert("이미지 파일을 등록할수없습니다. 잠시후 다시 시도해주십시오.");
         setIsLoading(false);
       })
@@ -112,15 +114,19 @@ const StoreImageContainer = () => {
     ListStore.getEditUser(user_id)
       .then(({ data }) => {
         setUserData(data);
-        if (data.store.store_img) {
+        setUploadImages(data.store.store_img);
+        if (data.store.store_img.length !== 0) {
           let selectFiles = [];
           let startIndex = 0;
-
           for (const file of data.store.store_img) {
             selectFiles = [
+              ...selectFiles,
               {
                 id: startIndex++,
-                object: file,
+                object: file.replace(
+                  "https://good-cafeteria.s3.ap-northeast-2.amazonaws.com/media/root/",
+                  ""
+                ),
               },
             ];
           }
