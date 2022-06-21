@@ -8,6 +8,7 @@ import { DragDrop } from "../../views";
 import { useStores } from "../../stores/Context";
 import Decode from "../../utils/decode";
 import Spinner from "../../components/Spinner";
+import { v4 as uuidv4 } from "uuid";
 
 const StoreImageContainer = () => {
   const { AuthStore, ListStore } = useStores();
@@ -17,38 +18,39 @@ const StoreImageContainer = () => {
   const [userData, setUserData] = useState({});
   const [user, setUser] = useState(null);
 
-  const fileId = useRef(0);
+  const [fileId, setFileId] = useState(0);
   const [isLoading, setIsLoading] = useState(false);
-
-  const [test, setTest] = useState({});
 
   const onChangeFiles = useCallback(
     (e) => {
       const maxSize = 3 * 1024 * 1024;
       const maxNum = 3;
       let selectFiles = [];
-      let tempFiles = files;
+      let tempFiles = [...files];
 
       if (e.type === "drop") {
         selectFiles = e.dataTransfer.files;
       } else {
         selectFiles = e.target.files;
       }
-
-      for (const file of selectFiles) {
-        if (maxSize < file.size) {
-          alert("이미지 용량은 3MB 이내로 등록가능합니다.");
-        } else {
-          tempFiles = [
-            ...tempFiles,
-            {
-              id: fileId.current++,
-              object: file,
-            },
-          ];
+      if (tempFiles.length !== maxNum) {
+        for (const file of selectFiles) {
+          if (maxSize < file.size) {
+            alert("이미지 용량은 3MB 이내로 등록가능합니다.");
+          } else {
+            tempFiles = [
+              ...tempFiles,
+              {
+                id: uuidv4(),
+                object: file,
+              },
+            ];
+          }
         }
+        setFiles(tempFiles);
+      } else {
+        alert("이미지는 최대 3장까지 등록 가능합니다.");
       }
-      setFiles(tempFiles);
     },
     [files]
   );
@@ -61,18 +63,31 @@ const StoreImageContainer = () => {
   );
 
   const submitImage = () => {
-    const dataToSend = userData;
+    let dataToSend = { ...userData };
+    const copiedFiles = [...files];
     const formData = new FormData();
-
-    for (const file of files) {
+    let imagesArray = [];
+    for (const file of copiedFiles) {
       formData.append("files", file.object);
     }
 
     setIsLoading(true);
     AuthStore.imageUpload(formData)
       .then((res) => {
-        const combinedData = dataToSend.store.store_img.concat(res.data);
-        dataToSend.store.store_img = combinedData;
+        let newData = copiedFiles.filter(
+          (file) => typeof file.object === "string"
+        );
+        for (const file of res.data) {
+          newData = [...newData, { id: uuidv4(), object: file }];
+        }
+        imagesArray = newData.map((item) => {
+          return item.object;
+        });
+        setFiles(newData);
+        dataToSend = {
+          ...dataToSend,
+          store: { ...dataToSend.store, store_img: imagesArray },
+        };
         sendData(dataToSend);
       })
       .catch((err) => {
@@ -83,19 +98,19 @@ const StoreImageContainer = () => {
   const sendData = (data) => {
     ListStore.editUser(user, data)
       .then(({ data }) => {
-        // let selectFiles = [];
-        // let startIndex = 0;
-        // setUserData(data);
-        // for (const file of data.store.store_img) {
-        //   selectFiles = [
-        //     {
-        //       id: startIndex++,
-        //       object: file,
-        //     },
-        //   ];
-        // }
-        // setFiles(selectFiles);
-
+        console.log(data);
+        let selectFiles = [];
+        setUserData(data);
+        for (const file of data.store.store_img) {
+          selectFiles = [
+            ...selectFiles,
+            {
+              id: uuidv4(),
+              object: file,
+            },
+          ];
+        }
+        setFiles(selectFiles);
         alert("이미지 등록이완료되었습니다.");
         setIsLoading(false);
       })
@@ -117,22 +132,23 @@ const StoreImageContainer = () => {
         setUploadImages(data.store.store_img);
         if (data.store.store_img.length !== 0) {
           let selectFiles = [];
-          let startIndex = 0;
           for (const file of data.store.store_img) {
             selectFiles = [
               ...selectFiles,
               {
-                id: startIndex++,
-                object: file.replace(
-                  "https://good-cafeteria.s3.ap-northeast-2.amazonaws.com/media/root/",
-                  ""
-                ),
+                id: uuidv4(),
+                object: file,
+                // object: file.replace(
+                //   "https://good-cafeteria.s3.ap-northeast-2.amazonaws.com/media/root/",
+                //   ""
+                // ),
               },
             ];
           }
           setFiles(selectFiles);
           setIsLoading(false);
         }
+        setIsLoading(false);
         return;
       })
       .catch((err) => {
@@ -154,7 +170,7 @@ const StoreImageContainer = () => {
 
   useEffect(() => {
     setUserId();
-  }, [test]);
+  }, []);
 
   return (
     <FlexBox padding="30px 70px" direction="column" width="100%">

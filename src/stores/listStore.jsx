@@ -68,7 +68,6 @@ export class ListStore {
 
   // 유저 정보 수정
   editUser = async (userId, data) => {
-    console.log(data);
     try {
       // const { email, name, busi_num, busi_num_img } = data;
       const response = await instance.patch(`/api/user/${userId}`, {
@@ -77,7 +76,7 @@ export class ListStore {
           name: data.store.name,
           busi_num: data.store.busi_num,
           busi_num_img: data.store.busi_num_img,
-          store_img: data.store.store_img,
+          store_img: [...data.store.store_img],
         },
       });
       return response;
