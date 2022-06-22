@@ -113,7 +113,6 @@ const StoreImageContainer = () => {
         setIsLoading(false);
       })
       .catch((err) => {
-        console.log(err);
         alert("이미지 파일을 등록할수없습니다. 잠시후 다시 시도해주십시오.");
         setIsLoading(false);
       })
@@ -187,6 +186,7 @@ const StoreImageContainer = () => {
           onChangeFiles={onChangeFiles}
           handleFilterFile={handleFilterFile}
           onClick={submitImage}
+          name={AuthStore.getUser.userName}
         />
         <StyledSpan font="12px" color="#838383">
           *이미지 등록 또는 삭제 후 "저장" 버튼을 꼭 눌러주세요.

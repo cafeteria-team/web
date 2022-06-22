@@ -5,7 +5,13 @@ import { Button } from "../components";
 import { v4 as uuidv4 } from "uuid";
 import { throttle } from "lodash";
 
-const DragDrop = ({ files, onChangeFiles, handleFilterFile, onClick }) => {
+const DragDrop = ({
+  files,
+  onChangeFiles,
+  handleFilterFile,
+  onClick,
+  name,
+}) => {
   // 드래그 중일때와 아닐때의 스타일을 구분하기 위한 state 변수
   const [isDragging, setIsDragging] = useState(false);
 
@@ -149,7 +155,7 @@ const DragDrop = ({ files, onChangeFiles, handleFilterFile, onClick }) => {
   });
 
   const ImageLists = memo(
-    ({ files, mouseLeave, mouseMove, top, left, handleFilterFile }) => {
+    ({ files, mouseLeave, mouseMove, top, left, handleFilterFile, name }) => {
       return (
         <FlexBox direction="column">
           {files.length > 0 &&
@@ -193,11 +199,11 @@ const DragDrop = ({ files, onChangeFiles, handleFilterFile, onClick }) => {
                   )}
                   <FlexBox color="rgb(99, 115, 129)">
                     {object?.name?.replace(
-                      "https://good-cafeteria.s3.ap-northeast-2.amazonaws.com/media/root/",
+                      `https://good-cafeteria.s3.ap-northeast-2.amazonaws.com/media/${name}/`,
                       ""
                     ) ||
                       object?.replace(
-                        "https://good-cafeteria.s3.ap-northeast-2.amazonaws.com/media/root/",
+                        `https://good-cafeteria.s3.ap-northeast-2.amazonaws.com/media/${name}/`,
                         ""
                       )}
                   </FlexBox>
@@ -248,8 +254,9 @@ const DragDrop = ({ files, onChangeFiles, handleFilterFile, onClick }) => {
         top={top}
         left={left}
         handleFilterFile={handleFilterFile}
+        name={name}
       />
-      <SaveBtn />
+      <SaveBtn onClick={onClick} />
     </>
   );
 };
