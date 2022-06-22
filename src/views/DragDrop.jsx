@@ -1,12 +1,18 @@
-import React, { useState, useCallback, useEffect, useRef } from "react";
+import React, { useState, useCallback, useEffect, useRef, memo } from "react";
 import { FlexBox } from "../components/StyledElements";
 import { FaFileImage, FaTrashAlt } from "react-icons/fa";
 import { Button } from "../components";
 import { v4 as uuidv4 } from "uuid";
+import { throttle } from "lodash";
 
 const DragDrop = ({ files, onChangeFiles, handleFilterFile, onClick }) => {
   // 드래그 중일때와 아닐때의 스타일을 구분하기 위한 state 변수
   const [isDragging, setIsDragging] = useState(false);
+
+  // 이미지 호버시
+  const [showImage, setShowImage] = useState(null);
+  const [top, setTop] = useState(null);
+  const [left, setLeft] = useState(null);
 
   // 드래그 이벤트를 감지하는 ref 참조변수 (label 태그에 들어갈 예정)
   const dragRef = useRef(null);
@@ -65,14 +71,29 @@ const DragDrop = ({ files, onChangeFiles, handleFilterFile, onClick }) => {
     }
   }, [handleDragIn, handleDragOut, handleDragOver, handleDrop]);
 
+  const mouseLeave = (e) => {
+    setShowImage(null);
+  };
+
+  const mouseMove = useCallback(
+    throttle((e, id) => {
+      e.preventDefault();
+      e.stopPropagation();
+      setShowImage(id);
+      setLeft(e.clientX + 20);
+      setTop(e.clientY - 200);
+    }, 80),
+    []
+  );
+
   useEffect(() => {
     initDragEvents();
 
     return () => resetDragEvents();
   }, [initDragEvents, resetDragEvents]);
 
-  return (
-    <>
+  const ImageInput = memo(({ isDragging, onChangeFiles, dragRef }) => {
+    return (
       <FlexBox
         background={
           isDragging ? "rgb(209,233,252)" : "rgba(145, 158, 171, 0.12)"
@@ -124,41 +145,83 @@ const DragDrop = ({ files, onChangeFiles, handleFilterFile, onClick }) => {
           </FlexBox>
         </label>
       </FlexBox>
+    );
+  });
 
-      <FlexBox direction="column">
-        {files.length > 0 &&
-          files.map((file) => {
-            const { id, object } = file;
+  const ImageLists = memo(
+    ({ files, mouseLeave, mouseMove, top, left, handleFilterFile }) => {
+      return (
+        <FlexBox direction="column">
+          {files.length > 0 &&
+            files.map((file) => {
+              const { id, object } = file;
 
-            return (
-              <FlexBox
-                key={uuidv4()}
-                just="space-between"
-                align="center"
-                height="40px"
-                rad="8px"
-                padding="0 20px"
-                margin="0 0 20px 0"
-                background="rgba(145, 158, 171, 0.12)"
-              >
-                <FlexBox color="rgb(99, 115, 129)">
-                  {object?.name || object}
+              return (
+                <FlexBox
+                  key={uuidv4()}
+                  just="space-between"
+                  align="center"
+                  height="40px"
+                  rad="8px"
+                  padding="0 20px"
+                  margin="0 0 20px 0"
+                  background={
+                    object?.name ? "rgba(145, 158, 171, 0.12)" : "#ffe4ce6e"
+                  }
+                  onMouseLeave={mouseLeave}
+                  onMouseMove={(e) => {
+                    if (!object?.name) {
+                      mouseMove(e, id);
+                    }
+                  }}
+                >
+                  {showImage === id && (
+                    <FlexBox
+                      width="200px"
+                      height="200px"
+                      position="absolute"
+                      top={`${top}px`}
+                      left={`${left}px`}
+                      overflow="hidden"
+                    >
+                      <img
+                        src={object}
+                        alt="images"
+                        style={{ width: "auto", height: "100%" }}
+                      />
+                    </FlexBox>
+                  )}
+                  <FlexBox color="rgb(99, 115, 129)">
+                    {object?.name?.replace(
+                      "https://good-cafeteria.s3.ap-northeast-2.amazonaws.com/media/root/",
+                      ""
+                    ) ||
+                      object?.replace(
+                        "https://good-cafeteria.s3.ap-northeast-2.amazonaws.com/media/root/",
+                        ""
+                      )}
+                  </FlexBox>
+                  <div onClick={() => handleFilterFile(id)}>
+                    <FaTrashAlt
+                      style={{
+                        color: "rgb(99, 115, 129)",
+                        width: "18px",
+                        height: "18px",
+                        marginRight: "0px",
+                        cursor: "pointer",
+                      }}
+                    />
+                  </div>
                 </FlexBox>
-                <div onClick={() => handleFilterFile(id)}>
-                  <FaTrashAlt
-                    style={{
-                      color: "rgb(99, 115, 129)",
-                      width: "18px",
-                      height: "18px",
-                      marginRight: "0px",
-                      cursor: "pointer",
-                    }}
-                  />
-                </div>
-              </FlexBox>
-            );
-          })}
-      </FlexBox>
+              );
+            })}
+        </FlexBox>
+      );
+    }
+  );
+
+  const SaveBtn = memo(({ onClick }) => {
+    return (
       <Button
         width="120px"
         margin="0px auto 10px"
@@ -168,6 +231,25 @@ const DragDrop = ({ files, onChangeFiles, handleFilterFile, onClick }) => {
         title="저장"
         onClick={onClick}
       />
+    );
+  });
+
+  return (
+    <>
+      <ImageInput
+        isDragging={isDragging}
+        onChangeFiles={onChangeFiles}
+        dragRef={dragRef}
+      />
+      <ImageLists
+        files={files}
+        mouseLeave={mouseLeave}
+        mouseMove={mouseMove}
+        top={top}
+        left={left}
+        handleFilterFile={handleFilterFile}
+      />
+      <SaveBtn />
     </>
   );
 };

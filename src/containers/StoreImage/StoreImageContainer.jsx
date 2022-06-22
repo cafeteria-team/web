@@ -1,4 +1,4 @@
-import React, { useState, useCallback, useRef, useEffect } from "react";
+import React, { useState, useCallback, useEffect } from "react";
 import {
   FlexBox,
   StyledTitle,
@@ -14,11 +14,9 @@ const StoreImageContainer = () => {
   const { AuthStore, ListStore } = useStores();
 
   const [files, setFiles] = useState([]);
-  const [uploadImages, setUploadImages] = useState([]);
   const [userData, setUserData] = useState({});
   const [user, setUser] = useState(null);
 
-  const [fileId, setFileId] = useState(0);
   const [isLoading, setIsLoading] = useState(false);
 
   const onChangeFiles = useCallback(
@@ -129,7 +127,6 @@ const StoreImageContainer = () => {
     ListStore.getEditUser(user_id)
       .then(({ data }) => {
         setUserData(data);
-        setUploadImages(data.store.store_img);
         if (data.store.store_img.length !== 0) {
           let selectFiles = [];
           for (const file of data.store.store_img) {
@@ -138,10 +135,6 @@ const StoreImageContainer = () => {
               {
                 id: uuidv4(),
                 object: file,
-                // object: file.replace(
-                //   "https://good-cafeteria.s3.ap-northeast-2.amazonaws.com/media/root/",
-                //   ""
-                // ),
               },
             ];
           }

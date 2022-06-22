@@ -100,12 +100,14 @@ export const FlexBox = styled.div`
   top: ${(props) => props.top || ""};
   right: ${(props) => props.right || ""};
   left: ${(props) => props.left || ""};
+  bottom: ${(props) => props.bottom || ""};
   cursor: ${(props) => props.cursor || ""};
   box-sizing: ${(props) => props.boxSizing || ""};
   opacity: ${(props) => props.opacity || ""};
   pointer-events: ${(props) => props.pointE || ""};
   transform: ${(props) => props.transform || ""};
   z-index: ${(props) => props.zIndex || ""};
+  overflow: ${(props) => props.overflow || ""};
   &:hover {
     background: ${(props) => props.hoverBg || ""};
     color: ${(props) => props.hoverColor || ""};
