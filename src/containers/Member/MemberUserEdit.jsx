@@ -101,7 +101,6 @@ const InputData = [
 ];
 
 const UploadedImage = ({ onFileChange, editImage, selectedUser }) => {
-  console.log(selectedUser);
   return (
     <FlexBox width="50%" direction="column" overflow="hidden">
       <FlexBox margin="0 10px 0 0" minW="100px" align="center">
@@ -191,6 +190,7 @@ const MemberUserEdit = observer(() => {
           alert(
             "회원정보를 수정할수없습니다. 다시 시도해주세요. *사업자번호는 10자리입니다."
           );
+
           return error;
         });
     }

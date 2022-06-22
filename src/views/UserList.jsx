@@ -57,7 +57,6 @@ const ListHeader = memo(() => {
 });
 
 const UserList = ({ userList, isLoading }) => {
-  console.log(userList);
   return (
     <FlexBox
       width="100%"

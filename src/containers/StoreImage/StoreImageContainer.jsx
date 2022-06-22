@@ -127,7 +127,10 @@ const StoreImageContainer = () => {
     ListStore.getEditUser(user_id)
       .then(({ data }) => {
         setUserData(data);
-        if (data.store.store_img.length !== 0) {
+        if (
+          data?.store.store_img?.length !== 0 &&
+          data.store.store_img !== null
+        ) {
           let selectFiles = [];
           for (const file of data.store.store_img) {
             selectFiles = [
