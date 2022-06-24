@@ -6,6 +6,7 @@ import moment from "moment";
 import { useStores } from "../../stores/Context";
 import { observer } from "mobx-react";
 import Spinner from "../../components/Spinner";
+import Decode from "../../utils/decode";
 
 const ManageContainer = observer(() => {
   const { AuthStore, ManageStore } = useStores();
@@ -154,9 +155,9 @@ const ManageContainer = observer(() => {
   };
 
   // 선택된 편의시설 리스트
-  const getSelectedFacilityList = () => {
+  const getSelectedFacilityList = (userId) => {
     setIsLoading(true);
-    ManageStore.callUserFacilityList(AuthStore.getUser.userId)
+    ManageStore.callUserFacilityList(userId)
       .then((res) => {
         const nameLists = res.data.store_facility.map(
           (item) => item.facility.name
@@ -360,10 +361,10 @@ const ManageContainer = observer(() => {
   };
 
   // 가격 리스트 불러오기
-  const getPriceList = () => {
+  const getPriceList = (userId) => {
     setIsPriceLoadging(true);
 
-    ManageStore.callPrice(AuthStore.getUser.userId)
+    ManageStore.callPrice(userId)
       .then((res) => {
         if (res.data.price !== null) {
           setPriceData(res.data.price);
@@ -426,9 +427,9 @@ const ManageContainer = observer(() => {
   };
 
   // 공지사항 불러오기
-  const callNotice = () => {
+  const callNotice = (userId) => {
     setIsNoticeLoading(true);
-    ManageStore.callNotice(AuthStore.getUser.userId)
+    ManageStore.callNotice(userId)
       .then((res) => {
         setNoticeData(res.data.content);
         setIsNoticeLoading(false);
@@ -439,20 +440,18 @@ const ManageContainer = observer(() => {
       });
   };
 
-  const checkUserId = () => {
-    if (!AuthStore.getUser.userId) {
-      setUserLoading(true);
-    } else {
-      setUserLoading(false);
-      getSelectedFacilityList();
-      callNotice();
-      getPriceList();
-    }
+  const checkUserId = (userId) => {
+    getSelectedFacilityList(userId);
+    callNotice(userId);
+    getPriceList(userId);
   };
 
   useEffect(() => {
-    checkUserId();
-  }, [AuthStore.getUser.userId]);
+    const decode = new Decode();
+    const access = localStorage.getItem("access");
+    const data = decode.getUserId(access);
+    checkUserId(data.user_id);
+  }, []);
 
   return (
     <FlexBox padding="30px 70px" direction="column" width="100%">
