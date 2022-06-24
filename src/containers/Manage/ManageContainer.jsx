@@ -26,6 +26,8 @@ const ManageContainer = observer(() => {
   const [pirceFirst, setPriceFirst] = useState(false);
 
   // 데이터셋
+  const [storeId, setStoreId] = useState(null);
+
   const [noticeData, setNoticeData] = useState("");
 
   const [menuData, setMenuData] = useState(null);
@@ -54,67 +56,6 @@ const ManageContainer = observer(() => {
     { 10: "" },
   ]);
 
-  // // 편의시설 리스트 받아오기
-  // const getFacilityList = (userLists, listId) => {
-  //   ManageStore.callFacilityList()
-  //     .then((res) => {
-  //       const nameLists = res.data.map((item) => item.name);
-  //       const idLists = res.data.map((item) => item.id);
-
-  //       let intersection = nameLists.filter(
-  //         (value) => userLists.indexOf(value) === -1
-  //       );
-
-  //       let idIntersection = idLists.filter(
-  //         (value) => listId.indexOf(value) === -1
-  //       );
-
-  //       setFacilityList((prev) => ({
-  //         ...prev,
-  //         facility: {
-  //           ...prev.facility,
-  //           list: intersection,
-  //           listId: idIntersection,
-  //         },
-  //       }));
-
-  //       setIsLoading(false);
-  //     })
-  //     .catch((err) => {
-  //       alert("편의시설 정보를 불러올수없습니다.");
-  //       setIsLoading(false);
-  //     })
-  //     .finally(() => setIsLoading(false));
-  // };
-
-  // // 선택된 편의시설 리스트
-  // const getSelectedFacilityList = () => {
-  //   setIsLoading(true);
-  //   ManageStore.callUserFacilityList(AuthStore.getUser.userId)
-  //     .then((res) => {
-  //       const nameLists = res.data.store_facility.map(
-  //         (item) => item.facility.name
-  //       );
-  //       const idLists = res.data.store_facility.map((item) => item.facility.id);
-  //       const targetId = res.data.store_facility.map((item) => item.id);
-
-  //       setFacilityList((prev) => ({
-  //         ...prev,
-  //         userFacility: {
-  //           ...prev.userFacility,
-  //           list: nameLists,
-  //           listId: idLists,
-  //           joinId: targetId,
-  //         },
-  //       }));
-
-  //       getFacilityList(nameLists, idLists);
-  //     })
-  //     .catch((err) => {
-  //       alert("편의시설 정보를 불러올수없습니다.");
-  //       setIsLoading(false);
-  //     });
-  // };
   // 편의시설 리스트 받아오기
   const getFacilityList = (userLists, listId, targetId) => {
     ManageStore.callFacilityList()
@@ -217,7 +158,7 @@ const ManageContainer = observer(() => {
       if (end?.id === "userFacility") {
         ManageStore.addUserFacilityList(
           facilityList.facility.listId[source.index],
-          AuthStore.getUser.userId
+          storeId
         )
           .then((res) => {
             const newStartList = start.list.filter(
@@ -249,7 +190,7 @@ const ManageContainer = observer(() => {
       } else {
         const targetId = facilityList.userFacility.joinId[source.index];
 
-        ManageStore.deleteUserFacilityList(targetId, AuthStore.getUser.userId)
+        ManageStore.deleteUserFacilityList(targetId, storeId)
           .then((res) => {
             const newEndList = end.list;
             const newEndListId = end.listId;
@@ -298,7 +239,7 @@ const ManageContainer = observer(() => {
     } else {
       setShowMenuList(true);
       const finalDate = moment(date).format("YYYY-MM-DD");
-      ManageStore.callMenu(AuthStore.getUser.userId, finalDate)
+      ManageStore.callMenu(storeId, finalDate)
         .then((res) => {
           if (res[0]?.id) {
             setMenuData(res[0].menus);
@@ -327,7 +268,7 @@ const ManageContainer = observer(() => {
   // 메뉴 리스트 저장
   const saveMenuList = (date) => {
     const selectedDate = moment(date).format();
-    ManageStore.addMenu(menuData, selectedDate, AuthStore.getUser.userId)
+    ManageStore.addMenu(menuData, selectedDate, storeId)
       .then((res) => alert("메뉴가 등록되었습니다."))
       .catch((err) =>
         alert("메뉴등록에 실패했습니다. 잠시후 다시 시도해주세요.")
@@ -337,12 +278,7 @@ const ManageContainer = observer(() => {
   // 메뉴 리스트 수정
   const editMenuList = (date) => {
     const selectedDate = moment(date).format();
-    ManageStore.editMenu(
-      menuData,
-      selectedDate,
-      AuthStore.getUser.userId,
-      menuId
-    )
+    ManageStore.editMenu(menuData, selectedDate, storeId, menuId)
       .then((res) => alert("메뉴가 등록되었습니다."))
       .catch((err) =>
         alert("메뉴등록에 실패했습니다. 잠시후 다시 시도해주세요.")
@@ -386,7 +322,7 @@ const ManageContainer = observer(() => {
   // 가격 리스트 추가
   // 가격 리스트 저장
   const savePriceList = () => {
-    ManageStore.savePrice(AuthStore.getUser.userId, priceData)
+    ManageStore.savePrice(storeId, priceData)
       .then((res) => alert("가격정보가 등록되었습니다."))
       .catch((err) =>
         alert("가격정보를 등록할수없습니다. 잠시후 다시 시도해주세요.")
@@ -394,7 +330,7 @@ const ManageContainer = observer(() => {
   };
   // 가격 리스트 수정
   const patchPriceList = () => {
-    ManageStore.editPrice(AuthStore.getUser.userId, priceData)
+    ManageStore.editPrice(storeId, priceData)
       .then((res) => {
         alert("가격정보가 등록되었습니다.");
       })
@@ -419,7 +355,7 @@ const ManageContainer = observer(() => {
 
   // 공지사항 저장
   const sendNotice = (result) => {
-    ManageStore.postNotice(result, AuthStore.getUser.userId)
+    ManageStore.postNotice(result, storeId)
       .then((res) => alert("공지사항이 등록되었습니다."))
       .catch((err) =>
         alert("공지사항을 저장할수없습니다. 잠시후 다시 시도해주세요.")
@@ -440,17 +376,18 @@ const ManageContainer = observer(() => {
       });
   };
 
-  const checkUserId = (userId) => {
-    getSelectedFacilityList(userId);
-    callNotice(userId);
-    getPriceList(userId);
+  const checkUserId = (storeId) => {
+    getSelectedFacilityList(storeId);
+    callNotice(storeId);
+    getPriceList(storeId);
   };
 
   useEffect(() => {
     const decode = new Decode();
     const access = localStorage.getItem("access");
     const data = decode.getUserId(access);
-    checkUserId(data.user_id);
+    setStoreId(data.store_id);
+    checkUserId(data.store_id);
   }, []);
 
   return (
